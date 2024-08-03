@@ -353,11 +353,11 @@ open.onsuccess = function() {
 			// Marma information not found, add it
 			console.log(key + " NOT FOUND");
 			console.log("initial filling DB ...");
-			initialMarmaValue.forEach((marma, index) => {
+			initialMarmaValues.forEach((marma, index) => {
 				let request = store.put(marma);
 				request.onsuccess = (event) => {
 					console.log(event.target.result + " initial filling User Values DONE");
-					if (index === initialMarmaValue.length - 1) {
+					if (index === initialMarmaValues.length - 1) {
 					  // Resolve the promise only after all data is added
 					  console.log("All initial User Values set successfully.");
 					  resolve();
