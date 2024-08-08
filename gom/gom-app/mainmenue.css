@@ -23,7 +23,7 @@ tiles
   background-color: var(--white-080);
   padding: 5px;
   border-radius: 0.25rem;
-	
+  max-width: 125px;
 }
 
 .MainMenueButton img{
