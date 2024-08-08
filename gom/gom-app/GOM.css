@@ -68,11 +68,13 @@ Main Elemnts
 ########################################
 */
 
-html, body{
-	text-align:center;
-	height: 100%;
-	background-image: linear-gradient(to top, var(--bg-color-2) 0%, var(--bg-color-1) 50%);
-	color: var(--white-080);
+html, body {
+    text-align: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-image: linear-gradient(to top, var(--bg-color-2) 0%, var(--bg-color-1) 50%);
+    color: var(--white-080);
 }
 
 body {
@@ -90,11 +92,12 @@ header{
 	padding: 1em;
 }
 
-footer {
-	position: fixed;
-	bottom: 0;
-	width: 100%;
-	background-color: var(--bg-color-2);
+#footer {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
 
@@ -134,14 +137,7 @@ navigationBar
 ########################################
 */
 
-#footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-}
-		 
+
 .menueBar{
 	height:50px;
 	display: flex;
