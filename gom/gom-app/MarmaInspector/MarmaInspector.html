@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Marmainspector</title>
+
+    <style>
+	html,
+	body {
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	background: transparent;
+	font-family: Roboto, Arial, sans-serif;
+	}
+	
+	/*
+########################################
+colors
+########################################
+*/
+
+	:root {
+	  --bg-color-005: rgba(108, 122, 137, 0.05);
+	  --bg-color-010: rgba(108, 122, 137, 0.10);
+	  --bg-color-030: rgba(108, 122, 137, 0.30);
+	  --bg-color-050: rgba(108, 122, 137, 0.50);
+	  --bg-color-090: rgba(108, 122, 137, 0.90);
+	  --bg-color-100: rgba(108, 122, 137, 1.00);
+	  --hl-color: rgba(75, 85, 95, 1.00);
+	  --bg-white: rgba(255, 255, 255, 0.70);
+	  --mainColor-1: none;/*rgba(2550,0,0,0.0000000000000001);*/
+	  --mainColor-2: none;/*rgba(2550,0,0,0.0000000000000001);*/
+	  --textColor: black;
+	}
+	body{
+		color: var(--textColor);
+	}
+	a {
+		color: rgba(108, 122, 137, 1.00);;
+	}	
+
+	#renderCanvas {
+		width: 100%;
+		height: 100%;
+		touch-action: none;
+		/*background-image: url('/logo.png');*/
+		background-image: linear-gradient(to top, var(--mainColor-2) 0%, var(--mainColor-1) 50%);
+	}
+	#licInfo{
+		position: absolute;
+		top: 0;
+		left: 0;
+		font-size: 1em;
+		overflow: hidden;
+	}
+	#licInfo img {
+		width: 16px;
+		margin: 4px;
+		float: left;
+	}
+	#licInfo1 {
+		margin:0;
+		overflow: hidden;
+	}
+	#licInfo2 {
+		margin:0;
+		float: left;
+		overflow: hidden;
+	}
+	.container {
+		position: absolute;
+		right: 10px;
+		bottom: 10px;
+		display: flex;
+		flex-direction: column;
+		background-color: var(--bg-white);
+		padding: 5px;
+		border-radius: 5px;
+		width: 10%;
+		min-width: 50px;
+		max-width: 150px;
+		transition: width 0.3s ease;
+	}
+	
+	#menueButton-container{
+		position: relative;
+		margin-left: auto;
+		margin-right: auto;
+		overflow: hidden;
+		transform: translateY(-100%);
+	}
+	
+	#menueButton img{
+	width: 100%;
+	}
+	
+	.container.double {
+		display: flex;
+		flex-direction: row;
+		width: auto;
+		max-width:20%;
+	}
+
+	.column {
+		display: flex;
+		flex-direction: column;
+		width: auto;
+	}
+	.item{
+		border-radius: 5px;
+		border: 2px solid var(--bg-color-100);
+		margin-top:5px;
+	}
+	.button {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 1;
+		background-color: transparent;
+		background-size: cover;
+		border: none;
+		cursor: pointer;
+	}
+	.vDisplay{
+		display: block;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		height: 0;
+		min-width: auto;
+		width:50%;
+		padding: 2px 0;
+		background: var(--bg-color-100);
+		border: solid 1px var(--bg-color-100);
+		border-radius: 2px 5px 0 0;
+		font-size: large;
+		overflow: hidden;
+		color: var(--textColor);
+		transition: height 0.3s ease;
+	}
+	.sliderContainer{
+		height: 0;
+		overflow: hidden;
+		transition: height 0.3s ease;
+	}
+
+	.slider {
+		-webkit-appearance: none;
+		appearance: none;
+		background: transparent;
+		cursor: pointer;
+		width: 100%;
+		margin: 10px 0;
+		writing-mode: lr;
+	}
+	#CAMcontroll{
+		position: absolute;
+		bottom: 10px;
+		background-color: var(--bg-white);
+		padding: 5px;
+		border-radius: 5px;
+		width: 25%;
+		max-width:150px;
+		min-width: 50px;
+	}
+	.CAMslider {
+		margin:0;
+		background-image: url("resources/icons/body-icon2.png");
+		background-size: 100%;
+		background-repeat: no-repeat;
+		writing-mode: vertical-rl;
+		aspect-ratio: 1/2;
+	}
+	.slider:focus {
+		outline: none;
+	}
+	.slider::-webkit-slider-runnable-track {
+		height: 20px;
+	}
+	.CAMslider::-webkit-slider-runnable-track {
+		width: 100%;
+	}
+	.slider::-moz-range-track{
+		height: 20px;
+	}
+	.slider::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		appearance: none;
+		width: 26px;
+		height: 26px;
+		margin-top: -3px; /* to center thumb on track margin-top = (track height in pixels / 2) - (thumb height in pixels /2)*/
+		background-color: rgba(255, 255, 255, 1); /*var(--bg-color-100);*/
+		border: 2px solid var(--bg-color-100);
+		border-radius: 5px;
+	}
+	.slider::-moz-range-thumb {
+		width: 26px;
+		height: 26px;
+		background-color: rgba(255, 255, 255, 1); /*var(--bg-color-100);*/
+		border: 2px solid var(--bg-color-100);
+		border-radius: 5px;
+	}
+	.CAMslider::-webkit-slider-thumb {
+		width: 25%;
+		height: 12.5%;
+		margin-right: 19%;
+	}
+	.CAMslider::-moz-range-thumb {
+		width: 25%;
+		height: 12.5%;
+	}
+	.thumb-icon {
+		position: absolute;
+		left: 33%;
+		top: 0;
+		font-size: 20px;
+		pointer-events: none;
+		margin: 4.5%;
+		width: 25%;
+		height: 12.5%;
+	}
+	.thumb-icon img{
+		width: 100%;
+	}		
+	.expanded {
+		width: 25%;
+	}
+	.hidden {
+		height: 0;
+		boorder: none;
+	}
+	.visible {
+		height: auto; 
+	}
+	.selected {
+		background-color: var(--bg-color-030);
+		border: 2px solid var(--bg-color-100);
+	}	
+	  
+	  
+    </style>
+
+    <script src="resources/babylon.js"></script>
+    <script src="resources/babylonjs.loaders.min.js"></script>
+    <script src="resources/pep.js"></script>
+  </head>
+
+  <body>
+    <canvas id="renderCanvas" touch-action="none"></canvas>
+	<div id="licInfo" onclick="showLic()"> 
+		<img src="resources/icons/info-icon2.png">
+		<p id="licInfo1" class="hidden"> 
+			source 3d material: BodyParts3D &copy; </br>
+			<a href="http://lifesciencedb.jp/bp3d/?lng=en#" target="_blank">The Database Center for Life Science</a>
+		</p>
+		<p id="licInfo2" class="hidden">
+			licensed under <a href="https://creativecommons.org/licenses/by-sa/2.1/jp/" target="_blank">CC Attribution-Share Alike 2.1 Japan</a>
+		</p>
+	</div>
+	<div id="CAMcontroll">
+	<!-- Camera controll slider will be dynamically added here -->
+	</div>
+	<div id="menueButton-container" class="container hidden" >
+		<!--<div class="button">-->
+			<button class="button" id="menueButton" onclick="location.href='../index.html';">
+				<img src="../resources/icons/menue-icon.png">
+			</button>
+		<!--</div>-->
+	</div>
+    <div class="container" id="ui-container">
+		<div class="column" id="column-1"><!-- Buttons and sliders will be dynamically added here --></div>
+		<div class="column" id="column-2"><!-- Buttons and sliders will be dynamically added here --></div>
+		
+    </div>
+
+
+    <script>
+      const canvas = document.getElementById("renderCanvas"); // Get the canvas element
+      const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
+
+function getQueryParam(param) {
+  let urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+/**** Colors *****/
+let marmaDesign = "";
+marmaDesign = getQueryParam('marmaDesign');
+console.log(marmaDesign);
+
+var bgColor;
+var hlColor, mainColor1, mainColor2;
+console.log("style: " + marmaDesign);
+if (marmaDesign == "snayu") {
+	bgColor = "rgba(168, 222, 213,  "
+	hlColor = "rgba(130, 207, 208, 1)"
+	document.getElementById('menueButton-container').style.display = "none";
+} else if (marmaDesign == "mamsa"){
+	bgColor = "rgba(162, 168, 222, "
+	document.getElementById('menueButton-container').style.display = "none";
+} else if (marmaDesign == "sandhi"){
+	bgColor = "rgba(222, 176, 214, "
+	document.getElementById('menueButton-container').style.display = "none";
+} else if (marmaDesign == "sira"){
+	bgColor = "rgba(219, 214, 160, "
+	document.getElementById('menueButton-container').style.display = "none";
+} else if (marmaDesign == "asthi"){
+	bgColor = "rgba(219, 207, 181, "
+	document.getElementById('menueButton-container').style.display = "none";
+} else {
+	bgColor = "rgba(108, 122, 137, "
+	mainColor1 = "rgba(33, 13, 38, 0.9)";
+	mainColor2 = "rgba(40, 36, 54, 21)";
+	textColor = "white";
+	document.documentElement.style.setProperty('--mainColor-1', mainColor1);
+	document.documentElement.style.setProperty('--mainColor-2', mainColor2);
+	document.documentElement.style.setProperty('--textColor', textColor);
+}
+console.log(bgColor);
+document.documentElement.style.setProperty('--bg-color-005', bgColor + " 0.05)");
+document.documentElement.style.setProperty('--bg-color-010', bgColor + " 0.10)");
+document.documentElement.style.setProperty('--bg-color-030', bgColor + " 0.30)");
+document.documentElement.style.setProperty('--bg-color-050', bgColor + " 0.50)");
+document.documentElement.style.setProperty('--bg-color-090', bgColor + " 0.90)");
+document.documentElement.style.setProperty('--bg-color-100', bgColor + " 1.00)");
+document.documentElement.style.setProperty('--hl-color', hlColor);
+
+const transparent = new BABYLON.Color4(0,0,0,0.0000000000000001);
+const transparentHex = transparent.toHexString();
+
+var scene;
+/**** build human body *****/
+const createScene = function () {
+	const scene = new BABYLON.Scene(engine);
+
+	
+
+/**** build world *****/
+//var ground = BABYLON.MeshBuilder.CreateGround("ground1", {width: 10, height: 10, subdivisions: 2}, scene);
+scene.clearColor = transparent;
+//new BABYLON.AxesViewer(scene, 1000);
+
+/**** Materials *****/
+		//color
+		const skincolor = new BABYLON.StandardMaterial("skincolor");
+		skincolor.diffuseColor = new BABYLON.Color3(0.96863, 0.82745, 0.65098);
+		skincolor.alpha = 0.5;
+		const haircolor = new BABYLON.StandardMaterial("haircolor");
+		haircolor.diffuseColor = new BABYLON.Color3(0.74902, 0.62353, 0.50588);
+		haircolor.alpha = 0.5;		
+		const musclecolor = new BABYLON.StandardMaterial("musclecolor");
+		musclecolor.diffuseColor = new BABYLON.Color3(0.87843, 0.35294, 0.19608);
+		musclecolor.alpha = 0.5;
+		const bonecolor = new BABYLON.StandardMaterial("bonecolor");
+		bonecolor.diffuseColor = new BABYLON.Color3(0.79608, 0.79608, 0.79608);
+		bonecolor.alpha = 0.5;
+		const cartilagecolor = new BABYLON.StandardMaterial("cartilagecolor");
+		cartilagecolor.diffuseColor = new BABYLON.Color3(0.75294, 0.71765, 0.68235);
+		cartilagecolor.alpha = 0.5;		
+		const arterycolor = new BABYLON.StandardMaterial("arterycolor");
+		arterycolor.diffuseColor = new BABYLON.Color3(0.38824, 0.09020, 0.02745);
+		arterycolor.alpha = 0.5;	
+		const veincolor = new BABYLON.StandardMaterial("veincolor");
+		veincolor.diffuseColor = new BABYLON.Color3(0.15686, 0.15686, 0.78431);
+		veincolor.alpha = 0.5;
+		const nervecolor = new BABYLON.StandardMaterial("nervecolor");
+		nervecolor.diffuseColor = new BABYLON.Color3(0.94902, 0.84314, 0.42745);
+		nervecolor.alpha = 0.5;
+		const organcolor = new BABYLON.StandardMaterial("organcolor");
+		organcolor.diffuseColor = new BABYLON.Color3(0.73725, 0.72941, 0.42745);
+		organcolor.alpha = 0.5;		
+		const digestioncolor = new BABYLON.StandardMaterial("digestioncolor");
+		digestioncolor.diffuseColor = new BABYLON.Color3(0.94902, 0.59608, 0.58039);
+		digestioncolor.alpha = 0.5;
+		const lungcolor = new BABYLON.StandardMaterial("lungcolor");
+		lungcolor.diffuseColor = new BABYLON.Color3(0.80784, 0.72941, 0.84314);
+		lungcolor.alpha = 0.5;
+		const livercolor = new BABYLON.StandardMaterial("livercolor");
+		livercolor.diffuseColor = new BABYLON.Color3(0.45490, 0.30980, 0.16471);
+		livercolor.alpha = 0.5;
+
+
+        BABYLON.SceneLoader.ImportMeshAsync(
+			"",
+			"https://raw.githubusercontent.com/corbi1/marma/main/",
+			"human3d_v4.glb"
+		).then((result) => {
+			console.log("imported")
+			
+			// Iterate through each mesh
+			result.meshes.forEach((mesh) => {
+				// Apply rotation
+				mesh.rotationQuaternion = null;
+				
+				// Apply position offset along axis
+				mesh.position.x = 0; // left and right (red)
+				mesh.position.y = 30; // up and down (green)
+				mesh.position.z = 0; // back and forth (blue)
+				
+				//console.log("aligned")
+				
+			});
+
+
+			// Recursive function to apply changes to all descendants of a node
+			function applyChangesToDescendants(node, changesFunction) {
+				node.getChildren().forEach(function (child) {
+					// Apply changes to the current child
+					changesFunction(child);
+					
+					// Recursively apply changes to its descendants
+					applyChangesToDescendants(child, changesFunction);
+				});
+			}
+
+			// Set appearance of skin
+			var collectionSkin = scene.getTransformNodeByName("Äußeres");
+			console.log(collectionSkin);
+			if (collectionSkin) {
+				console.log("Set appearance of skin")
+				applyChangesToDescendants(collectionSkin, function(mesh) {
+					if (mesh.material) {
+						mesh.material = skincolor; // Apply color
+					} else if (!mesh.material){
+						collectionSkin = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+
+			// Set appearance of flesh
+			var collectionflesh = scene.getTransformNodeByName("Zahnfleisch");
+			console.log(collectionflesh);
+			if (collectionflesh) {
+				console.log("Set appearance of flesh")
+				applyChangesToDescendants(collectionflesh, function(mesh) {
+					if (mesh.material) {
+						mesh.material = musclecolor; // Apply color
+					} else if (!mesh.material){
+						collectionflesh = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+
+			// Set appearance of hair
+			var collectionHair = scene.getTransformNodeByName("Haar");
+			if (collectionHair) {
+				console.log("Set appearance of Hair")
+				applyChangesToDescendants(collectionHair, function(mesh) {
+					if (mesh.material) {
+						mesh.material = haircolor; // Apply color
+					} else if (!mesh.material){
+						collectionHair = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+
+			// Set appearance of muscles
+			var collectionMuscle = scene.getTransformNodeByName("Muskeln");
+			if (collectionMuscle) {
+				console.log("Set appearance of muscles")
+				applyChangesToDescendants(collectionMuscle, function(mesh) {
+					if (mesh.material) {
+						//mesh.material.alpha = 0.5; // Set opacity to 50%
+						mesh.material = musclecolor; // Apply color
+					} else if (!mesh.material){
+						collectionMuscle = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+
+			// Set appearance of bones
+			var collectionBones = scene.getTransformNodeByName("Knochen");
+			if (collectionBones) {
+				console.log("Set appearance of bones")
+				applyChangesToDescendants(collectionBones, function(mesh) {
+					if (mesh.material) {
+						mesh.material = bonecolor; // Apply color
+					} else if (!mesh.material){
+						collectionBones = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+
+			// Set appearance of artery
+			var collectionArtery = scene.getTransformNodeByName("Arterien");
+			if (collectionArtery) {
+				console.log("Set appearance of artery")
+				applyChangesToDescendants(collectionArtery, function(mesh) {
+					if (mesh.material) {
+						mesh.material = arterycolor; // Apply color
+					} else if (!mesh.material){
+						collectionArtery = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}		
+
+			// Set appearance of vein
+			var collectionVein = scene.getTransformNodeByName("Venen");
+			if (collectionVein) {
+				console.log("Set appearance of vein")
+				applyChangesToDescendants(collectionVein, function(mesh) {
+					if (mesh.material) {
+						mesh.material = veincolor; // Apply color
+					} else if (!mesh.material){
+						collectionVein = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}			
+
+			// Set appearance of nerve
+			var collectionNerve = scene.getTransformNodeByName("Nerven");
+			if (collectionNerve) {
+				console.log("Set appearance of nerve")
+				applyChangesToDescendants(collectionNerve, function(mesh) {
+					if (mesh.material) {
+						mesh.material = nervecolor; // Apply color
+					} else if (!mesh.material){
+						collectionNerve = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+
+			// Set appearance of organs
+			var collectionOrgans = scene.getTransformNodeByName("Organe");
+			if (collectionOrgans) {
+				console.log("Set appearance of organs")
+				applyChangesToDescendants(collectionOrgans, function(mesh) {
+					if (mesh.material) {
+						mesh.material = organcolor; // Apply color
+					} else if (!mesh.material){
+						collectionOrgans = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+
+			// Set appearance of digestion
+			var collectionDigestion = scene.getTransformNodeByName("Verdauung");
+			if (collectionDigestion) {
+				console.log("Set appearance of digestion")
+				applyChangesToDescendants(collectionDigestion, function(mesh) {
+					if (mesh.material) {
+						mesh.material = digestioncolor; // Apply color
+					} else if (!mesh.material){
+						collectionDigestion = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+
+			// Set appearance of lung
+			var collectionLung = scene.getTransformNodeByName("Lunge");
+			if (collectionLung) {
+				console.log("Set appearance of lung")
+				applyChangesToDescendants(collectionLung, function(mesh) {
+					if (mesh.material) {
+						mesh.material = lungcolor; // Apply color
+					} else if (!mesh.material){
+						collectionLung = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+
+			// Set appearance of liver
+			var collectionLiver = scene.getTransformNodeByName("Leber");
+			if (collectionLiver) {
+				console.log("Set appearance of liver")
+				applyChangesToDescendants(collectionLiver, function(mesh) {
+					if (mesh.material) {
+						mesh.material = livercolor; // Apply color
+					} else if (!mesh.material){
+						collectionLiver = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+
+			// Set appearance of cartilage
+			var nodeNames = ["M_Arm_r_Sehnen", "M_Arm_l_Sehnen", "M_Bein_r_Sehnen", "M_Bein_l_Sehnen", "Sehnen", "costal Cartilage", "Bandscheiben", "Augapfel"]; // Add your node names here
+
+			// Iterate through the array and apply the changes to each node
+			nodeNames.forEach(function(nodeName) {
+				var node = scene.getTransformNodeByName(nodeName);
+				if (node) {
+					console.log("Set appearance of:", nodeName);
+					applyChangesToDescendants(node, function(mesh) {
+						if (mesh.material) {
+							mesh.material = cartilagecolor; // Apply color
+						} else if (!mesh.material) {
+							var childNode = scene.getTransformNodeByName(mesh.name);
+							if (childNode) {
+								applyChangesToDescendants(childNode, function(childMesh) {
+									if (childMesh.material) {
+										childMesh.material = cartilagecolor; // Apply color
+									}
+								});
+							}
+						}
+					});
+				} else {
+					console.log("Node not found:", nodeName);
+				}
+			});
+
+			// Register a render loop to repeatedly render the scene
+			engine.runRenderLoop(function () {
+				scene.render();
+			});
+		initializeUI(scene);
+		showLic();
+		adjustColumns();	
+		});
+	};
+
+function setLight(camera, scene) {
+/**** Set light *****/
+		const light = new BABYLON.PointLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+		light.intensity = 0.5;
+		light.specular = new BABYLON.Color3.Black();
+		const light1 = new BABYLON.DirectionalLight("FrontRightLight", new BABYLON.Vector3(5, -1, 5), scene);
+		light1.specular = new BABYLON.Color3.Black();
+		light1.intensity = 0.6;
+		const light2 = new BABYLON.DirectionalLight("FrontLeftLight", new BABYLON.Vector3(-5, -1, 5), scene);
+		light2.specular = new BABYLON.Color3.Black();
+		light2.intensity = 0.6;
+		const light3 = new BABYLON.DirectionalLight("BackLight", new BABYLON.Vector3(0, -1, -5), scene);
+		light3.specular = new BABYLON.Color3.Black();
+		
+		scene.registerBeforeRender(function () {
+			light.position = camera.position;
+		});
+        return scene;
+};
+
+/**** License Info *****/
+var licviz = 1;
+function showLic(){
+	if (licviz == 1){
+		document.getElementById("licInfo1").classList.add('visible');
+		document.getElementById("licInfo1").classList.remove('hidden');
+		document.getElementById("licInfo2").classList.add('hidden');
+		document.getElementById("licInfo2").classList.remove('visible');
+		licviz = 0;
+	} else if (licviz == 0){
+		document.getElementById("licInfo2").classList.add('visible');
+		document.getElementById("licInfo2").classList.remove('hidden');
+		licviz = 1;
+	}
+}
+
+
+function initializeUI(scene) {
+	//scene.debugLayer.show()
+
+	const modelheight = 1700;
+	var cameraY = modelheight/2 // Starting position at the middle
+	if (getQueryParam('cameraY') >= 0 && getQueryParam('cameraY') != null){ // Starting position from parameter
+		console.log("camera: " + getQueryParam('cameraY'))
+		cameraY = parseInt(getQueryParam('cameraY'));
+	}
+	var camera
+
+
+/***** Set camera control*****/
+	const CAMcontroll = document.getElementById('CAMcontroll');
+	const CAMslider = document.createElement('input');
+	CAMslider.classList.add('slider');
+	CAMslider.classList.add('CAMslider');
+	CAMslider.type = 'range';
+	CAMslider.min = '0';
+	CAMslider.max = modelheight; // Set maximum to model height
+	CAMslider.value = modelheight - cameraY; 
+
+	CAMslider.addEventListener('input', () => {
+		const invertedValue = CAMslider.max - CAMslider.value;
+		changeCamera(camera, parseFloat(invertedValue));
+		updateIconPosition();
+	});
+
+	CAMcontroll.appendChild(CAMslider);
+
+    //const thumbIcon = document.querySelector('.thumb-icon');
+	const thumbIcon = document.createElement('div');
+    thumbIcon.classList.add('thumb-icon');
+	CAMcontroll.appendChild(thumbIcon);
+	const elem = document.createElement("img");
+	elem.src = 'resources/icons/see-icon.png';
+	thumbIcon.appendChild(elem);
+
+	function updateIconPosition() {
+		const sliderHeight = CAMslider.offsetHeight;
+		const thumbHeight = thumbIcon.offsetHeight;
+		const max = CAMslider.max;
+		const min = CAMslider.min;
+		const value = CAMslider.value;
+		const isFirefox = typeof InstallTrigger !== 'undefined';
+		if (isFirefox){
+			var offset = 0;
+		}else{
+			var offset = 5;
+		}
+		const top = ((value - min) / (max - min)) * (sliderHeight - thumbHeight) - offset;
+		thumbIcon.style.top = `${top}px`;
+	}
+
+	function changeCamera (camera, value) {
+		// Update camera position based on slider value
+		camera.setTarget(new BABYLON.Vector3(0, value, -100));
+		console.log ("camera focus at: " + value)
+	};
+	
+	updateIconPosition();
+	
+/**** Set camera *****/	
+	camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 10, new BABYLON.Vector3(0, cameraY, -100), scene);
+	camera.useAutoRotationBehavior = true;
+	//camera.setPosition(new BABYLON.Vector3(0, Math.PI / 2, 2350));
+	//camera.setPosition(new BABYLON.Vector3(5, 1.5, 4000));
+	camera.alpha = 5;
+	camera.beta = 1.5;
+	camera.radius = 2350;
+	if (getQueryParam('cameraR') >= 0 && getQueryParam('cameraR') != null ){ // Zoom from parameter
+		console.log(getQueryParam('cameraR'))
+		camera.radius = getQueryParam('cameraR');
+	}
+	
+	camera.attachControl(canvas, true);
+	//camera.autoRotationBehavior.idleRotationSpeed = 1;
+
+	setLight(camera, scene);
+
+/***** visibility control*****/
+	//document.addEventListener("DOMContentLoaded", function() {
+		const icons = ["skin.png", "muscles.png", "bones.png", "intestines.png", "blood.png", "nerves.png"];
+		const container = document.getElementById('ui-container');
+		const column1 = document.getElementById('column-1');
+		const column2 = document.getElementById('column-2');
+		let selectedIndex = -1;
+
+		// Create buttons and sliders dynamically
+		icons.forEach((icon, index) => {
+			const item = document.createElement('div');
+            item.classList.add('item');
+
+			// Create value display
+			const valueDisplay = document.createElement('div');
+            valueDisplay.classList.add('vDisplay');
+			valueDisplay.classList.add('valueDisplay');			
+			
+			// Create button
+			const button = document.createElement('button');
+			button.classList.add('button');
+			button.style.backgroundImage = `url('resources/icons/${icon}')`;
+			button.addEventListener('click', () => toggleVisibility(index));
+			item.appendChild(button);
+			button.appendChild(valueDisplay);
+			
+			const sliderContainer = document.createElement('div');
+            sliderContainer.classList.add('sliderContainer');
+
+			// Create slider
+			const slider = document.createElement('input');
+			slider.classList.add('slider');
+			slider.type = 'range';
+			slider.min = '0';
+			slider.max = '100';
+			slider.value = '50';
+			slider.addEventListener('input', () => {
+				setMeshVisibility(index, slider.value);
+				updateSliderBackground(slider);
+				updateValueDisplay(valueDisplay, slider);
+			});
+			updateSliderBackground(slider);
+			updateValueDisplay(valueDisplay, slider);
+			sliderContainer.appendChild(slider);
+			
+			item.appendChild(sliderContainer);
+            column2.appendChild(item);
+			
+		});
+		
+		// Function to update the slider's background
+		function updateSliderBackground(slider) {
+			const value = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+			slider.style.background = `linear-gradient(to right, var(--bg-color-100) 0%, var(--bg-color-100) ${value}%, var(--bg-white) ${value}%, var(--bg-white) 100%)`;
+		}
+
+		// Function to update displayed value
+		function updateValueDisplay(valueDisplay, slider) {
+			const value = slider.value
+			valueDisplay.innerHTML = value + " %";
+			valueDisplay.style.width = value + "%";
+		}
+
+		// Toggle visibility of sliders and buttons
+		function toggleVisibility(index) {
+			//const sliders = document.querySelectorAll('.slider');
+			const sliderContainers = document.querySelectorAll('.sliderContainer');
+			const items = document.querySelectorAll('.item');
+			const buttons = document.querySelectorAll('.button');
+			const valueDisplays = document.querySelectorAll('.vDisplay');
+
+			if (selectedIndex === index) {
+				//sliders[index].classList.remove('visible');
+				sliderContainers[index].classList.remove('visible');
+				valueDisplays.forEach(display => {display.classList.remove('visible');});
+				buttons[index].style.left = "0px";
+				items[index].classList.remove('selected');
+				container.classList.remove('expanded');
+				selectedIndex = -1;
+			} else {
+				if (selectedIndex !== -1) {
+					//sliders[selectedIndex].classList.remove('visible');
+					sliderContainers[selectedIndex].classList.remove('visible');
+					valueDisplays[index].classList.remove('visible');
+					items[selectedIndex].classList.remove('selected');
+					//container.classList.add('expanded');
+				}
+				//sliders[index].classList.add('visible');
+				sliderContainers[index].classList.add('visible');
+				valueDisplays[index].classList.add('visible');
+				items[index].classList.add('selected');
+				container.classList.add('expanded');
+				selectedIndex = index;
+			}
+			console.log("after visibility toggle");
+			console.log(container.getBoundingClientRect().height);
+			adjustColumns();
+		}
+
+	// Define collections of meshes
+	var meshCollections = [
+	["Äußeres"],
+	["Muskeln"],
+	["Knochen"],
+	["Organe"],
+	["Arterien", "Venen"],
+	["Nerven"]
+	];
+
+	// Helper function to apply changes to all descendants
+	function applyChangesToDescendants(node, callback) {
+		callback(node);
+		node.getChildMeshes().forEach(function(child) {
+			applyChangesToDescendants(child, callback);
+		});
+	}
+
+	// Function to set mesh visibility or opacity
+	function setMeshVisibility(index, opacity) {
+		//console.log("index: " + index);
+		//console.log("collection: " + meshCollections[index]);
+
+		// Iterate through the collection of names
+		meshCollections[index].forEach(function(collectionName) {
+			var node = scene.getTransformNodeByName(collectionName);
+			if (node) {
+				console.log("Set opacity of:", collectionName);
+				applyChangesToDescendants(node, function(mesh) {
+					if (mesh.material) {
+						mesh.material.alpha = opacity / 100;
+					}
+				});
+			} else {
+				console.log("Node not found:", collectionName);
+			}
+		});
+	}
+	document.getElementById('menueButton-container').classList.remove('hidden');
+	//});
+        // Initial adjustment
+        console.log("test5");
+		console.log(container.getBoundingClientRect().height);
+		adjustColumns();
+}
+
+const load = createScene(); //Call the createScene function
+
+const container = document.getElementById('ui-container');
+const column1 = document.getElementById('column-1');
+const column2 = document.getElementById('column-2');
+
+function adjustColumns () {
+	container.addEventListener('transitionend', function(){
+		// Temporarily move items back to the container to reset their positions
+		const items = Array.from(container.getElementsByClassName('item'));
+		console.log("test0");
+		console.log(container.getBoundingClientRect().height);
+		console.log(container.getBoundingClientRect().height + 80);
+		console.log(window.innerHeight);
+		//items.forEach(item => container.appendChild(item));
+
+		// Check if container height exceeds window height plus buffer
+		if (container.getBoundingClientRect().height + 80 > window.innerHeight) {
+			container.classList.add('double');
+			console.log("test1");
+			console.log(container.getBoundingClientRect().height);
+			// Clear the columns
+			column1.innerHTML = '';
+			column2.innerHTML = '';
+
+			// Add items to columns
+			const midIndex = Math.ceil(items.length / 2);
+			items.slice(0, midIndex).forEach(item => column1.appendChild(item));
+			items.slice(midIndex).forEach(item => column2.appendChild(item));
+		} else {
+			container.classList.remove('double');
+			console.log("one column");
+			// Ensure all items are in a single column
+			column1.innerHTML = '';
+			items.forEach(item => column1.appendChild(item));
+		}
+	});
+	console.log("test3");
+	console.log(container.getBoundingClientRect().height);
+}
+
+// Debounce function to limit the rate at which adjustColumns is called
+const debounce = (func, delay) => {
+    let debounceTimer;
+    return function () {
+        const context = this;
+        const args = arguments;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    };
+};
+
+window.addEventListener("resize", debounce(adjustColumns, 20));
+
+
+// Watch for browser/canvas resize events
+window.addEventListener("resize", function () {
+engine.resize();
+});
+
+    </script>
+  </body>
+</html>
