@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="de">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+	<title id="title" class="MarmaNameSK">GOM</title>
+	<link href="GOM.css" rel="stylesheet" type="text/css" />
+	<link href="mainmenue.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript"></script>
+	<script src="mainmenue.js" defer></script>
+</head>
+
+<header>
+	<div id="titleBar">
+		<div id="headline">
+		<h1> <span id="headline2">GOM</span></h1>
+		</div>
+	</div>
+</header>
+
+<body id="body">
+<div class="content">
+
+<section id="tilesSection">
+
+<div id="tiles">
+	<a href="MarmaSearch/MarmaSearch.html?filterWindow=1" class="MainMenueButton"><img src="resources/icons/marma-search-icon.png"></a>
+	<a href="MarmaInspector/MarmaInspector.html" class="MainMenueButton"><img src="resources/icons/marma-inspector-icon.png"></a>
+	<a href="Knowledge/knowledge.html" class="MainMenueButton"><img src="resources/icons/book-icon.webp"></a>
+</div>
+
+</section>
+
+
+	
+
+
+</div>
+
+<footer id="footer">
+    <div class="menueBar">
+		<div class="menueButton" onclick="toggleMenue()">
+		  <div class="bar1"></div>
+		  <div class="bar2"></div>
+		  <div class="bar3"></div>
+		</div>
+    </div>
+	
+	<div class="overlay" id="Menue">
+	  <a href="javascript:void(0)" class="closebtn" onclick="toggleMenue(this)">&times;</a>
+	  <div class="overlayContent">
+
+		<button class="accordion" ><img src="resources/icons/info-icon.png">About</button>
+			<div class="panel">
+				<div>
+					<h3>Diese App ist dazu gedacht dir zu helfen dich und deinen Körper besser kennenzulernen.</h3>
+					<p>Das heißt konkret ein besseres Verständis davon zu bekommen, wie dein Körper funktioniert und wie man nützliche Verhaltensweisen kultiviert. Dazu greift Gom auf die Lehren des Yoga zurück, aber auch Ayurveda oder aktuelle medizinische Grundlagen.</p>
+					
+					<h3>Yoga und Ayurveda</h3>
+					<p>Yoga und Ayurveda sind nicht spirituell, sondern sind eine über Jahrhunderte weitergegebene Wissensgrundlage für einen guten Umgang mit sich, seinem Körper aber auch mit seiner Umwelt.</p>
+					
+					<h3>Goṃ गों = sich mit etwas vertraut machen</h3>
+					<p>Auch Gom ist nicht spirituell oder relligiös. Das Wort Gom ist zwar aus dem Tibethischen entliehen, aber lediglich weil der Kern des Wortes gut zum Ziel der App passt, nicht weil damit ein religöser Gedanke verbunden ist.</p>
+					</br>
+					<p>Der Dailai Lama beschreibt die Bedeutung von Gom so: </br> [...] training the mind to focus in a disciplined way on its own internal states. [...] In Budhism, this mental training is called bhavana [...]. The original sanskrit term bhavana carries connotations of cultivation, in the sense of cultivating a habit, while the Tibetan term, gom, literally means "to familiarize". So the idea is a diciplined mental practice of cultivating familiarity with a given object, whether an external object or an internal experiance. (Dalai Lama, The universe in a single atom)</p>
+				</div>
+			</div>
+		<button class="accordion" ><img src="resources/icons/setting-icon.webp">Settings</button>
+			<div class="panel">
+				 <button class="settings" onclick="deleteDB()"><img src="resources/icons/database-delete-icon.png"> delete all input data</button> 
+			</div>		
+
+		<button class="accordion" ><img src="resources/icons/contact-icon.png">Impressum</button>
+			<div class="panel">
+				<h3>Haftungsausschluss </h3>
+				<p>GOM liefert Ideen und Hinweise für einen achtsamen Umgang mit dem eigenen Körper. GOM liefert keinerlei medizinische Beratung oder Hinweise zu Heilung in irgendeiner Form. Bei körperlichen oder gesundheitlichen Beschwerden bitte immer medizinisches Fachpersonal aufsuchen. </p>
+				<p>Bitte achte beim Üben auf deine Gesundheit. Probiere keine Haltungen, die du nicht schon unter Anleitung kennenglernt hast. Höre auf bevor du Schmerzen hast oder dir im schlimmsten Fall Verletzungen zuziehst. GOM ist nicht verantwortlich für Schäden jeglicher Art, die du dir oder anderen bei der Nutzung von GOM zuziehst.</p>
+				<p>Corbinian Thierbach<p>
+			</div>
+	  </div>
+	</div>
+	
+
+</footer>
+
+</body>
