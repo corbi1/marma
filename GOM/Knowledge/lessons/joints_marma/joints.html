@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Die Gelenke</title>
+
+	<link href="../../../Body/body.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Body/resources/babylon.js"></script>
+    <script src="../../../Body/resources/babylonjs.loaders.min.js"></script>
+    <script src="../../../Body/resources/pep.js"></script>
+	<style>
+	#licInfo{
+		font-size: x-small;
+		top: auto;
+		bottom:0;
+	}
+	
+	#licInfo1 {
+		padding-top: 5px;
+	}
+	
+	#dInfo{
+		position:absolute;
+		bottom:0;
+		right:0;
+	}
+	#dInfo img{
+		width:50px;
+	}
+	</style>
+  </head>
+
+  <body>
+    <canvas id="renderCanvas" touch-action="none"></canvas>
+	<div id="licInfo" onclick="showLic()"> 
+		<img src="../../../resources/icons/white/info-icon.webp">
+		<p id="licInfo1" class="hidden"> 
+			source 3d material: BodyParts3D &copy;			
+		</p>
+		<p id="licInfo2" class="hidden">
+			<a href="http://lifesciencedb.jp/bp3d/?lng=en#" target="_blank">The Database Center for Life Science</a></br>
+			licensed under <a href="https://creativecommons.org/licenses/by-sa/2.1/jp/" target="_blank">CC Attribution-Share Alike 2.1 Japan</a>
+		</p>
+	</div>
+	<div id="loading-screen">
+	  <div class="spinner"></div>
+	</div>
+	<div id="dInfo"> 
+		<img src="../../../resources/icons/white/3d-icon.webp">			
+	</div>
+
+    <script>
+      const canvas = document.getElementById("renderCanvas"); // Get the canvas element
+      const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
+
+function getQueryParam(param) {
+  let urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+/**** Colors *****/
+let jointType = "";
+jointType = getQueryParam('jointType');
+console.log("jointType: " + jointType);
+
+var bgColor;
+var hlColor, mainColor1, mainColor2;
+	bgColor = "rgba(81, 35, 112, "
+	mainColor1 = "rgba(33, 13, 38, 0.9)";
+	mainColor2 = "rgba(40, 36, 54, 21)";
+	textColor = "white";
+	document.documentElement.style.setProperty('--mainColor-1', mainColor1);
+	document.documentElement.style.setProperty('--mainColor-2', mainColor2);
+	document.documentElement.style.setProperty('--textColor', textColor);
+
+console.log(bgColor);
+document.documentElement.style.setProperty('--bg-color-005', bgColor + " 0.05)");
+document.documentElement.style.setProperty('--bg-color-010', bgColor + " 0.10)");
+document.documentElement.style.setProperty('--bg-color-030', bgColor + " 0.30)");
+document.documentElement.style.setProperty('--bg-color-050', bgColor + " 0.50)");
+document.documentElement.style.setProperty('--bg-color-090', bgColor + " 0.90)");
+document.documentElement.style.setProperty('--bg-color-100', bgColor + " 1.00)");
+document.documentElement.style.setProperty('--hl-color', hlColor);
+
+const transparent = new BABYLON.Color4(0,0,0,0.0000000000000001);
+const transparentHex = transparent.toHexString();
+
+var scene;
+/**** build human body *****/
+const createScene = function () {
+const scene = new BABYLON.Scene(engine);
+
+/**** build world *****/
+
+//var ground = BABYLON.MeshBuilder.CreateGround("ground1", {width: 500, height: 500, subdivisions: 0}, scene);
+//ground.position.x = -20;
+//ground.position.y = -15;
+//ground.position.z = -100;
+// Create a material for the ground
+//var groundMaterial = new BABYLON.StandardMaterial("groundMaterial");
+//groundMaterial.diffuseColor = new BABYLON.Color3(0.21961, 0.09020, 0.25490); //  Blue Mat=(0.00784, 0.77647, 0.96471)
+//ground.material = groundMaterial;
+
+scene.clearColor = transparent;
+//new BABYLON.AxesViewer(scene, 1000);
+//scene.debugLayer.show()
+
+/**** Materials *****/
+		//color
+		const bonecolor = new BABYLON.StandardMaterial("bonecolor");
+		bonecolor.diffuseColor = new BABYLON.Color3(0.79608, 0.79608, 0.79608);
+		bonecolor.alpha = 1.0;
+		
+		if (jointType === "1") {
+
+		} else if (jointType === "2") {
+
+		}
+
+        BABYLON.SceneLoader.ImportMeshAsync(
+			"",
+			"https://raw.githubusercontent.com/corbi1/marma/main/",
+			"joints3d_v1.glb"
+		).then((result) => {
+			console.log("imported")
+			
+			// Iterate through each mesh to set rotation
+			result.meshes.forEach((mesh) => {
+				// Ensure transformations are baked into the geometry
+				if (mesh.parent) {
+					mesh.computeWorldMatrix(true); // Ensure world matrix is up-to-date
+					mesh.bakeCurrentTransformIntoVertices();
+				}
+				
+				// Apply additional rotation if needed
+				mesh.rotationQuaternion = null;
+				mesh.rotation.x += Math.PI / 2;
+			});
+
+			// Apply position offsets
+			result.meshes.forEach((mesh) => {
+
+			if (mesh.parent) {
+					mesh.parent.computeWorldMatrix(true); // Update parent world matrix
+					mesh.parent.position.set(0, 0, 0); // Reset parent position
+					mesh.parent.rotationQuaternion = null; // Ensure no quaternion overrides
+					mesh.parent.rotation.set(0, 0, 0); // Reset parent rotation
+					mesh.parent.scaling.set(1, 1, 1); // Reset parent scale
+				}
+
+				mesh.setAbsolutePosition(new BABYLON.Vector3(0, 0, 0)); //x = left and right (red); y = up and down (green); z = back and forth (blue)
+			});
+
+			// Recursive function to apply changes to all descendants of a node
+			function applyChangesToDescendants(node, changesFunction) {
+				node.getChildren().forEach(function (child) {
+					// Apply changes to the current child
+					changesFunction(child);
+					
+					// Recursively apply changes to its descendants
+					applyChangesToDescendants(child, changesFunction);
+				});
+			}
+
+			// Set appearance of bones
+			var collectionBones = scene.getTransformNodeByName("Knochen");
+			if (collectionBones) {
+				console.log("Set appearance of bones")
+				applyChangesToDescendants(collectionBones, function(mesh) {
+					if (mesh.material) {
+						mesh.material = bonecolor; // Apply color
+						mesh.material.backFaceCulling = false;
+						mesh.alwaysSelectAsActiveMesh = true; // Prevent frustum culling
+						//mesh.refreshBoundingInfo();
+						//mesh.showBoundingBox = true;
+					} else if (!mesh.material){
+						collectionBones = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+			
+			// Register a render loop to repeatedly render the scene
+			engine.runRenderLoop(function () {
+				scene.render();
+			});
+		initializeUI(scene);
+		showLic();
+		});
+	};
+
+function setLight(camera, scene) {
+/**** Set light *****/
+		const light = new BABYLON.PointLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+		light.intensity = 0.5;
+		light.specular = new BABYLON.Color3.Black();
+		const light1 = new BABYLON.DirectionalLight("FrontRightLight", new BABYLON.Vector3(5, -1, 5), scene);
+		light1.specular = new BABYLON.Color3.Black();
+		light1.intensity = 0.6;
+		const light2 = new BABYLON.DirectionalLight("FrontLeftLight", new BABYLON.Vector3(-5, -1, 5), scene);
+		light2.specular = new BABYLON.Color3.Black();
+		light2.intensity = 0.6;
+		const light3 = new BABYLON.DirectionalLight("BackLight", new BABYLON.Vector3(0, -1, -5), scene);
+		light3.specular = new BABYLON.Color3.Black();
+		
+		scene.registerBeforeRender(function () {
+			light.position = camera.position;
+		});
+        return scene;
+};
+
+/**** License Info *****/
+var licviz = 1;
+function showLic(){
+	if (licviz == 1){
+		document.getElementById("licInfo1").classList.add('visible');
+		document.getElementById("licInfo1").classList.remove('hidden');
+		document.getElementById("licInfo2").classList.add('hidden');
+		document.getElementById("licInfo2").classList.remove('visible');
+		licviz = 0;
+	} else if (licviz == 0){
+		document.getElementById("licInfo2").classList.add('visible');
+		document.getElementById("licInfo2").classList.remove('hidden');
+		licviz = 1;
+	}
+}
+
+
+function initializeUI(scene) {
+	var camera
+	
+/**** Set camera *****/	
+	const modelheight = 680;
+	var cameraY = modelheight/2
+	camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 10, new BABYLON.Vector3(0, cameraY, 0), scene);
+	camera.useAutoRotationBehavior = true;
+	camera.alpha = 5;
+	camera.beta = 1.5;
+	camera.radius = 1200;
+	camera.attachControl(canvas, true);
+	//camera.autoRotationBehavior.idleRotationSpeed = 1;
+	//camera.minZ = 0.1; // Minimum clipping distance
+	//camera.maxZ = 5000; // Maximum clipping distance
+	
+
+	setLight(camera, scene);
+	document.getElementById("loading-screen").style.display = "none";
+
+}
+
+const load = createScene(); //Call the createScene function
+
+// Watch for browser/canvas resize events
+window.addEventListener("resize", function () {
+engine.resize();
+});
+
+    </script>
+  </body>
+</html>
