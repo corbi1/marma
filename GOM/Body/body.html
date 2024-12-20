@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5.0, minimum-scale=0.5">
     <title>The Body</title>
 	
 	<link href="body.css" rel="stylesheet" type="text/css" />
@@ -22,7 +23,12 @@
 			licensed under <a href="https://creativecommons.org/licenses/by-sa/2.1/jp/" target="_blank">CC Attribution-Share Alike 2.1 Japan</a>
 		</p>
 	</div>
+	<div id="loading-screen">
+	  <div class="spinner"></div>
+	</div>
 	<div id="CAMcontroll">
+		<div id="meshNameDiv" class="hidden">
+		</div>
 	<!-- Camera controll slider will be dynamically added here -->
 	
 	</div>
@@ -40,7 +46,7 @@
 
 
     <script>
-      const canvas = document.getElementById("renderCanvas"); // Get the canvas element
+	  const canvas = document.getElementById("renderCanvas"); // Get the canvas element
       const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 
 function getQueryParam(param) {
@@ -52,25 +58,34 @@ function getQueryParam(param) {
 let marmaDesign = "";
 marmaDesign = getQueryParam('marmaDesign');
 console.log(marmaDesign);
+let key = getQueryParam('key');
+console.log(key);
+let marmaName;
+let meshName;
+if (key !== null){
+	marmaName = getQueryParam('marmaName');
+	meshName = key + "_" + marmaName;
+}
+console.log(meshName);
 
 var bgColor;
 var mainColor1, mainColor2;
 
 console.log("style: " + marmaDesign);
 if (marmaDesign == "snayu") {
-	bgColor = "rgba(168, 222, 213,  "
-	document.getElementById('menueButton-container').style.display = "none";
-} else if (marmaDesign == "mamsa"){
-	bgColor = "rgba(162, 168, 222, "
-	document.getElementById('menueButton-container').style.display = "none";
-} else if (marmaDesign == "sandhi"){
-	bgColor = "rgba(222, 176, 214, "
-	document.getElementById('menueButton-container').style.display = "none";
-} else if (marmaDesign == "sira"){
 	bgColor = "rgba(219, 214, 160, "
 	document.getElementById('menueButton-container').style.display = "none";
+} else if (marmaDesign == "mamsa"){
+	bgColor = "rgba(222, 176, 214, "
+	document.getElementById('menueButton-container').style.display = "none";
+} else if (marmaDesign == "sandhi"){
+	bgColor = "rgba(162, 168, 222, "
+	document.getElementById('menueButton-container').style.display = "none";
+} else if (marmaDesign == "sira"){
+	bgColor = "rgba(223, 107, 112, "
+	document.getElementById('menueButton-container').style.display = "none";
 } else if (marmaDesign == "asthi"){
-	bgColor = "rgba(219, 207, 181, "
+	bgColor = "rgba(194, 179, 190,  " 
 	document.getElementById('menueButton-container').style.display = "none";
 } else {
 	bgColor = "rgba(81, 35, 112, "
@@ -145,27 +160,27 @@ scene.clearColor = transparent;
 		livercolor.alpha = 0.5;
 		//marmas
 		const snayu = new BABYLON.StandardMaterial("snayu");
-		snayu.diffuseColor = new BABYLON.Color3(0.65882, 0.87059, 0.83529);
+		snayu.diffuseColor = new BABYLON.Color3(0.8588, 0.8392, 0.6275);
 		snayu.alpha = 0.5;
 		const mamsa = new BABYLON.StandardMaterial("mamsa");
-		mamsa.diffuseColor = new BABYLON.Color3(0.63529, 0.65882, 0.87059);
+		mamsa.diffuseColor = new BABYLON.Color3(0.8706, 0.6902, 0.8392);
 		mamsa.alpha = 0.5;
 		const sandhi = new BABYLON.StandardMaterial("sandhi");
-		sandhi.diffuseColor = new BABYLON.Color3(0.87059, 0.69020, 0.83922);
+		sandhi.diffuseColor = new BABYLON.Color3(0.6353, 0.6588, 0.8706);
 		sandhi.alpha = 0.5;
 		const sira = new BABYLON.StandardMaterial("sira");
-		sira.diffuseColor = new BABYLON.Color3(0.85882, 0.83922, 0.62745);
+		sira.diffuseColor = new BABYLON.Color3(0.8745, 0.4196, 0.4392);
 		sira.alpha = 0.5;
 		const asthi = new BABYLON.StandardMaterial("asthi");
-		asthi.diffuseColor = new BABYLON.Color3(0.85882, 0.81176, 0.70980);
+		asthi.diffuseColor = new BABYLON.Color3(0.7608, 0.7020, 0.7451);
 		asthi.alpha = 0.5;
 
         BABYLON.SceneLoader.ImportMeshAsync(
 			"",
 			"https://raw.githubusercontent.com/corbi1/marma/main/",
-			"human3d_v8.3.glb"
+			"human3d_v8.6.glb"
 		).then((result) => {
-			console.log("loaded: human3d_v8.5.glb");
+			console.log("loaded: human3d_v8.6.glb");
 
 			// Iterate through each mesh to set rotation
 			result.meshes.forEach((mesh) => {
@@ -253,7 +268,6 @@ scene.clearColor = transparent;
 				console.log("Set appearance of muscles")
 				applyChangesToDescendants(collectionMuscle, function(mesh) {
 					if (mesh.material) {
-						//mesh.material.alpha = 0.5; // Set opacity to 50%
 						mesh.material = musclecolor; // Apply color
 					} else if (!mesh.material){
 						collectionMuscle = scene.getTransformNodeByName(mesh);
@@ -456,6 +470,11 @@ scene.clearColor = transparent;
 					}
 				});
 			}
+			
+			if (meshName) {
+			
+			}
+			
 
 			// Register a render loop to repeatedly render the scene
 			engine.runRenderLoop(function () {
@@ -463,7 +482,7 @@ scene.clearColor = transparent;
 			});
 		initializeUI(scene);
 		showLic();
-		//adjustColumns();	
+		
 		});
 	};
 
@@ -508,15 +527,15 @@ function initializeUI(scene) {
 
 	const modelheight = 1700;
 	var cameraY = modelheight/2 // Starting position at the middle
-	if (getQueryParam('cameraY') >= 0 && getQueryParam('cameraY') != null){ // Starting position from parameter
-		console.log("vertical camera position: " + getQueryParam('cameraY'))
-		cameraY = parseInt(getQueryParam('cameraY'));
-	}
+	//if (getQueryParam('cameraY') >= 0 && getQueryParam('cameraY') != null){ // Starting position from parameter
+	//	console.log("vertical camera position: " + getQueryParam('cameraY'))
+	//	cameraY = parseInt(getQueryParam('cameraY'));
+	//}
 	var camera
 
 
 /***** Set camera control*****/
-	const CAMcontroll = document.getElementById('CAMcontroll');
+/*	const CAMcontroll = document.getElementById('CAMcontroll');
 	const CAMslider = document.createElement('input');
 	CAMslider.classList.add('slider');
 	CAMslider.classList.add('CAMslider');
@@ -530,12 +549,56 @@ function initializeUI(scene) {
 		changeCamera(camera, parseFloat(invertedValue));
 		updateIconPosition();
 	});
+*/
+const CAMcontroll = document.getElementById('CAMcontroll');
+const CAMslider = document.createElement('input');
+CAMslider.classList.add('slider');
+CAMslider.id = 'CAMslider';
+CAMslider.type = 'range';
+CAMslider.min = '0';
+CAMslider.max = modelheight; // Set maximum to model height
+CAMslider.value = modelheight - cameraY;
+
+let betaReset = false; // Flag to track if beta reset is complete
+
+CAMslider.addEventListener('input', () => {
+    const invertedValue = CAMslider.max - CAMslider.value;
+
+    if (!betaReset) {
+        // Perform the smooth beta transition only once
+        animateBeta(camera, Math.PI / 2, () => {
+            betaReset = true; // Mark the beta as reset
+            changeCamera(camera, parseFloat(invertedValue)); // Update Y position after transition
+        });
+    } else {
+        // Update the camera position without changing beta
+        changeCamera(camera, parseFloat(invertedValue));
+    }
+
+    updateIconPosition(); // Optional: Updates the icon position if needed
+});
+
+// Reset betaReset on slider release
+CAMslider.addEventListener('mouseup', () => {
+    betaReset = false; // Allow animation to trigger again on next click
+});
+
+// For better cross-device support (touch and pointer devices)
+CAMslider.addEventListener('touchend', () => {
+    betaReset = false; // Reset beta on touch release
+});
+
+CAMslider.addEventListener('pointerup', () => {
+    betaReset = false; // Reset beta on pointer release
+});
+
 
 	CAMcontroll.appendChild(CAMslider);
 
     //const thumbIcon = document.querySelector('.thumb-icon');
 	const thumbIcon = document.createElement('div');
-    thumbIcon.classList.add('thumb-icon');
+    //thumbIcon.classList.add('thumb-icon');
+	thumbIcon.id = 'thumb-icon';
 	CAMcontroll.appendChild(thumbIcon);
 	const elem = document.createElement("img");
 	elem.src = '../resources/body/see-icon.png';
@@ -553,47 +616,87 @@ function initializeUI(scene) {
 		thumbIcon.style.top = `${top}px`;
 	}
 
-	function changeCamera (camera, value) {
+/*	function changeCamera (camera, value) {
 		// Update camera position based on slider value
 		camera.setTarget(new BABYLON.Vector3(0, value, 0));
+		camera.position.y = value;
+		camera.beta = Math.PI / 2;
 		//console.log ("camera focus at: " + value)
-	};
+	};*/
 	
-	updateIconPosition();
-
-	// rotation Controll
-const rotationControl = document.createElement('div');
-rotationControl.id = 'rotationControll'; // Add ID for styling in CSS
-
-// Create the nested <img> element
-const rotationIcon = document.createElement('img');
-rotationIcon.src = '../resources/body/stop-rotate-icon.webp'; // Set initial image
-rotationIcon.alt = 'Rotation Control'; // Accessibility text
-rotationIcon.id = 'rotationIcon'; // Add ID for styling in CSS
-
-// Append the <img> to the div
-rotationControl.appendChild(rotationIcon);
-
-// Add the event listener for click events
-let isRotationStopped = true; // State toggle for idle rotation speed
-rotationControl.addEventListener('click', () => {
-    cameraRotation();
-});
-
-// Define the cameraRotation function
-function cameraRotation() {
-    if (isRotationStopped) {
-        camera.autoRotationBehavior.idleRotationSpeed = 0.0;
-        rotationIcon.src = '../resources/body/start-rotate-icon.webp'; // rotate image color= #6A995D
-    } else {
-        camera.autoRotationBehavior.idleRotationSpeed = 0.1;
-        rotationIcon.src = '../resources/body/stop-rotate-icon.webp'; // stop image color= #993636
-    }
-    isRotationStopped = !isRotationStopped; // Toggle the state
+function changeCamera(camera, value) {
+    const originalRadius = camera.radius; // Save the current radius
+	camera.setTarget(new BABYLON.Vector3(0, value, 0));
+    camera.position.y = value; // Update the camera's Y position
+	camera.beta = Math.PI / 2;
+	camera.radius = originalRadius; // Restore the radius
 }
 
-// Append the rotation control div to the target element
-CAMcontroll.appendChild(rotationControl);
+// Function to animate the camera's beta angle
+function animateBeta(camera, targetBeta, onComplete) {
+    const currentBeta = camera.beta; // Start angle
+
+    const animation = new BABYLON.Animation(
+        "betaAnimation",                // Animation name
+        "beta",                         // Property to animate
+        60,                             // Frames per second
+        BABYLON.Animation.ANIMATIONTYPE_FLOAT, // Animation type
+        BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT // No looping
+    );
+
+    // Animation keys (start and end values)
+    const keys = [
+        { frame: 0, value: currentBeta },
+        { frame: 30, value: targetBeta } // duration 30 frame of 60
+    ];
+
+    animation.setKeys(keys);
+
+    // Attach the animation to the camera
+    camera.animations = [animation];
+
+    // Start the animation
+    const anim = scene.beginAnimation(camera, 0, 30, false);
+
+    // Call onComplete once animation ends
+    anim.onAnimationEnd = () => {
+        if (onComplete) onComplete();
+    };
+}
+
+	// rotation Controll
+	const rotationControl = document.createElement('div');
+	rotationControl.id = 'rotationControll';
+
+	// Create the nested <img> element
+	const rotationIcon = document.createElement('img');
+	rotationIcon.src = '../resources/body/stop-rotate-icon.webp'; // Set initial image
+	rotationIcon.alt = 'Rotation Control'; // Accessibility text
+	rotationIcon.id = 'rotationIcon'; // Add ID for styling in CSS
+
+	// Append the <img> to the div
+	rotationControl.appendChild(rotationIcon);
+
+	// Add the event listener for click events
+	let isRotationStopped = true; // State toggle for idle rotation speed
+	rotationControl.addEventListener('click', () => {
+		cameraRotation();
+	});
+
+	// Define the cameraRotation function
+	function cameraRotation() {
+		if (isRotationStopped) {
+			camera.autoRotationBehavior.idleRotationSpeed = 0.0;
+			rotationIcon.src = '../resources/body/start-rotate-icon.webp'; // rotate image color= #6A995D
+		} else {
+			camera.autoRotationBehavior.idleRotationSpeed = 0.1;
+			rotationIcon.src = '../resources/body/stop-rotate-icon.webp'; // stop image color= #993636
+		}
+		isRotationStopped = !isRotationStopped; // Toggle the state
+	}
+
+	// Append the rotation control div to the target element
+	CAMcontroll.appendChild(rotationControl);
 
 	
 /**** Set camera *****/	
@@ -610,7 +713,7 @@ CAMcontroll.appendChild(rotationControl);
 	camera.autoRotationBehavior.idleRotationSpeed = 0.1;
 
 	setLight(camera, scene);
-
+	
 /***** visibility control*****/
 	//document.addEventListener("DOMContentLoaded", function() {
 		const icons = ["marmas.webp","skin.png", "muscles.png", "bones.png", "intestines.png", "blood.png", "nerves.png"];
@@ -752,7 +855,38 @@ CAMcontroll.appendChild(rotationControl);
 			}
 		});
 	}
+
+	// Set camera focus on selected mesh
+	if (meshName) {
+		console.log("meshName:", meshName);
+		//hide camera control
+		document.getElementById("CAMslider").classList.add('hidden');
+		document.getElementById("thumb-icon").classList.add('hidden');
+		// Find the mesh by name
+		const selectedMesh = scene.getMeshByName(meshName);
+		if (selectedMesh) {
+			console.log("mesh: ", meshName);
+			// Display the mesh name in the div
+			document.getElementById("meshNameDiv").innerText = `${marmaName}`;
+			document.getElementById("meshNameDiv").classList.remove('hidden');
+
+			// Focus the camera on the mesh
+			const meshPosition = selectedMesh.getBoundingInfo().boundingBox.centerWorld;
+			camera.setTarget(meshPosition);
+			cameraY = meshPosition.y;
+			camera.position.y = cameraY;
+			camera.beta = Math.PI / 2;
+			CAMslider.value = modelheight - cameraY;
+			console.log("hight: ", cameraY);
+		} else {
+			document.getElementById("meshNameDiv").innerText = `Mesh not found: ${meshName}`;
+		}
+	}	
+	
+	
+	document.getElementById("loading-screen").style.display = "none";
 	document.getElementById('menueButton-container').classList.remove('hidden');
+	setTimeout(updateIconPosition, 0);
 	//});
 }
 
