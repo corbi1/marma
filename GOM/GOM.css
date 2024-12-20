@@ -109,7 +109,6 @@ header{
     z-index: 1000;
 }
 
-
 /*
 ########################################
 header (title)
@@ -136,6 +135,7 @@ h2 {
 
 h3 {
 	font-size: 1.2em;
+	line-height: 1.2em;
 	font-weight: bold;
 	margin: 30px auto 10px auto;
 }
@@ -260,6 +260,18 @@ Menue Items
 	bottom: 0;
 	margin: auto;
 	cursor: pointer;
+}
+
+/*
+########################################
+other
+########################################
+*/
+
+.extLink{
+	color: var(--white-080) !important;
+	font-size: 1em !important;
+	text-decoration: underline !important;
 }
 
 /*
