@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="de">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+	<title id="title" class="MarmaNameSK">Marma</title>
+	<link href="Marmas.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript"></script>
+	<script src="../create_db.js"></script>
+	<script src="Marmas.js" defer></script>
+
+</head>
+
+<header>
+	<div id="titleBar">
+		<div id="headline">
+		<h1 id="headline1"><span class="MarmaNameSK" ></span></h1>
+		<h2> <span id="headline2">Title</span> - <span class="BodyRegion" >BodyRegion</span></h2>
+		</div>
+	</div>
+	<div class="toolBar">
+		<button class="toolButton"  id="openFilterMenue" onclick="openFilterMenue(true)"><img src="../resources/icons/search-icon.webp"></button>
+	</div>
+</header>
+
+<body id="body">
+<div id="content">
+
+<section id="visualSection">
+	<div id="visual">
+		<img id="visual_img"> <br />
+	</div>
+</section>
+
+<section id="infoSection">
+	  <p>
+		<span class="MarmaNameSK" >Marmaname Sanskrit</span> gehört zu der Gruppe <span class="MarmaGrpSK" >Marmagruppe Sanskrit</span> (<span class="MarmaGrpDE" >Marmagruppe Deutsch</span>).
+	  </p>
+</section>
+
+<section id="evaluationSection">
+	<div id="evaluation">
+		<div class="slidecontainer">
+			<div class="popup">
+				<p id="localisationLabel" class="sLabel show" onclick="locFunctionShow()">Lokalisation: <img src="../resources/icons/info-icon.webp"></p>
+				<p id="localisationExpl" class="sExpl" onclick="locFunctionHide()">Ich kenne den Ort ... <img src="../resources/icons/info-icon.webp"></p>
+				<span class="popuptext" id="localisationPopup" onclick="locFunctionHide()">Popup</span>
+				<span ></span>
+			</div> 
+			<input type="range" min="1" max="5" class="slider" id="localisation">
+		</div>
+		<div class="slidecontainer">
+			<div class="popup">
+				
+				<p id="awarenessLabel" class="sLabel show" onclick="awFunctionShow()">Stärke der Wahrnehmung: <img src="../resources/icons/info-icon.webp"></p>
+				<p id="awarenessExpl" class="sExpl" onclick="awFunctionHide()">Ich spüre das Marma ... <img src="../resources/icons/info-icon.webp"></p>
+				<span class="popuptext" id="awarenessPopup" onclick="awFunctionHide()">Popup</span>
+				<span ></span>
+			</div> 
+			<input type="range" min="1" max="5" class="slider" id="awareness">
+		</div>
+		<div class="slidecontainer">
+			<div class="popup">
+				
+				<p id="frequencyLabel" class="sLabel show" onclick="freqFunctionShow()">Häufigkeit der Wahrnehmung: <img src="../resources/icons/info-icon.webp"></p>
+				<p id="frequencyExpl" class="sExpl" onclick="freqFunctionHide()">Ich spüre das Marma ... <img src="../resources/icons/info-icon.webp"></p>
+				<span class="popuptext" id="frequencyPopup" onclick="freqFunctionHide()">Popup</span>
+				<span ></span>
+			</div> 
+			<input type="range" min="1" max="6" class="slider" id="frequency">
+		</div>
+	</div>
+</section>
+	
+<section id="addInfoSection">
+
+	<button class="accordion" id="addInfo">Weitere Infos</button>
+	<div class="panel">
+		<div id="infoList">
+		  <ul id="addInfoList">
+			<li><span class="MarmaNameSK" ></span><span> - </span><span id="Typography" ></span></li>
+			<li>Marmagruppe </br>
+				<span class="MarmaGrpSK" >MarmaGrpSK</span><span> - </span><span class="MarmaGrpDE" ></span></li>
+			<li>Bedeutung </br>
+				<span id="Origin" >Begriffserklärung</span></li>
+			<li>Körpergegend: </br>
+				<span class="BodyRegion" >BodyRegion</span></li>
+			<li>Ort: </br>
+				<span class="Anatomy" >Anatomischer Ort</span></li>
+		  </ul>
+		</div>
+	</div>
+	<button class="accordion" id="addInfo_anatomy">Anatomie</button>
+	<div class="panel">
+		<p id="AnatomicalLoc">Das <span class="MarmaNameSK" ></span> befindet sich <span id="Explanation" ></span>.</br>
+		</p>
+
+		<button class="navButton" id="anatomyButton" onclick="openBodyInspector()">
+				<img src="../resources/icons/body-icon.webp">
+		</button>
+
+		<div id="infoList">
+		  <ul>
+			<li>Körpergegend: </br>
+				<span class="BodyRegion" >BodyRegion</span></li>
+			<li>Ort: </br>
+				<span class="Anatomy" >Anatomischer Ort</span></li>
+		  </ul>
+		</div>
+		
+		<div class="overlay" id="3d_Body_Inspector">
+		  <a href="javascript:void(0)" class="closebtn" onclick="closeBodyInspector()">&times;</a>
+		  <div class="overlayIFrame">
+			<iframe id="inspectorFrame" title="3d body inspector"></iframe> 
+		  </div>		
+		</div>
+</section>
+
+</div>
+
+<footer id="footer">
+
+    <div class="menueBar">
+        <div class="footer-button"><button class="navButton" id="pervious"><img src="../resources/icons/previous-icon.webp"></button></div>
+        <div class="footer-button menue_toolButton">
+		  <div class="button">
+			<button class="navButton" id="menue" onclick="location.href='../index.html';">
+				<img src="../resources/icons/menue-icon.webp">
+			</button>
+		  </div>
+          <div class="button">
+			<button class="navButton" id="search" onclick="openFilterMenue(true)">
+				<img src="../resources/icons/search-icon.webp">
+			    <div class="circle-badge">
+					<span id="filterHits"></span>
+				</div>
+			</button>
+		  </div>
+          <!--<div class="button">Center Button 2</div>-->
+        </div>
+		<div class="footer-button menue_navButtons">
+			<div class="footer-button">
+			<button class="navButton" id="pervious2"> <img src="../resources/icons/previous-icon.webp"></button>
+			</div>
+			<div class="footer-button"><button class="navButton" id="next"><img src="../resources/icons/next-icon.webp"></button></div>
+		</div>
+    </div>
+	
+	<div class="overlay" id="filterMenue">
+	  <a href="javascript:void(0)" class="closebtn" onclick="closeFilterMenue(true)">&times;</a>
+	  <div class="overlayContent">
+
+		<div class="filterSelect"> 
+			<select name="Marma" id="filterMarmaNAME" size="1"> <!-- use <selectmenu> when supported in the future-->
+				<option value="">Marma auswählen</option>
+			</select>
+		</div>
+		<div class="filterSelect"> 
+			<select name="Marma Grupp" id="filterMarmaGRP" size="1">
+				<option value="">Marma Gruppe auswählen</option>
+			</select>
+		</div>
+		<div class="filterSelect"> 
+			<select name="Körperteil" id="filterBodyPart" size="1">
+				<option value="">Körperteil auswählen</option>
+			</select>
+		</div>
+		<div class="filterSelect"> 
+			<select name="Körperteil" id="filterBodySide" size="1">
+				<option value="">Körperseite auswählen</option>
+			</select>
+		</div>
+			<button class="navButton" id="menue" onclick="location.href='../index.html';"><img src="../resources/icons/menue-icon.webp"></button>
+			<button class="navButton" id="resetFilter"><img src="../resources/icons/reset-icon.webp"></button>
+			<button class="navButton" id="filter-button"><img src="../resources/icons/search-icon.webp"></button>
+		</div>
+	</div>
+</footer>
+
+</body>
