@@ -712,9 +712,18 @@ function animateBeta(camera, targetBeta, onComplete) {
 	// Set camera limits
 	camera.lowerRadiusLimit = 10;
 	camera.upperRadiusLimit = modelheight * 5;
-	//camera.wheelPrecision = 12;
+
+	// Adjust zoom speed
 	camera.useNaturalPinchZoom = true;  // Enable natural pinch zoom
-	//camera.pinchPrecision = 8;
+	//camera.pinchPrecision = 8;  
+
+
+	// Dynamic zoom speed adjustment
+	
+	console.log("Camera Initial Radius:", camera.radius);
+	console.log("Model Height:", modelheight);
+	console.log("Lower Radius Limit:", camera.lowerRadiusLimit);
+	console.log("Upper Radius Limit:", camera.upperRadiusLimit);
 
 	camera.attachControl(canvas, true);
 	camera.autoRotationBehavior.idleRotationSpeed = 0.1;
