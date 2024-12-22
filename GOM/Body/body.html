@@ -712,6 +712,10 @@ function animateBeta(camera, targetBeta, onComplete) {
 	camera.attachControl(canvas, true);
 	camera.autoRotationBehavior.idleRotationSpeed = 0.1;
 
+	// Adjust zoom speed
+	camera.wheelDeltaPercentage = 0.03;
+	camera.pinchDeltaPercentage = 0.2;
+
 	setLight(camera, scene);
 	
 /***** visibility control*****/
