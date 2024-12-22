@@ -717,18 +717,14 @@ function animateBeta(camera, targetBeta, onComplete) {
 	camera.upperRadiusLimit = modelheight * 5;
 
 	// Adjust zoom speed
-	//camera.wheelDeltaPercentage = 0.03;
-// Dynamic zoom speed adjustment
-camera.onBeforeRenderObservable.add(() => {
-    const minSpeed = 0.005; // Minimum zoom speed
-    const maxSpeed = 0.02; // Maximum zoom speed
-    const range = camera.upperRadiusLimit - camera.lowerRadiusLimit;
-    const normalizedRadius = (camera.radius - camera.lowerRadiusLimit) / range;
-    
-    // Smooth interpolation between min and max speed
-    camera.wheelDeltaPercentage = minSpeed + (maxSpeed - minSpeed) * (1 - normalizedRadius);
-});
-	//camera.pinchDeltaPercentage = 0.03;
+	// Dynamic zoom speed adjustment
+	const minSpeed = 0.005; // Minimum zoom speed
+	const maxSpeed = 0.02; // Maximum zoom speed
+	const range = camera.upperRadiusLimit - camera.lowerRadiusLimit;
+	const normalizedRadius = (camera.radius - camera.lowerRadiusLimit) / range;
+	
+	// Smooth interpolation between min and max speed
+	camera.wheelDeltaPercentage = minSpeed + (maxSpeed - minSpeed) * (1 - normalizedRadius);
 
 	setLight(camera, scene);
 	
