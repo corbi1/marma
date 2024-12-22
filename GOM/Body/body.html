@@ -709,25 +709,15 @@ function animateBeta(camera, targetBeta, onComplete) {
 		camera.radius = getQueryParam('cameraR');
 	}
 	
-	camera.attachControl(canvas, true);
-	camera.autoRotationBehavior.idleRotationSpeed = 0.1;
-
 	// Set camera limits
 	camera.lowerRadiusLimit = 10;
 	camera.upperRadiusLimit = modelheight * 5;
-	camera.wheelPrecision = 100;
-camera.useNaturalPinchZoom = true;  // Enable natural pinch zoom
-//camera.pinchPrecision = 8;  
+	//camera.wheelPrecision = 12;
+	camera.useNaturalPinchZoom = true;  // Enable natural pinch zoom
+	//camera.pinchPrecision = 8;
 
-	// Adjust zoom speed
-	// Dynamic zoom speed adjustment
-	//const minSpeed = 0.005; // Minimum zoom speed
-	//const maxSpeed = 0.01; // Maximum zoom speed
-	//const range = camera.upperRadiusLimit - camera.lowerRadiusLimit;
-	/7const normalizedRadius = (camera.radius - camera.lowerRadiusLimit) / range;
-	
-	// Smooth interpolation between min and max speed
-	//camera.wheelDeltaPercentage = minSpeed + (maxSpeed - minSpeed) * (1 - normalizedRadius);
+	camera.attachControl(canvas, true);
+	camera.autoRotationBehavior.idleRotationSpeed = 0.1;
 
 	setLight(camera, scene);
 	
