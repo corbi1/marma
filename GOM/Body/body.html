@@ -718,10 +718,8 @@ function animateBeta(camera, targetBeta, onComplete) {
 	
 	// Adjust zoom speed
 	camera.useNaturalPinchZoom = true;  // Enable natural pinch zoom
-	//camera.pinchPrecision = 8;  
-
-
-	// Dynamic zoom speed adjustment
+	//camera.pinchPrecision = 8;
+	camera.wheelPrecision = 0.5;
 	
 	console.log("Camera Initial Radius:", camera.radius);
 	console.log("Model Height:", modelheight);
