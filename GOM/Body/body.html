@@ -719,7 +719,7 @@ function animateBeta(camera, targetBeta, onComplete) {
 	// Adjust zoom speed
 	// Dynamic zoom speed adjustment
 	const minSpeed = 0.005; // Minimum zoom speed
-	const maxSpeed = 0.02; // Maximum zoom speed
+	const maxSpeed = 0.01; // Maximum zoom speed
 	const range = camera.upperRadiusLimit - camera.lowerRadiusLimit;
 	const normalizedRadius = (camera.radius - camera.lowerRadiusLimit) / range;
 	
