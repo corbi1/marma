@@ -88,13 +88,16 @@ colors
 		position: absolute;
 		top: 0;
 		left: 0;
-		font-size: 1em;
+		font-size: 0.7em;
+		line-height: 1;
 		overflow: hidden;
+		text-align: justify;
 	}
 	#licInfo img {
 		width: 16px;
-		margin: 4px;
+		margin: 4px 8px 4px 4px;
 		float: left;
+		
 	}
 	#licInfo1 {
 		margin:0;
@@ -118,36 +121,39 @@ colors
 	
 	#menueButton-container{
 		position: relative;
-		bottom: 15px;
-		width: 100px;
+		bottom: 10px;
+		width: fit-content;
 		background-color: var(--bg-white);
 		border-radius: 5px;
 		margin-left: auto;
 		margin-right: auto;
-		overflow: hidden;
 		transform: translateY(-100%);
 	}
-	
-	#menueButton img{
-	width: 100%;
+	#menueButton{
+		position: initial;
+		width: var(--item-width);
 	}
-.column {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    align-content: flex-end;
-    max-height: 100vh;
-    min-width: 60px;
-}
-.item {
-    width: var(--item-width);
-    height: auto;
-    margin: var(--item-margin);
-    background-color: var(--bg-white);
-    border-radius: 5px;
-    border: 2px solid var(--bg-color-010);
-    overflow: hidden;
-}
+	#menueButton img{
+		width: 100%;
+	}
+	.column {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		align-content: flex-end;
+		max-height: 100vh;
+		min-width: 60px;
+	}
+	.item {
+		width: var(--item-width);
+		height: auto;
+		margin: var(--item-margin);
+		background-color: var(--bg-white);
+		border-radius: 5px;
+		border: 2px solid var(--bg-color-010);
+		overflow: hidden;
+		transition: width 0.3s ease;/*added*/
+	}
 	.button {
 		position: relative;
 		width: 100%;
@@ -293,7 +299,125 @@ colors
 		overflow: hidden;
 	}
 
+/*
+########################################
+Help Overlay
+########################################
+*/
 
+.overlay {
+  z-index: 200;
+  top: 0;
+  left: 0;
+  /*background-image: linear-gradient(to top, var(--bg-color-2) 0%, var(--bg-color-1) 50%);*/
+  background-color: var(--bg-color-2);
+}
+
+#help {
+  position: fixed;
+  top: 15px;
+  right: 0px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: auto;
+  z-index: 205;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--white-080);
+  transition: background-color 0.5s ease, height 0.3s ease;
+}
+
+#hint {
+  color: var(--white-080);
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+  height: 0;
+  overflow: hidden; /* Ensure content is hidden during collapse */
+  transition: height 0.5s ease;
+}
+
+#helpbtn {
+  color: var(--white-080);
+  font-size: 2.5em;
+  padding: 8px;
+  text-decoration: none;
+
+}
+
+.pulse {
+  animation: pulseEffect 2s infinite;
+}
+
+@keyframes pulseEffect {
+  0% {
+    background-color: var(--bg-color-1);
+  }
+  50% {
+    background-color: var(--bg-color-highlight);
+  }
+  100% {
+    background-color: var(--bg-color-1);
+  }
+}
+.overlay{
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+}
+
+.overlayContent{
+	z-index: 210;
+	top:0;
+	width:auto;
+	margin:50px;
+	flex: 1;
+}
+.overlayContent p{
+	text-align:justify;
+}
+.overlayContent img{
+	margin: 15px 5px;
+	width: 40%;
+	max-width: 150px;
+    min-width: 50px;
+}
+#helpOL{
+	color:white;
+}
+#helpNav {
+  z-index: 210;
+  /*position: sticky;*/
+  bottom: 0;
+  margin: 0 50px 50px 50px;
+  /*background-color: rgba(0, 0, 0, 0.8);*/
+  text-align: center;
+  padding: 10px 0;
+}
+
+.navButton{
+	background-color: var(--progress1);
+	width:70px;
+	height:70px;
+}
+#helpNav .navButton img{
+	width: auto;
+    height: 50px;
+}
+
+#help3{
+	width:80%;
+}
+
+/*
+########################################
+mobile
+########################################
+*/
 
 /* Desktop (Height > 960px): */
 @media screen and (min-height: 961px) {
@@ -336,12 +460,15 @@ colors
 /* Portrait Phone (Width <= 480px, Height 681px - 960px): */
 @media screen and (min-height: 681px) and (max-height: 960px) and (max-width: 480px) {
     :root {
-        --container-width: 140px;
+        --container-width: 80px;
         --item-width: 70px;
     }
 	.container{
 		max-height: 100vh;
 	}
+	    .not-selected {
+        display: block;
+    }
 }
 
 /* Landscape Phone (Height 481px - 680px): */
@@ -363,11 +490,14 @@ colors
 /* Portrait Tablet Small (Width <= 480px, Height 481px - 680px): */
 @media screen and (min-height: 481px) and (max-height: 680px) and (max-width: 480px) {
     :root {
-        --container-width: 110px;
+        --container-width: 60px;
         --item-width: 50px;
     }
 	.container{
 		max-height: 100vh;
+	}
+	.selected{
+		width:110px;
 	}
 	.not-selected {
         display: block;
