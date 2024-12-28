@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5.0, minimum-scale=0.5">
     <title>The Body</title>
 	
+	<link href="../GOM.css" rel="stylesheet" type="text/css" />
 	<link href="body.css" rel="stylesheet" type="text/css" />
     <script src="resources/babylon.js"></script>
     <script src="resources/babylonjs.loaders.min.js"></script>
@@ -39,10 +40,80 @@
 			</button>
 		<!--</div>-->
 	</div>
-    <div class="container" id="ui-container">
+    <div class="container" id="vizContrl">
 		<div class="column" id="column-1"><!-- Buttons and sliders will be dynamically added here --></div>
-		
     </div>
+	
+	<div id="help" onclick="toggleHelp()">
+		<a href="javascript:void(0)" id="helpbtn" class="hidden" >?</a>
+		<div id="hint" class="hidden">
+			<p >Hilfe</p>
+		</div>
+	</div>
+	<div class="overlay" id="helpOL">
+	  <div class="overlayContent">
+		<div id="help1">
+			<h3>Der Körper</h3>
+			<p>Hier kannst du dir den Körper in all seinen Einzelheiten ansehen. Leider gibt es derzeit nur ein männliches Modell. Da die grundsätzliche Anatomie bei beiden Geschlechtern sehr ähnlich ist reicht das für einen Überblick ersteinmal aus.</p>
+			<h3>Ansicht</h3>
+			<p>Mit Fingergesten kannst du dir das Modell in die gewünschte Ansicht drehen:</p>
+			<img src="../resources/body/white/horizontal-rotate-icon.webp" alt="horizontal rotieren">
+			<img src="../resources/body/white/vertical-rotate-icon.webp" alt="vertical rotieren">
+			<h3>Zoom</h3>
+			<p>Zoomen kannst du in dem du mit zwei Fingern das Modell größer ziehst:</p>
+			<img src="../resources/body/white/zoom-icon.webp" alt="horizontal rotieren">
+		</div>
+		<div class="hidden" id="help2">
+			<h3>Die Kamera</h3>
+			<p>In der unteren linken Ecke findest du die Einstellungen für die Kamera.</p>
+			<p>Bewege das Auge nach oben und unten um die verschiedenen vertikalen Bereiche des Modells zu fokusieren.</p>
+			</br>
+			<p>Um die automatische Rotation zu stoppen klicke auf das Symbol:</p>
+			<img style="background-color:var(--bg-white);border-radius: 5%;padding: 5px;)"src="../resources/body/stop-rotate-icon.webp" alt="rotieren stoppen">
+		</div>
+		<div class="hidden" id="help3">
+			<h3>Sichtbarkeit</h3>
+			<p>In der unteren rechten Ecke findest du die Einstellungen für die Sichtbarkeit.</p>
+			<p>Klicke auf eines der Symbole. Nach dem Klick auf eines der Symbole erscheint dieses dann vergrößert. </p>
+			</br>
+			<p>Unter dem aktivierten Symbol findest du jetzt einen Regler. Mit diesem Regler kannst du die Sichtbarkeit verschiedener Element des Modells regeln: von 0% gar nicht sichtbar, bis 100% komplett sichtbar. Werte dazwischen zeigen die Elemente transparent.</p>
+			</br>
+			<p>Wenn du deine Einstellungen getroffen hast, kannst du das aktive, große Symbol erneut klicken um dieses wieder schrumpfen, bzw. die anderen Symbole anzeigen zu lassen.</p>
+		</div>
+		<div>
+			<h3>Elemente des Modells</h3>
+			<p>Die Elemente des Modell sind in sieben Kategorien eingeteilt. Für jede einzelne Kategorie kann die Sichtbarkeit eingestellt werden.</p>
+			</br>
+			<h3>Marmas</h3>
+			<img src="../resources/body/white/marmas.webp" alt="Marma Icon">
+			<p>Sichtbarkeit der Marma Punkte.</p>
+			<h3>Haut</h3>
+			<img src="../resources/body/white/skin.webp" alt="Haut Icon">
+			<p>Sichtbarkeit der Haut und Haare.</p>
+			<h3>Muskeln</h3>
+			<img src="../resources/body/white/muscles.webp" alt="Muskel Icon">
+			<p>Sichtbarkeit der Muskeln.</p>
+			<h3>Knochen</h3>
+			<img src="../resources/body/white/bones.webp" alt="Knochen Icon">
+			<p>Sichtbarkeit der Knochen, Knorpel und Sehnen.</p>
+			<h3>Organe</h3>
+			<img src="../resources/body/white/intestines.webp" alt="Organe Icon">
+			<p>Sichtbarkeit der Organe.</p>
+			<h3>Blutgefäße</h3>
+			<img src="../resources/body/white/blood.webp" alt="Herz Icon">
+			<p>Sichtbarkeit der Venen und Arrterien. Achtung, das Modell ist nicht vollständig.</p>
+			<h3>Nerven</h3>
+			<img src="../resources/body/white/nerves.webp" alt="Gehirn Icon">
+			<p>Sichtbarkeit der Nerven. Achtung, es ist nur ein kleiner Teil dargestellt!</p>
+		</div>
+	  </div>
+		<div class="" id="helpNav">
+			<!--<button class="navButton" id="previous"> <img src="../resources/icons/white/previous-icon.webp" alt="zurück"></button>-->
+			<button class="navButton" id="next"><img src="../resources/icons/white/next-icon.webp" alt="weiter"></button>
+		</div>
+	</div>
+
+	
 
 
     <script>
@@ -526,6 +597,7 @@ function showLic(){
 function initializeUI(scene) {
 
 	const modelheight = 1700;
+
 	var cameraY = modelheight/2 // Starting position at the middle
 	//if (getQueryParam('cameraY') >= 0 && getQueryParam('cameraY') != null){ // Starting position from parameter
 	//	console.log("vertical camera position: " + getQueryParam('cameraY'))
@@ -575,22 +647,22 @@ CAMslider.addEventListener('input', () => {
         changeCamera(camera, parseFloat(invertedValue));
     }
 
-    updateIconPosition(); // Optional: Updates the icon position if needed
-});
+		updateIconPosition(); // Optional: Updates the icon position if needed
+	});
 
-// Reset betaReset on slider release
-CAMslider.addEventListener('mouseup', () => {
-    betaReset = false; // Allow animation to trigger again on next click
-});
+	// Reset betaReset on slider release
+	CAMslider.addEventListener('mouseup', () => {
+		betaReset = false; // Allow animation to trigger again on next click
+	});
 
-// For better cross-device support (touch and pointer devices)
-CAMslider.addEventListener('touchend', () => {
-    betaReset = false; // Reset beta on touch release
-});
+	// For better cross-device support (touch and pointer devices)
+	CAMslider.addEventListener('touchend', () => {
+		betaReset = false; // Reset beta on touch release
+	});
 
-CAMslider.addEventListener('pointerup', () => {
-    betaReset = false; // Reset beta on pointer release
-});
+	CAMslider.addEventListener('pointerup', () => {
+		betaReset = false; // Reset beta on pointer release
+	});
 
 
 	CAMcontroll.appendChild(CAMslider);
@@ -616,53 +688,53 @@ CAMslider.addEventListener('pointerup', () => {
 		thumbIcon.style.top = `${top}px`;
 	}
 
-/*	function changeCamera (camera, value) {
-		// Update camera position based on slider value
+	/*	function changeCamera (camera, value) {
+			// Update camera position based on slider value
+			camera.setTarget(new BABYLON.Vector3(0, value, 0));
+			camera.position.y = value;
+			camera.beta = Math.PI / 2;
+			//console.log ("camera focus at: " + value)
+		};*/
+		
+	function changeCamera(camera, value) {
+		const originalRadius = camera.radius; // Save the current radius
 		camera.setTarget(new BABYLON.Vector3(0, value, 0));
-		camera.position.y = value;
+		camera.position.y = value; // Update the camera's Y position
 		camera.beta = Math.PI / 2;
-		//console.log ("camera focus at: " + value)
-	};*/
-	
-function changeCamera(camera, value) {
-    const originalRadius = camera.radius; // Save the current radius
-	camera.setTarget(new BABYLON.Vector3(0, value, 0));
-    camera.position.y = value; // Update the camera's Y position
-	camera.beta = Math.PI / 2;
-	camera.radius = originalRadius; // Restore the radius
-}
+		camera.radius = originalRadius; // Restore the radius
+	}
 
-// Function to animate the camera's beta angle
-function animateBeta(camera, targetBeta, onComplete) {
-    const currentBeta = camera.beta; // Start angle
+	// Function to animate the camera's beta angle
+	function animateBeta(camera, targetBeta, onComplete) {
+		const currentBeta = camera.beta; // Start angle
 
-    const animation = new BABYLON.Animation(
-        "betaAnimation",                // Animation name
-        "beta",                         // Property to animate
-        60,                             // Frames per second
-        BABYLON.Animation.ANIMATIONTYPE_FLOAT, // Animation type
-        BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT // No looping
-    );
+		const animation = new BABYLON.Animation(
+			"betaAnimation",                // Animation name
+			"beta",                         // Property to animate
+			60,                             // Frames per second
+			BABYLON.Animation.ANIMATIONTYPE_FLOAT, // Animation type
+			BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT // No looping
+		);
 
-    // Animation keys (start and end values)
-    const keys = [
-        { frame: 0, value: currentBeta },
-        { frame: 30, value: targetBeta } // duration 30 frame of 60
-    ];
+		// Animation keys (start and end values)
+		const keys = [
+			{ frame: 0, value: currentBeta },
+			{ frame: 30, value: targetBeta } // duration 30 frame of 60
+		];
 
-    animation.setKeys(keys);
+		animation.setKeys(keys);
 
-    // Attach the animation to the camera
-    camera.animations = [animation];
+		// Attach the animation to the camera
+		camera.animations = [animation];
 
-    // Start the animation
-    const anim = scene.beginAnimation(camera, 0, 30, false);
+		// Start the animation
+		const anim = scene.beginAnimation(camera, 0, 30, false);
 
-    // Call onComplete once animation ends
-    anim.onAnimationEnd = () => {
-        if (onComplete) onComplete();
-    };
-}
+		// Call onComplete once animation ends
+		anim.onAnimationEnd = () => {
+			if (onComplete) onComplete();
+		};
+	}
 
 	// rotation Controll
 	const rotationControl = document.createElement('div');
@@ -708,30 +780,26 @@ function animateBeta(camera, targetBeta, onComplete) {
 	if (getQueryParam('cameraR') >= 0 && getQueryParam('cameraR') != null ){ // Zoom from parameter
 		camera.radius = getQueryParam('cameraR');
 	}
+
+	camera.attachControl(canvas, true);
+	camera.autoRotationBehavior.idleRotationSpeed = 0.1;
 	
 	// Set camera limits
 	camera.lowerRadiusLimit = 10;
 	camera.upperRadiusLimit = modelheight * 5;
 
-	camera.attachControl(canvas, true);
-	camera.autoRotationBehavior.idleRotationSpeed = 0.1;
-	
 	// Adjust zoom speed
 	camera.useNaturalPinchZoom = true;  // Enable natural pinch zoom
-	//camera.pinchPrecision = 8;
-	camera.wheelPrecision = 0.5;
-	
-	console.log("Camera Initial Radius:", camera.radius);
-	console.log("Model Height:", modelheight);
-	console.log("Lower Radius Limit:", camera.lowerRadiusLimit);
-	console.log("Upper Radius Limit:", camera.upperRadiusLimit);
+	//camera.pinchPrecision = 8; default = 12
+	//panningSensibility= 1000; default = 100
+	camera.wheelPrecision = 0.5; //default = 1
 
 	setLight(camera, scene);
 	
 /***** visibility control*****/
 	//document.addEventListener("DOMContentLoaded", function() {
-		const icons = ["marmas.webp","skin.png", "muscles.png", "bones.png", "intestines.png", "blood.png", "nerves.png"];
-		const container = document.getElementById('ui-container');
+		const icons = ["marmas.webp","skin.webp", "muscles.webp", "bones.webp", "intestines.webp", "blood.webp", "nerves.webp"];
+		const container = document.getElementById('vizContrl');
 		const column = document.getElementById('column-1');
 		let selectedIndex = -1; //no button selected
 
@@ -793,6 +861,7 @@ function animateBeta(camera, targetBeta, onComplete) {
 		// Toggle visibility of sliders and buttons
 		function toggleVisibility(index) {
 			//const sliders = document.querySelectorAll('.slider');
+			const container = document.getElementById('vizContrl');
 			const sliderContainers = document.querySelectorAll('.sliderContainer');
 			const items = document.querySelectorAll('.item');
 			const buttons = document.querySelectorAll('.button');
@@ -804,6 +873,7 @@ function animateBeta(camera, targetBeta, onComplete) {
 				sliderContainers[index].classList.remove('visible');
 				valueDisplays.forEach(display => {display.classList.remove('visible');});
 				items.forEach(item => item.classList.remove('selected', 'not-selected'));
+				container.classList.remove('selected');
 				selectedIndex = -1;
 			} else {
 				if (selectedIndex !== -1) {
@@ -821,6 +891,7 @@ function animateBeta(camera, targetBeta, onComplete) {
 						if (i !== index) item.classList.add('not-selected');
 					});
 				}
+				container.classList.add('selected');
 				// Select the new button
 				sliderContainers[index].classList.add('visible');
 				valueDisplays[index].classList.add('visible');
@@ -899,6 +970,8 @@ function animateBeta(camera, targetBeta, onComplete) {
 	
 	
 	document.getElementById("loading-screen").style.display = "none";
+	document.getElementById("helpbtn").classList.remove('hidden');
+	showHint();
 	document.getElementById('menueButton-container').classList.remove('hidden');
 	setTimeout(updateIconPosition, 0);
 	//});
@@ -910,6 +983,140 @@ const load = createScene(); //Call the createScene function
 window.addEventListener("resize", function () {
 engine.resize();
 });
+
+
+
+/***** help *****/
+
+// JavaScript function to toggle the overlay
+function toggleHelp() {
+    const overlay = document.getElementById("helpOL");
+    const helpContainer = document.getElementById("help");
+    const helpBtn = document.getElementById("helpbtn");
+    const nextButton = document.getElementById("next");
+    const helpContents = document.querySelectorAll("#helpOL .overlayContent > div");
+
+    if (overlay.style.height === "100%") {
+        overlay.style.height = "0%";
+        helpBtn.textContent = "?"; // Change to "?"
+    } else {
+        overlay.style.height = "100%";
+        helpBtn.textContent = "×"; // Change to "×"
+		hint.classList.add("hidden");
+
+        // Reset navigation to the initial state
+        currentIndex = 0;
+        nextButton.querySelector("img").src = "../resources/icons/white/next-icon.webp";
+        helpContents.forEach((content, i) => {
+            if (i === 0) {
+                content.classList.remove("hidden");
+            } else {
+                content.classList.add("hidden");
+            }
+        });
+        resetZIndex();
+    }
+}
+
+// JavaScript function to show helper text for 5 seconds
+function resetZIndex() {
+	document.getElementById("CAMcontroll").style.zIndex = "";
+	document.getElementById("CAMcontroll").style.boxShadow = "none";
+	document.getElementById("vizContrl").style.zIndex = "";
+	document.getElementById("vizContrl").style.boxShadow = "none";
+}
+
+function showHint() {
+    const helpContainer = document.getElementById("help");
+    const hint = document.getElementById("hint");
+
+    // Set height to auto and calculate full height
+    hint.classList.remove("hidden");
+    const autoHeight = hint.scrollHeight + "px";
+
+    // Set height to 0 before transitioning
+    hint.style.height = "0";
+    setTimeout(() => {
+        hint.style.transition = "height 0.5s ease";
+        hint.style.height = autoHeight;
+    });
+
+    // Add pulse animation to the help container
+    helpContainer.classList.add("pulse");
+
+    // Remove pulse animation and hide the hint after 5 seconds
+    setTimeout(() => {
+        helpContainer.classList.remove("pulse");
+        hint.style.height = "0";
+        setTimeout(() => {
+            hint.classList.add("hidden");
+            hint.style.transition = ""; // Reset transition property
+        }, 500); // Match the transition duration
+    }, 5000);
+}
+
+// JavaScript function to handle navigation
+function handleNavigation() {
+    const helpContents = document.querySelectorAll("#helpOL .overlayContent > div");
+    const nextButton = document.getElementById("next");
+    let currentIndex = 0;
+
+    function resetNavigation() {
+        currentIndex = 0;
+        nextButton.querySelector("img").src = "../resources/icons/white/next-icon.webp";
+        helpContents.forEach((content, i) => {
+            if (i === 0) {
+                content.classList.remove("hidden");
+            } else {
+                content.classList.add("hidden");
+            }
+        });
+        resetZIndex();
+    }
+
+    function updateZIndex(index) {
+        resetZIndex();
+        if (index === 1) {
+            document.getElementById("CAMcontroll").style.zIndex = "205";
+			document.getElementById("CAMcontroll").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+        } else if (index === 2) {
+            document.getElementById("vizContrl").style.zIndex = "205";
+			document.getElementById("vizContrl").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+        }
+    }
+
+    function showContent(index) {
+        helpContents.forEach((content, i) => {
+            if (i === index) {
+                content.classList.remove("hidden");
+            } else {
+                content.classList.add("hidden");
+            }
+        });
+        updateZIndex(index);
+    }
+
+    nextButton.addEventListener("click", () => {
+        if (currentIndex < helpContents.length - 1) {
+            currentIndex++;
+            showContent(currentIndex);
+            if (currentIndex === helpContents.length - 1) {
+                nextButton.querySelector("img").src = "../resources/knowledge/white/check-mark-icon.webp";
+            }
+        } else {
+            toggleHelp();
+            resetNavigation();
+        }
+    });
+
+    // Initialize with the first content
+    resetNavigation();
+}
+
+// Initialize navigation when the script loads
+document.addEventListener("DOMContentLoaded", handleNavigation);
+
+
 
     </script>
   </body>
