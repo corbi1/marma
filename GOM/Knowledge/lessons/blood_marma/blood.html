@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Blutgefäße</title>
+
+	<link href="../../../Body/body.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Body/resources/babylon.js"></script>
+    <script src="../../../Body/resources/babylonjs.loaders.min.js"></script>
+    <script src="../../../Body/resources/pep.js"></script>
+	<style>
+	#licInfo{
+		font-size: x-small;
+		top: auto;
+		bottom:0;
+	}
+	
+	#licInfo1 {
+		padding-top: 5px;
+	}
+	
+	#dInfo{
+		position:absolute;
+		bottom:0;
+		right:0;
+	}
+	#dInfo img{
+		width:50px;
+	}
+	</style>
+  </head>
+
+  <body>
+    <canvas id="renderCanvas" touch-action="none"></canvas>
+	<div id="licInfo" onclick="showLic()"> 
+		<img src="../../../resources/icons/white/info-icon.webp">
+		<p id="licInfo1" class="hidden"> 
+			source 3d material: BodyParts3D &copy;			
+		</p>
+		<p id="licInfo2" class="hidden">
+			<a href="http://lifesciencedb.jp/bp3d/?lng=en#" target="_blank">The Database Center for Life Science</a></br>
+			licensed under <a href="https://creativecommons.org/licenses/by-sa/2.1/jp/" target="_blank">CC Attribution-Share Alike 2.1 Japan</a>
+		</p>
+	</div>
+	<div id="loading-screen">
+	  <div class="spinner"></div>
+	</div>
+	<div id="dInfo"> 
+		<img src="../../../resources/icons/white/3d-icon.webp">			
+	</div>
+
+    <script>
+      const canvas = document.getElementById("renderCanvas"); // Get the canvas element
+      const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
+
+function getQueryParam(param) {
+  let urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+/**** Colors *****/
+let bloodStyle = "";
+bloodStyle = getQueryParam('bloodStyle');
+console.log("bloodStyle: " + bloodStyle);
+
+var bgColor;
+var hlColor, mainColor1, mainColor2;
+	bgColor = "rgba(81, 35, 112, "
+	mainColor1 = "rgba(33, 13, 38, 0.9)";
+	mainColor2 = "rgba(40, 36, 54, 21)";
+	textColor = "white";
+	document.documentElement.style.setProperty('--mainColor-1', mainColor1);
+	document.documentElement.style.setProperty('--mainColor-2', mainColor2);
+	document.documentElement.style.setProperty('--textColor', textColor);
+
+console.log(bgColor);
+document.documentElement.style.setProperty('--bg-color-005', bgColor + " 0.05)");
+document.documentElement.style.setProperty('--bg-color-010', bgColor + " 0.10)");
+document.documentElement.style.setProperty('--bg-color-030', bgColor + " 0.30)");
+document.documentElement.style.setProperty('--bg-color-050', bgColor + " 0.50)");
+document.documentElement.style.setProperty('--bg-color-090', bgColor + " 0.90)");
+document.documentElement.style.setProperty('--bg-color-100', bgColor + " 1.00)");
+document.documentElement.style.setProperty('--hl-color', hlColor);
+
+const transparent = new BABYLON.Color4(0,0,0,0.0000000000000001);
+const transparentHex = transparent.toHexString();
+
+var scene;
+/**** build human body *****/
+const createScene = function () {
+	const scene = new BABYLON.Scene(engine);
+
+/**** build world *****/
+
+var ground = BABYLON.MeshBuilder.CreateGround("ground1", {width: 500, height: 500, subdivisions: 0}, scene);
+ground.position.x = -20;
+ground.position.y = -15;
+ground.position.z = -25;
+// Create a material for the ground
+var groundMaterial = new BABYLON.StandardMaterial("groundMaterial");
+groundMaterial.diffuseColor = new BABYLON.Color3(0.21961, 0.09020, 0.25490); //  Blue Mat=(0.00784, 0.77647, 0.96471)
+ground.material = groundMaterial;
+
+scene.clearColor = transparent;
+//new BABYLON.AxesViewer(scene, 1000);
+
+/**** Materials *****/
+		//color
+		const skincolor = new BABYLON.StandardMaterial("skincolor");
+		skincolor.diffuseColor = new BABYLON.Color3(0.96863, 0.82745, 0.65098);
+		skincolor.alpha = 0.05;
+		const musclecolor = new BABYLON.StandardMaterial("musclecolor");
+		musclecolor.diffuseColor = new BABYLON.Color3(0.87843, 0.35294, 0.19608);
+		musclecolor.alpha = 0.2;
+		const bonecolor = new BABYLON.StandardMaterial("bonecolor");
+		bonecolor.diffuseColor = new BABYLON.Color3(0.79608, 0.79608, 0.79608);
+		bonecolor.alpha = 0.05;
+		const cartilagecolor = new BABYLON.StandardMaterial("cartilagecolor");
+		cartilagecolor.diffuseColor = new BABYLON.Color3(0.75294, 0.71765, 0.68235);
+		cartilagecolor.alpha = 0.0;		
+		const arterycolor = new BABYLON.StandardMaterial("arterycolor");
+		arterycolor.diffuseColor = new BABYLON.Color3(0.38824, 0.09020, 0.02745);
+		arterycolor.alpha = 1.0;	
+		const veincolor = new BABYLON.StandardMaterial("veincolor");
+		veincolor.diffuseColor = new BABYLON.Color3(0.15686, 0.15686, 0.78431);
+		veincolor.alpha = 1.0;
+		
+		if (bloodStyle === "A") {
+			arterycolor.alpha = 1.0;
+			veincolor.alpha = 0.2;
+		} else if (bloodStyle === "V") {
+			veincolor.alpha = 1.0;
+			arterycolor.alpha = 0.2;
+		}
+
+        BABYLON.SceneLoader.ImportMeshAsync(
+			"",
+			"https://raw.githubusercontent.com/corbi1/marma/main/",
+			"blood3d_v1.glb"
+		).then((result) => {
+			console.log("imported")
+			
+			// Iterate through each mesh to set rotation
+			result.meshes.forEach((mesh) => {
+				// Ensure transformations are baked into the geometry
+				if (mesh.parent) {
+					mesh.computeWorldMatrix(true); // Ensure world matrix is up-to-date
+					mesh.bakeCurrentTransformIntoVertices();
+				}
+				
+				// Apply additional rotation if needed
+				mesh.rotationQuaternion = null;
+				mesh.rotation.x += Math.PI / 2;
+			});
+
+			// Apply position offsets
+			result.meshes.forEach((mesh) => {
+
+			if (mesh.parent) {
+					mesh.parent.computeWorldMatrix(true); // Update parent world matrix
+					mesh.parent.position.set(0, 0, 0); // Reset parent position
+					mesh.parent.rotationQuaternion = null; // Ensure no quaternion overrides
+					mesh.parent.rotation.set(0, 0, 0); // Reset parent rotation
+					mesh.parent.scaling.set(1, 1, 1); // Reset parent scale
+				}
+
+				mesh.setAbsolutePosition(new BABYLON.Vector3(0, 73, -100)); //x = left and right (red); y = up and down (green); z = back and forth (blue)
+			});
+
+			// Recursive function to apply changes to all descendants of a node
+			function applyChangesToDescendants(node, changesFunction) {
+				node.getChildren().forEach(function (child) {
+					// Apply changes to the current child
+					changesFunction(child);
+					
+					// Recursively apply changes to its descendants
+					applyChangesToDescendants(child, changesFunction);
+				});
+			}
+
+			// Set appearance of skin
+			var collectionSkin = scene.getTransformNodeByName("Äußeres");
+			console.log(collectionSkin);
+			if (collectionSkin) {
+				console.log("Set appearance of skin")
+				applyChangesToDescendants(collectionSkin, function(mesh) {
+					if (mesh.material) {
+						mesh.material = skincolor; // Apply color
+					} else if (!mesh.material){
+						collectionSkin = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+
+			// Set appearance of muscles
+			var collectionMuscle = scene.getTransformNodeByName("Muskeln");
+			if (collectionMuscle) {
+				console.log("Set appearance of muscles")
+				applyChangesToDescendants(collectionMuscle, function(mesh) {
+					if (mesh.material) {
+						//mesh.material.alpha = 0.5; // Set opacity to 50%
+						mesh.material = musclecolor; // Apply color
+					} else if (!mesh.material){
+						collectionMuscle = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+
+			// Set appearance of bones
+			var collectionBones = scene.getTransformNodeByName("Knochen");
+			if (collectionBones) {
+				console.log("Set appearance of bones")
+				applyChangesToDescendants(collectionBones, function(mesh) {
+					if (mesh.material) {
+						mesh.material = bonecolor; // Apply color
+					} else if (!mesh.material){
+						collectionBones = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+			
+			// Set appearance of artery
+			var collectionArtery = scene.getTransformNodeByName("Arterien");
+			if (collectionArtery) {
+				console.log("Set appearance of artery")
+				applyChangesToDescendants(collectionArtery, function(mesh) {
+					if (mesh.material) {
+						mesh.material = arterycolor; // Apply color
+					} else if (!mesh.material){
+						collectionArtery = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}		
+
+			// Set appearance of vein
+			var collectionVein = scene.getTransformNodeByName("Venen");
+			if (collectionVein) {
+				console.log("Set appearance of vein")
+				applyChangesToDescendants(collectionVein, function(mesh) {
+					if (mesh.material) {
+						mesh.material = veincolor; // Apply color
+					} else if (!mesh.material){
+						collectionVein = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}			
+
+			// Set appearance of cartilage
+			var nodeNames = ["M_Arm_r_Sehnen", "M_Arm_l_Sehnen", "M_Bein_r_Sehnen", "M_Bein_l_Sehnen", "Sehnen", "costal Cartilage", "Bandscheiben", "Augapfel"]; // Add your node names here
+
+			// Iterate through the array and apply the changes to each node
+			nodeNames.forEach(function(nodeName) {
+				var node = scene.getTransformNodeByName(nodeName);
+				if (node) {
+					console.log("Set appearance of:", nodeName);
+					applyChangesToDescendants(node, function(mesh) {
+						if (mesh.material) {
+							mesh.material = cartilagecolor; // Apply color
+						} else if (!mesh.material) {
+							var childNode = scene.getTransformNodeByName(mesh.name);
+							if (childNode) {
+								applyChangesToDescendants(childNode, function(childMesh) {
+									if (childMesh.material) {
+										childMesh.material = cartilagecolor; // Apply color
+									}
+								});
+							}
+						}
+					});
+				} else {
+					console.log("Node not found:", nodeName);
+				}
+			});
+
+			// Register a render loop to repeatedly render the scene
+			engine.runRenderLoop(function () {
+				scene.render();
+			});
+		initializeUI(scene);
+		showLic();
+		});
+	};
+
+function setLight(camera, scene) {
+/**** Set light *****/
+		const light = new BABYLON.PointLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+		light.intensity = 0.5;
+		light.specular = new BABYLON.Color3.Black();
+		const light1 = new BABYLON.DirectionalLight("FrontRightLight", new BABYLON.Vector3(5, -1, 5), scene);
+		light1.specular = new BABYLON.Color3.Black();
+		light1.intensity = 0.6;
+		const light2 = new BABYLON.DirectionalLight("FrontLeftLight", new BABYLON.Vector3(-5, -1, 5), scene);
+		light2.specular = new BABYLON.Color3.Black();
+		light2.intensity = 0.6;
+		const light3 = new BABYLON.DirectionalLight("BackLight", new BABYLON.Vector3(0, -1, -5), scene);
+		light3.specular = new BABYLON.Color3.Black();
+		
+		scene.registerBeforeRender(function () {
+			light.position = camera.position;
+		});
+        return scene;
+};
+
+/**** License Info *****/
+var licviz = 1;
+function showLic(){
+	if (licviz == 1){
+		document.getElementById("licInfo1").classList.add('visible');
+		document.getElementById("licInfo1").classList.remove('hidden');
+		document.getElementById("licInfo2").classList.add('hidden');
+		document.getElementById("licInfo2").classList.remove('visible');
+		licviz = 0;
+	} else if (licviz == 0){
+		document.getElementById("licInfo2").classList.add('visible');
+		document.getElementById("licInfo2").classList.remove('hidden');
+		licviz = 1;
+	}
+}
+
+
+function initializeUI(scene) {
+//	scene.debugLayer.show()
+
+	var camera
+	
+/**** Set camera *****/	
+	const modelheight = 1700;
+	var cameraY = modelheight/2
+	camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 10, new BABYLON.Vector3(0, cameraY, 0), scene);
+	camera.useAutoRotationBehavior = true;
+	camera.alpha = 5;
+	camera.beta = 1.5;
+	camera.radius = 2350;
+	camera.attachControl(canvas, true);
+	//camera.autoRotationBehavior.idleRotationSpeed = 1;
+	// Set camera limits
+	camera.lowerRadiusLimit = 10;
+	camera.upperRadiusLimit = modelheight * 5;
+
+	// Adjust zoom speed
+	camera.useNaturalPinchZoom = true;  // Enable natural pinch zoom
+	//camera.pinchPrecision = 8; default = 12
+	//panningSensibility= 1000; default = 100
+	camera.wheelPrecision = 0.5; //default = 1
+	
+	setLight(camera, scene);
+	document.getElementById("loading-screen").style.display = "none";
+
+}
+
+const load = createScene(); //Call the createScene function
+
+// Watch for browser/canvas resize events
+window.addEventListener("resize", function () {
+engine.resize();
+});
+
+    </script>
+  </body>
+</html>
