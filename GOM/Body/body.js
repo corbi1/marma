@@ -25,6 +25,7 @@ if (key !== null){
 } else if (key == null) {
 	document.getElementById('marmaFocusHelp').style.display = "none";
 	document.getElementById('camSliderHelp').style.display = "block";
+	document.getElementById('menueButton-container').style.display = "none";
 }
 
 
@@ -36,27 +37,22 @@ var mainColor1, mainColor2;
 console.log("style: " + marmaDesign);
 if (marmaDesign == "snayu") {
 	bgColor = "rgba(219, 214, 160, "
-	document.getElementById('menueButton-container').style.display = "none";
 	document.documentElement.style.background = "transparent";
 	document.body.style.background = "transparent";
 } else if (marmaDesign == "mamsa"){
 	bgColor = "rgba(222, 176, 214, "
-	document.getElementById('menueButton-container').style.display = "none";
 	document.documentElement.style.background = "transparent";
 	document.body.style.background = "transparent";
 } else if (marmaDesign == "sandhi"){
 	bgColor = "rgba(162, 168, 222, "
-	document.getElementById('menueButton-container').style.display = "none";
 	document.documentElement.style.background = "transparent";
 	document.body.style.background = "transparent";
 } else if (marmaDesign == "sira"){
 	bgColor = "rgba(223, 107, 112, "
-	document.getElementById('menueButton-container').style.display = "none";
 	document.documentElement.style.background = "transparent";
 	document.body.style.background = "transparent";
 } else if (marmaDesign == "asthi"){
 	bgColor = "rgba(194, 179, 190,  " 
-	document.getElementById('menueButton-container').style.display = "none";
 	document.documentElement.style.background = "transparent";
 	document.body.style.background = "transparent";
 } else {
