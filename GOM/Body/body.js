@@ -22,10 +22,10 @@ if (key !== null){
 	document.getElementById('marmaFocusHelp').style.display = "block";
 	document.getElementById('camSliderHelp').style.display = "none";
 	document.getElementById('helpbtn').style.color = "black";
+	document.getElementById('menueButton-container').style.display = "none";
 } else if (key == null) {
 	document.getElementById('marmaFocusHelp').style.display = "none";
 	document.getElementById('camSliderHelp').style.display = "block";
-	document.getElementById('menueButton-container').style.display = "none";
 }
 
 
