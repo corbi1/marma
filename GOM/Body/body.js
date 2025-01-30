@@ -25,6 +25,7 @@ if (key !== null){
 	document.getElementById('helpbtn').style.color = "black";
 	document.getElementById('menueButton-container').style.display = "none";
 } else if (key == null) {
+	console.log("test2" + key);
 	document.getElementById('marmaFocusHelp').style.display = "none";
 	document.getElementById('camSliderHelp').style.display = "block";
 }
