@@ -17,6 +17,7 @@ console.log(key);
 let marmaName;
 let meshName;
 if (key !== null){
+	console.log("test" + key);
 	marmaName = getQueryParam('marmaName');
 	meshName = key + "_" + marmaName;
 	document.getElementById('marmaFocusHelp').style.display = "block";
