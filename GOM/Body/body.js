@@ -149,7 +149,7 @@ const createScene = function () {
 	BABYLON.SceneLoader.ImportMeshAsync(
 		"",
 		"https://raw.githubusercontent.com/corbi1/marma/main/",
-		"human3d_v8.6.glb"
+		"human3d_v8.7.glb"
 	).then((result) => {
 		console.log("loaded: human3d_v8.6.glb");
 
