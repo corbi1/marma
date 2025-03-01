@@ -52,18 +52,35 @@ function showHintTWO() {
         hint.style.height = autoHeight;
     });
 
-    // Add pulse animation to the help container
-    helpContainer.classList.add("pulse");
-
-    // Remove pulse animation and hide the hint after 5 seconds
-    setTimeout(() => {
-        helpContainer.classList.remove("pulse");
-        hint.style.height = "0";
-        setTimeout(() => {
-            hint.classList.add("hidden");
-            hint.style.transition = ""; // Reset transition property
-        }, 500); // Match the transition duration
-    }, 5000);
+	let circle = document.getElementById("effect-circle2");
+	let helpButton = document.getElementById("helpbtnTWO");
+	let circleContainer = document.getElementById("circle-container2");
+	
+	let rect = helpButton.getBoundingClientRect();
+	let navRect = helpContainer.getBoundingClientRect();
+	
+	circleContainer.style.left = `${rect.left + rect.width / 2 - navRect.left}px`;
+	circleContainer.style.top = `${rect.top + rect.height / 2 - navRect.top}px`;
+	
+	let count = 0;
+	let interval = setInterval(() => {
+		circle.style.display = "block";
+		circle.style.animation = "none";
+		void circle.offsetWidth; // Force reflow to restart animation
+		circle.style.animation = "radiate 2s forwards";
+		count++;
+		if (count >= 3) { // 6 seconds total
+			clearInterval(interval);
+			setTimeout(() => {
+				circle.style.display = "none";
+				hint.style.height = "0";
+				setTimeout(() => {
+					hint.classList.add("hidden");
+					hint.style.transition = ""; // Reset transition property
+				}, 500); // Match the transition duration
+			}, 2000);
+		}
+	}, 2000);
 }
 
 // JavaScript function to handle navigation
