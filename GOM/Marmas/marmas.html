@@ -11,6 +11,7 @@
 	<script src="Marmas.js" defer></script>
 	<script src="../resources/help/help_script.js"></script>
 	<script src="../resources/help/helpTWO_script.js"></script>
+	<script src="../resources/help/circle.js"></script>
 	
 	<script>
 	//**** help ****
@@ -68,6 +69,9 @@
 		</div>
 	</div>
 	<div id="help" onclick="toggleHelp()">
+		<div class="circle-container" id="circle-container">
+            <div class="circle" id="effect-circle"></div>
+        </div>
 		<a href="javascript:void(0)" id="helpbtn" class="toolButton">?</a>
 		<div id="hint" class="hidden">
 			<p >Hilfe</p>
@@ -83,14 +87,13 @@
 
 <section id="visualSection">
 	<div id="visual">
-		<img id="visual_img"> <br />
+		<img id="visual_img" alt="icon des Marmas" onclick="openBodyInspector()"> <br />
 	</div>
 </section>
 
 <section id="infoSection">
-	  <p>
-		<span class="MarmaNameSK" >Marmaname Sanskrit</span> gehört zu der Gruppe <span class="MarmaGrpSK" >Marmagruppe Sanskrit</span> (<span class="MarmaGrpDE" >Marmagruppe Deutsch</span>).
-	  </p>
+		<p id="AnatomicalLoc">Das <span class="MarmaNameSK" ></span> befindet sich <span id="Explanation" ></span>.</br>
+		</p>
 </section>
 
 <section id="evaluationSection">
@@ -129,39 +132,45 @@
 	
 <section id="addInfoSection">
 
+	<button class="accordion" id="Tipp">Tipp</button>
+	<div class="panel">
+		<div id="infoList">
+		  <ul id="addInfoList">
+			<li>
+				<span id="MarmaTipp" ></span>
+			</li>
+		  </ul>
+		</div>
+	</div>
 	<button class="accordion" id="addInfo">Weitere Infos</button>
 	<div class="panel">
 		<div id="infoList">
 		  <ul id="addInfoList">
-			<li><span class="MarmaNameSK" ></span><span> - </span><span id="Typography" ></span></li>
-			<li>Marmagruppe </br>
-				<span class="MarmaGrpSK" >MarmaGrpSK</span><span> - </span><span class="MarmaGrpDE" ></span></li>
-			<li>Bedeutung </br>
-				<span id="Origin" >Begriffserklärung</span></li>
-			<li>Körpergegend: </br>
-				<span class="BodyRegion" >BodyRegion</span></li>
-			<li>Ort: </br>
-				<span class="Anatomy" >Anatomischer Ort</span></li>
+			<li><span class="MarmaNameSK bold" ></span><span> - </span><span class="bold" id="Typography" ></span>
+			</li>
+			<li><span class="MarmaNameSK" >Marmaname Sanskrit</span> ist ein <span class="MarmaGrpDE bold" >Marmagruppe Deutsch</span> (<span class="MarmaGrpSK" >Marmagruppe Sanskrit</span>).
+			</li>
+			<li>Übersetzung / Herleitung </br>
+				<span id="Origin" >Begriffserklärung</span>
+			</li>
 		  </ul>
 		</div>
 	</div>
 	<button class="accordion" id="addInfo_anatomy">Anatomie</button>
 	<div class="panel">
-		<p id="AnatomicalLoc">Das <span class="MarmaNameSK" ></span> befindet sich <span id="Explanation" ></span>.</br>
-		</p>
-
-		<button class="navButton" id="anatomyButton" onclick="openBodyInspector()">
-				<img src="../resources/icons/body-icon.webp">
-		</button>
-
 		<div id="infoList">
 		  <ul>
-			<li>Körpergegend: </br>
-				<span class="BodyRegion" >BodyRegion</span></li>
+			<li><span class="MarmaNameSK bold" >Marmaname Sanskrit</span> befindet sich <span class="bold" id="BodySide" >Körperseite</span> am <span class="BodyRegion bold" >BodyRegion</span>.</li>
 			<li>Ort: </br>
 				<span class="Anatomy" >Anatomischer Ort</span></li>
 		  </ul>
 		</div>
+		<span class="MarmaNameSK" >Marmaname Sanskrit</span> im 3d Modell:</br>
+		</br>
+		<button class="navButton" id="anatomyButton" onclick="openBodyInspector()">
+				<img src="../resources/icons/body-icon.webp">
+		</button>
+		
 		
 		<div class="overlay" id="3d_Body_Inspector">
 		  <a href="javascript:void(0)" class="closebtn" id="closeBody" onclick="closeBodyInspector()">&times;</a>
@@ -264,6 +273,9 @@
 <!-- Filter -->			
 	<div class="overlay" id="filterMenue">
 	<div id="helpTWO" onclick="toggleHelpTWO()">
+		<div class="circle-container" id="circle-container2">
+            <div class="circle" id="effect-circle2"></div>
+        </div>
 		<a href="javascript:void(0)" id="helpbtnTWO" >?</a>
 		<div id="hintTWO" class="hidden">
 			<p >Hilfe</p>
@@ -274,27 +286,33 @@
 		<div><h3>Wähle die Marmas aus, die du gerne näher betrachten willst.</h3><div>
 		<div class="filterSelect"> 
 			<select name="Marma" id="filterMarmaNAME" size="1"> <!-- use <selectmenu> when supported in the future-->
-				<option value="">Marma auswählen</option>
 			</select>
 		</div>
 		<div class="filterSelect"> 
 			<select name="Marma Grupp" id="filterMarmaGRP" size="1">
-				<option value="">Marma Gruppe auswählen</option>
 			</select>
 		</div>
 		<div class="filterSelect"> 
 			<select name="Körperteil" id="filterBodyPart" size="1">
-				<option value="">Körperteil auswählen</option>
 			</select>
 		</div>
 		<div class="filterSelect"> 
 			<select name="Körperteil" id="filterBodySide" size="1">
-				<option value="">Körperseite auswählen</option>
 			</select>
+		</div>
+		<button class="accordion" id="filterResults">Trefferliste: </button>
+		<div class="panel" id="resultPanel">
+			<div id="resultsContainer"></div>
 		</div>
 			<button class="navButton" id="menue" onclick="location.href='../index.html';"><img src="../resources/icons/menue-icon.webp" alt="Hauptmenü"></button>
 			<button class="navButton" id="resetFilter"><img src="../resources/icons/reset-icon.webp" alt="Zurücksetzen"></button>
-			<button class="navButton" id="filter-button"><img src="../resources/icons/search-icon.webp" alt="Suche starten"></button>
+			<button class="navButton" id="filter-button">
+				<div class="circle-container" id="circleContainer">
+					<div class="circle" id="circle"></div>
+				</div>
+				<img src="../resources/icons/search-icon.webp" alt="Suche starten">
+			</button>
+
 		</div>
 
 <!-- Filter Help-->		
