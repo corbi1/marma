@@ -4,6 +4,11 @@ var store;
 var data;
 var update = 0;
 
+let SelectMarmaName = new Set();
+let SelectMarmaGRP = new Set();
+let SelectBodyRegion = new Set();
+let SelectBodySide = new Set();
+
 //###################################################################################
 //colors
 //###################################################################################	
@@ -82,22 +87,14 @@ if (stateFiltermenue === 1){
 //retrieve temporary values
 //###################################################################################	
 
-var savedMarmaName = JSON.parse(localStorage.getItem('SelectOptions_Name'));
-var savedMarmaGRP = JSON.parse(localStorage.getItem('SelectOptions_GRP'));
-var savedBodyRegion = JSON.parse(localStorage.getItem('SelectOptions_Region'));
-var savedBodySide = JSON.parse(localStorage.getItem('SelectOptions_Side'));
-selectFilterElement('filterMarmaNAME', savedMarmaName);
-selectFilterElement('filterMarmaGRP', savedMarmaGRP);
-selectFilterElement('filterBodyPart', savedBodyRegion);
-selectFilterElement('filterBodySide', savedBodySide);
-
-console.log("Marmas in storage",localStorage.getItem('myArray'));
-var myArray = JSON.parse(localStorage.getItem('myArray')) || [];
-console.log("Marmas",myArray);
+console.log("Marmas in storage",localStorage.getItem('filteredMarmas'));
+var filteredMarmas = JSON.parse(localStorage.getItem('filteredMarmas')) || [];
+var filterResults = [];
+console.log("Marmas",filteredMarmas);
 
 console.log(sessionStorage.getItem("marmaID"));
 if (sessionStorage.getItem("marmaID") == null){
-	sessionStorage.setItem("marmaID", myArray[0]);
+	sessionStorage.setItem("marmaID", filteredMarmas[0]);
 }
 
 //###################################################################################
@@ -130,18 +127,18 @@ initDB().then(db => {
     console.log("Database initialized for Marma Search");
 	
 	if (sessionStorage.getItem("marmaID") === "undefined" || sessionStorage.getItem("marmaID") === null) { // Starting up for the first time or error
-		console.error('No marmaID found in sessionStorage');
+		console.warn('No marmaID found in sessionStorage');
 		sessionStorage.removeItem("marmaID"); // Remove bad data
 		loadMarmalist(db).then(array => { // create list of all marmas
-			myArray = array;
-			console.log("All Marmas:", myArray);
-			sessionStorage.setItem("marmaID", myArray[0] || null);
-			localStorage.setItem('myArray', JSON.stringify(myArray));
-			document.getElementById("filterHits").innerHTML = myArray.length;
-			if (myArray.length > 0) {
+			filteredMarmas = array;
+			console.log("All Marmas:", filteredMarmas);
+			sessionStorage.setItem("marmaID", filteredMarmas[0] || null);
+			localStorage.setItem('filteredMarmas', JSON.stringify(filteredMarmas));
+			document.getElementById("filterHits").innerHTML = filteredMarmas.length;
+			if (filteredMarmas.length > 0) {
 				retrieveDataFromStores();
 			} else {
-				console.warn("myArray is empty, no IDs found.");
+				console.warn("filteredMarmas is empty, no IDs found.");
 				sessionStorage.setItem("marmaID", "amsa_la");
 			}
 		}).catch(error => {
@@ -153,7 +150,7 @@ initDB().then(db => {
 	}
 
     function retrieveDataFromStores() {
-        console.log("Marma default: " + myArray[0]);
+        console.log("Marma default: " + filteredMarmas[0]);
 		console.log("storage: " + sessionStorage.getItem("marmaID"));
 		
 		let key = sessionStorage.getItem("marmaID");
@@ -186,11 +183,14 @@ initDB().then(db => {
             updateClassElements('BodyRegion', data.location.bodyRegion);
             updateClassElements('Anatomy', data.location.anatomy);
 
+			document.getElementById("BodySide").innerHTML = data.location.bodySide;
             document.getElementById("headline2").innerHTML = data.marmaName.de;
             document.getElementById("visual_img").src = "../resources/marma_icons/" + key + ".webp";
             document.getElementById("Origin").innerHTML = data.info.origin;
             document.getElementById("Explanation").innerHTML = data.location.explanation;
             document.getElementById("Typography").innerHTML = data.info.typography;
+			document.getElementById("MarmaTipp").innerHTML = data.info.tipp;
+			
             console.log("display infos of " + key + " DONE");
         };
 
@@ -230,468 +230,300 @@ initDB().then(db => {
             console.error(`Error retrieving user values for marmaID: ${key}`, evt);
         };
     }
-	
-//###################################################################################
-//Create Filter values
-//###################################################################################
-	
-	function loadSelectOptions() {
-	  localStorage.setItem('SelectOptions_Name', JSON.stringify(document.getElementById("filterMarmaNAME").value));
-	  console.log("save to storage: ", document.getElementById("filterMarmaNAME").value);
-	  localStorage.setItem('SelectOptions_GRP', JSON.stringify(document.getElementById("filterMarmaGRP").value));
-	  console.log("save to storage: ", document.getElementById("filterMarmaGRP").value);
-	  localStorage.setItem('SelectOptions_Region', JSON.stringify(document.getElementById("filterBodyPart").value));
-	  console.log("save to storage: ", document.getElementById("filterBodyPart").value);
-	  localStorage.setItem('SelectOptions_Side', JSON.stringify(document.getElementById("filterBodySide").value));
-	  console.log("save to storage: ", document.getElementById("filterBodySide").value);
 
-	  document.getElementById("filterMarmaNAME").style.display = "initial"
-	  document.getElementById("filterMarmaGRP").style.display = "initial"
-	  document.getElementById("filterBodyPart").style.display = "initial"
-	  document.getElementById("filterBodySide").style.display = "initial"
-	  
-	  filterValue_marmaName = document.getElementById("filterMarmaNAME").value
-	  filterValue_marmaGRP = document.getElementById("filterMarmaGRP").value
-	  filterValue_bodyRegion = document.getElementById("filterBodyPart").value
-	  filterValue_bodySide = document.getElementById("filterBodySide").value
-	  
-	  console.log("values:" + filterValue_marmaName + filterValue_marmaGRP + filterValue_bodyRegion + filterValue_bodySide);
-	  var SelectMarmaName = []; // Array to store MarmaName
-	  var SelectMarmaGRP = []; // Array to store MarmaGruppe
-	  var SelectBodyRegion = []; // Array to store BodyRegion
-	  var SelectBodySide = []; // Array to store BodySide
+	//###################################################################################
+	//Filtering new
+	//###################################################################################
 
-	  store = getObjectStore(db, "marmaStore", 'readwrite');
-	  // Open a cursor to iterate over the data
-	  console.log("opening cursor...");
-	  store.openCursor().onsuccess = function(event) {
-		var cursor = event.target.result;
-		if (cursor) {
-		  var DBvalue_MarmaName = cursor.value.marmaName.sanskrit
-		  var DBvalue_MarmaGRP = cursor.value.marmaGrp.de
-		  //var DBvalue_MarmaGRP = cursor.value.marmaGrp.sanskrit
-		  var DBvalue_bodyRegion = cursor.value.location.bodyRegion
-		  var DBvalue_bodySide = cursor.value.location.bodySide
-					  
-		  // Options when at least for MarmaName is set
-		  if (filterValue_marmaName !== ""){
-			if(filterValue_marmaGRP === "" && filterValue_bodyRegion === "" && filterValue_bodySide === "" && DBvalue_MarmaName === filterValue_marmaName) { //Options when only MarmaName is set
-				console.log("Options when only MarmaName is set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}
+	function filterMarmaData(db) {
+		store = getObjectStore(db, "marmaStore", 'readonly');
 
-			} else if (filterValue_bodySide === "" && filterValue_bodyRegion === "" &&DBvalue_MarmaName === filterValue_marmaName && DBvalue_MarmaGRP === filterValue_marmaGRP) { //Options when MarmaName and marmaGRP are set
-				console.log("Options when MarmaName and marmaGRP are set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}
+		//get the userinput
+		let filterValue_marmaName = document.getElementById("filterMarmaNAME").value;
+		let filterValue_marmaGRP = document.getElementById("filterMarmaGRP").value;
+		let filterValue_bodyRegion = document.getElementById("filterBodyPart").value;
+		let filterValue_bodySide = document.getElementById("filterBodySide").value;
 
-			} else if (filterValue_marmaGRP === "" && filterValue_bodySide === "" && DBvalue_MarmaName === filterValue_marmaName && DBvalue_bodyRegion === filterValue_bodyRegion) {	//Options when MarmaName and bodypart are set
-				console.log("Options when MarmaName and bodypart are set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}
-
-			} else if (filterValue_marmaGRP === "" && filterValue_bodyRegion === "" && DBvalue_MarmaName === filterValue_marmaName && DBvalue_bodySide === filterValue_bodySide) { //Options when MarmaName and bodyside are set
-				console.log("Options when MarmaName and bodyside are set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}
-
-			} else if (filterValue_bodySide === "" && DBvalue_MarmaName === filterValue_marmaName && DBvalue_MarmaGRP === filterValue_marmaGRP && DBvalue_bodyRegion === filterValue_bodyRegion){ //Options when MarmaName, MarmaGRP and bodyPart are set
-				console.log("Options when MarmaName, MarmaGRP and bodyPart are set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-				
-			} else if (filterValue_bodyRegion === "" && DBvalue_MarmaName === filterValue_marmaName && DBvalue_MarmaGRP === filterValue_marmaGRP && DBvalue_bodySide === filterValue_bodySide){ //Options when MarmaName, MarmaGRP and bodySide are set
-				console.log("Options when MarmaName, MarmaGRP and bodySide are set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-				
-			} else if (filterValue_marmaGRP === "" && DBvalue_MarmaName === filterValue_marmaName && DBvalue_bodyRegion === filterValue_bodyRegion && DBvalue_bodySide === filterValue_bodySide){ //Options when MarmaName, bodyPart and bodySide are set
-				console.log("Options when MarmaName, bodyPart and bodySide are set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-
-			} else if (DBvalue_MarmaName === filterValue_marmaName && DBvalue_MarmaGRP === filterValue_marmaGRP && DBvalue_bodyRegion === filterValue_bodyRegion && DBvalue_bodySide === filterValue_bodySide){ //Options when all options are set
-				console.log("Options when all options are set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-			} 
-		  
-		  // Options when at least marmaGrp is set
-		  } else if (filterValue_marmaGRP !== ""){
-			if(filterValue_marmaName === "" && filterValue_bodyRegion === "" && filterValue_bodySide === "" && DBvalue_MarmaGRP === filterValue_marmaGRP) { //Options when only marmaGRP is set
-				console.log("Options when only marmaGRP is set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}
-
-			} else if (filterValue_marmaName === "" && filterValue_bodySide === "" && DBvalue_MarmaGRP === filterValue_marmaGRP && DBvalue_bodyRegion === filterValue_bodyRegion) { //Options when MarmaGRP and bodypart are set
-				console.log("Options when MarmaGRP and bodypart are set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}
-
-			} else if (filterValue_marmaName === "" && filterValue_bodyRegion === "" && DBvalue_MarmaGRP === filterValue_marmaGRP && DBvalue_bodySide === filterValue_bodySide) { //Options when MarmaGRP and bodyside are set
-				console.log("Options when MarmaGRP and bodyside are set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}
-
-			} else if (filterValue_marmaName === "" && DBvalue_MarmaGRP === filterValue_marmaGRP && DBvalue_bodyRegion === filterValue_bodyRegion && DBvalue_bodySide === filterValue_bodySide){ //Options when marmaGrp, bodyPart and bodySide are set
-				console.log("Options when marmaGrp, bodyPart and bodySide are set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-			}
-		
-		  // Options when at least bodyPart is set
-		  } else if (filterValue_bodyRegion !== ""){
-			if(filterValue_marmaName === "" && filterValue_marmaGRP === "" && filterValue_bodySide === "" && DBvalue_bodyRegion == filterValue_bodyRegion) { //Options when only bodyPart is set
-				console.log("Options when only bodyPart is set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}			  
-		  
-			} else if (filterValue_marmaName === "" && filterValue_marmaGRP === "" && DBvalue_bodyRegion === filterValue_bodyRegion && DBvalue_bodySide === filterValue_bodySide) { //Options when bodypart and bodyside are set
-				console.log("Options when bodypart and bodyside are set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}			  
-			}
-		  
-		  // Options when at least bodySide is set
-		  } else if (filterValue_marmaName === "" && filterValue_marmaGRP === "" && filterValue_bodyRegion === "" && DBvalue_bodySide == filterValue_bodySide) { //Options when only bodyside is set
-				console.log("Options when only bodyside is set");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}
-
-		  // Options when all selects are set
-		 } else if (filterValue_marmaName === "" && filterValue_bodyRegion === "" && filterValue_bodySide === "" && filterValue_marmaGRP === ""){ //all options
-				console.log("all options");
-				if (!SelectMarmaName.includes(DBvalue_MarmaName)) {
-					SelectMarmaName.push(DBvalue_MarmaName);
-				}
-				if (!SelectBodyRegion.includes(DBvalue_bodyRegion)) {
-					SelectBodyRegion.push(DBvalue_bodyRegion);
-				}
-				if (!SelectBodySide.includes(DBvalue_bodySide)) {
-					SelectBodySide.push(DBvalue_bodySide);
-				}
-				if (!SelectMarmaGRP.includes(DBvalue_MarmaGRP)) {
-					SelectMarmaGRP.push(DBvalue_MarmaGRP);
-				}
-		  }
-		  cursor.continue();
+		/** Get Initial Data Based on First Available Filter */
+		if (filterValue_marmaName) {
+			console.log("Marma selected:",filterValue_marmaName);
+			let index = store.index("marmaName");
+			let request = index.getAll(filterValue_marmaName);
+			request.onsuccess = function (event) {
+				let filteredData = event.target.result;
+				applyNextFilters(filteredData);
+			};
 		} else {
-			console.log("All options provided.");
-			// set options 
-			function selectElements(id, SelectArray, StoredOption) {    
-				var selectElement = document.getElementById(id);
-				if (SelectArray) {
-				var select = document.getElementById(id);
-
-				// remove existing options
-				   for(let j = selectElement.options.length - 1; j >= 1; j--) {
-					  selectElement.remove(j);
-				   }
-
-				// Iterate SelectMarmaNames, create a <option> element and append it to the select
-					for (let i = 0; i < SelectArray.length; i++) {
-						const element = SelectArray[i];
-						var option = document.createElement("option");
-						option.text = element;
-						option.value = element;
-						select.appendChild(option);
-					}
-					if (SelectArray.length === 1){
-						console.log("set " + SelectArray);
-						document.getElementById(id).options[1].setAttribute('selected', 'selected');
-					}
-					
-				document.getElementById(id).value = JSON.parse(localStorage.getItem(StoredOption));
-				}
-			}
-			selectElements('filterMarmaNAME', SelectMarmaName, 'SelectOptions_Name');
-			selectElements('filterMarmaGRP', SelectMarmaGRP, 'SelectOptions_GRP');
-			selectElements('filterBodyPart', SelectBodyRegion, 'SelectOptions_Region');
-			selectElements('filterBodySide', SelectBodySide, 'SelectOptions_Side');
+			console.log("No Marma selected");
+			let request = store.getAll();
+			request.onsuccess = function (event) {
+				let allData = event.target.result;
+				applyNextFilters(allData);
+			};
 		}
-	  };
-	}; //close: load select options
 
-	document.getElementById("filterMarmaNAME").addEventListener("change", loadSelectOptions);
-	document.getElementById("filterMarmaGRP").addEventListener("change", loadSelectOptions);
-	document.getElementById("filterBodyPart").addEventListener("change", loadSelectOptions);
-	document.getElementById("filterBodySide").addEventListener("change", loadSelectOptions);
-	document.getElementById("openFilterMenue").addEventListener("click", loadSelectOptions); //button side bar
-	document.getElementById("search").addEventListener("click", loadSelectOptions); //button menue bar
+		/** Apply Additional Filters in Sequence */
+		function applyNextFilters(filteredData) {
+			console.log("Marma Group:",filterValue_marmaGRP);
+			if (filterValue_marmaGRP) {
+				filteredData = filteredData.filter(marma => marma.marmaGrp.de === filterValue_marmaGRP);
+			}
+
+			console.log("Body Region:",filterValue_bodyRegion);
+			if (filterValue_bodyRegion) {
+				filteredData = filteredData.filter(marma => marma.location.bodyRegion === filterValue_bodyRegion);
+			}
+
+			console.log("Body Side:",filterValue_bodySide);
+			if (filterValue_bodySide) {
+				filteredData = filteredData.filter(marma => marma.location.bodySide === filterValue_bodySide);
+			}
+			
+			filterResults = filteredData.map(marma => marma.id);
+			console.log("Filtered IDs:", filterResults);
+			updateSelectOptions(filteredData); // Final result after all filters applied
+		}
+	}
+
+	//###################################################################################
+	//Update Filteroptions
+	//###################################################################################
+
+	// Create the options lists after filtering
+	function updateSelectOptions(filteredData) {
+		// Clear previous options to prevent empty or stale options
+		SelectMarmaName.clear();
+		SelectMarmaGRP.clear();
+		SelectBodyRegion.clear();
+		SelectBodySide.clear();
+		
+		// Update resultlist with hit count
+		let accordionHeader = document.getElementById("filterResults");
+		accordionHeader.textContent = `${filteredData.length} Marmas gefunden`;
 	
+		// Clear results container
+		let resultsContainer = document.getElementById("resultsContainer");
+		resultsContainer.innerHTML = "";
+
+		// Gather all options and create results overview
+		filteredData.forEach(marma => {
+			SelectMarmaName.add(marma.marmaName.sanskrit);
+			SelectMarmaGRP.add(marma.marmaGrp.de);
+			SelectBodyRegion.add(marma.location.bodyRegion);
+			SelectBodySide.add(marma.location.bodySide);
+
+			// Create a div for each result
+			let marmaDiv = document.createElement("div");
+			marmaDiv.classList.add("marma-result");
+
+			let infoContainer = document.createElement("div");
+			infoContainer.classList.add("resultInfo-container");
+
+			let nameDiv = document.createElement("div");
+			nameDiv.classList.add("resultMain");
+			nameDiv.textContent = "Name: " + marma.marmaName.sanskrit;
+			
+			let addInfoContainer = document.createElement("div");
+			addInfoContainer.classList.add("resultAddInfo-container");
+
+			let groupDiv = document.createElement("div");
+			groupDiv.classList.add("resultAddInfo");
+			groupDiv.textContent = marma.marmaGrp.de;
+			
+			let regionDiv = document.createElement("div");
+			regionDiv.classList.add("resultAddInfo");
+			regionDiv.textContent = marma.location.bodyRegion;
+			
+			let sideDiv = document.createElement("div");
+			sideDiv.classList.add("resultAddInfo");
+			sideDiv.textContent = marma.location.bodySide;
+			
+			let button = document.createElement("button");
+			button.classList.add("callMarma");
+			button.addEventListener("click", function() {
+				applyFilter(marma.id);
+			});
+			
+			let buttonImage = document.createElement("img");
+			buttonImage.setAttribute("src", "../resources/icons/next-icon.webp");
+			buttonImage.setAttribute("alt", "Marma aufrufen");
+			
+			button.appendChild(buttonImage);
+
+			addInfoContainer.appendChild(groupDiv);
+			addInfoContainer.appendChild(regionDiv);
+			addInfoContainer.appendChild(sideDiv);
+
+			infoContainer.appendChild(nameDiv);
+			infoContainer.appendChild(addInfoContainer);
+
+			marmaDiv.appendChild(infoContainer);
+			marmaDiv.appendChild(button);
+			resultsContainer.appendChild(marmaDiv);
+		});
+
+			let filterValue_marmaName = document.getElementById("filterMarmaNAME").value;
+			let filterValue_marmaGRP = document.getElementById("filterMarmaGRP").value;
+			let filterValue_bodyRegion = document.getElementById("filterBodyPart").value;
+			let filterValue_bodySide = document.getElementById("filterBodySide").value;
+
+		if (filteredData.length > 0) {
+			populateDropdown("filterMarmaNAME", SelectMarmaName, filterValue_marmaName);
+			populateDropdown("filterMarmaGRP", SelectMarmaGRP, filterValue_marmaGRP);
+			populateDropdown("filterBodyPart", SelectBodyRegion, filterValue_bodyRegion);
+			populateDropdown("filterBodySide", SelectBodySide, filterValue_bodySide);
+		} else {
+			console.warn("Skipping dropdown update – No results!");
+		}
+	}
+
+	//populate the selcetion elemnts with the options, either from filter or restored
+	function populateDropdown(selectId, optionsSet, storedValue) {
+		let selectElement = document.getElementById(selectId);
+
+		selectElement.innerHTML = ""; // Clear existing options
+
+		// Default option text for each select
+		let defaultOptions = {
+			"filterMarmaNAME": "Marma auswählen",
+			"filterMarmaGRP": "Marma Gruppe auswählen",
+			"filterBodyPart": "Körperteil auswählen",
+			"filterBodySide": "Bereich auswählen"
+		};
+
+		// If a value is selected, change the default text
+		if (storedValue !== "") {
+			defaultOptions = {
+				"filterMarmaNAME": "Marma zurücksetzen",
+				"filterMarmaGRP": "Marma Gruppe zurücksetzen",
+				"filterBodyPart": "Körperteil zurücksetzen",
+				"filterBodySide": "Seite zurücksetzen"
+			};
+		}
+
+		// Add default option
+		let defaultOption = document.createElement("option");
+		defaultOption.value = "";
+		defaultOption.text = defaultOptions[selectId] || "Select an option";
+		selectElement.appendChild(defaultOption);
+
+		// Add actual options
+		optionsSet.forEach(option => {
+			let newOption = document.createElement("option");
+			newOption.value = option;
+			newOption.text = option;
+			selectElement.appendChild(newOption);
+		});
+
+		// Restore selection if it exists in the new dataset
+		if (optionsSet.has(storedValue)) {
+			selectElement.value = storedValue;
+		} else {
+			selectElement.value = ""; // Reset if not found
+		}
+	}
+
+	// Save selected values to localStorage
+	function saveSelection() {
+		document.querySelectorAll("#filterMarmaNAME option").forEach(opt => SelectMarmaName.add(opt.value));
+		document.querySelectorAll("#filterMarmaGRP option").forEach(opt => SelectMarmaGRP.add(opt.value));
+		document.querySelectorAll("#filterBodyPart option").forEach(opt => SelectBodyRegion.add(opt.value));
+		document.querySelectorAll("#filterBodySide option").forEach(opt => SelectBodySide.add(opt.value));
+
+		// Save option sets
+		localStorage.setItem("SelectOptions_Name", JSON.stringify([...SelectMarmaName]));
+		localStorage.setItem("SelectOptions_GRP", JSON.stringify([...SelectMarmaGRP]));
+		localStorage.setItem("SelectOptions_Region", JSON.stringify([...SelectBodyRegion]));
+		localStorage.setItem("SelectOptions_Side", JSON.stringify([...SelectBodySide]));
+
+		// Save selected values
+		localStorage.setItem("Selected_MarmaName", document.getElementById("filterMarmaNAME").value);
+		localStorage.setItem("Selected_MarmaGRP", document.getElementById("filterMarmaGRP").value);
+		localStorage.setItem("Selected_BodyRegion", document.getElementById("filterBodyPart").value);
+		localStorage.setItem("Selected_BodySide", document.getElementById("filterBodySide").value);
+
+		console.log("Filter values & option sets saved.");
+	}
+
+	// Restore selected values and update dropdowns
+	function restoreSelection(SelectMarmaName, SelectMarmaGRP, SelectBodyRegion, SelectBodySide) {
+		function removeEmptyValues(arr) {
+			return arr.filter(option => option && option.trim() !== ""); // Remove empty and whitespace-only values
+		}
+
+		var savedOptions_Name = removeEmptyValues(JSON.parse(localStorage.getItem("SelectOptions_Name")) || []);
+		var savedOptions_GRP = removeEmptyValues(JSON.parse(localStorage.getItem("SelectOptions_GRP")) || []);
+		var savedOptions_Region = removeEmptyValues(JSON.parse(localStorage.getItem("SelectOptions_Region")) || []);
+		var savedOptions_Side = removeEmptyValues(JSON.parse(localStorage.getItem("SelectOptions_Side")) || []);
+
+		var savedMarmaName = localStorage.getItem("Selected_MarmaName") || "";
+		var savedMarmaGRP = localStorage.getItem("Selected_MarmaGRP") || "";
+		var savedBodyRegion = localStorage.getItem("Selected_BodyRegion") || "";
+		var savedBodySide = localStorage.getItem("Selected_BodySide") || "";
+
+		populateDropdown("filterMarmaNAME", new Set(savedOptions_Name), savedMarmaName);
+		populateDropdown("filterMarmaGRP", new Set(savedOptions_GRP), savedMarmaGRP);
+		populateDropdown("filterBodyPart", new Set(savedOptions_Region), savedBodyRegion);
+		populateDropdown("filterBodySide", new Set(savedOptions_Side), savedBodySide);
+	}
+
+	// Reset filter options
 	function resetSelectOptions() {
-	  document.getElementById("filterMarmaNAME").value = ""
-	  document.getElementById("filterMarmaGRP").value = ""
-	  document.getElementById("filterBodyPart").value = ""
-	  document.getElementById("filterBodySide").value = ""
-	  console.log("filter reset...");
-	  loadSelectOptions()
+		document.getElementById("filterMarmaNAME").value = "";
+		document.getElementById("filterMarmaGRP").value = "";
+		document.getElementById("filterBodyPart").value = "";
+		document.getElementById("filterBodySide").value = "";
+		console.log("Filter reset...");
+		filterMarmaData(db);
 	}
-	if (stateFiltermenue === 1){
+
+	console.log("Filter menu:", stateFiltermenue);
+	if (stateFiltermenue === 0) {
+		//Fetch previously saved options from localStorage
+		var savedMarmaName = new Set(JSON.parse(localStorage.getItem("SelectOptions_Name")) || []);
+		var savedMarmaGRP = new Set(JSON.parse(localStorage.getItem("SelectOptions_GRP")) || []);
+		var savedBodyRegion = new Set(JSON.parse(localStorage.getItem("SelectOptions_Region")) || []);
+		var savedBodySide = new Set(JSON.parse(localStorage.getItem("SelectOptions_Side")) || []);
+
+		restoreSelection(savedMarmaName, savedMarmaGRP, savedBodyRegion, savedBodySide);
+
+	} else {
 		resetSelectOptions();
-		//setQueryParam('filterWindow', 0);
-		sessionStorage.setItem("marmaID", myArray[0]);
 	}
-	
-	document.getElementById("resetFilter").addEventListener("click", resetSelectOptions);
 
-//###################################################################################
-//Filtering
-//###################################################################################			
+	// Apply filter and store selected items
+	function applyFilter(marmaID) {
+		setQueryParam("filterWindow", 0);
+		saveSelection();
+		filteredMarmas = filterResults;
+		console.log("Filter applied:", filteredMarmas);
 
-    function filterData() {
-        setQueryParam('filterWindow', 0);
-        const stateFiltermenue = 0; // Define as const if it's not changing
-        console.log("stateFiltermenue: " + stateFiltermenue);
-        document.documentElement.style.setProperty('--bg-color-1', bgColor + "0.90)");
+		if (filteredMarmas.length > 0) {
+			sessionStorage.setItem("marmaID", filteredMarmas[0]);
+			if (marmaID){
+				sessionStorage.setItem("marmaID", marmaID);
+			}
+			console.log("Saving filtered Marmalist");
+		}
+		localStorage.setItem("filteredMarmas", JSON.stringify(filteredMarmas));
+		location.reload();
+	}
 
-        // Collect filter values
-        const filterValue_marmaName = document.getElementById("filterMarmaNAME").value;
-        const filterValue_marmaGRP = document.getElementById("filterMarmaGRP").value;
-        const filterValue_bodyRegion = document.getElementById("filterBodyPart").value;
-        const filterValue_bodySide = document.getElementById("filterBodySide").value;
+	// Event Listeners
+	const filters = ["filterMarmaNAME", "filterMarmaGRP", "filterBodyPart", "filterBodySide"];
 
-        myArray = []; // Clear array before populating it again
+	filters.forEach(id => {
+		document.getElementById(id).addEventListener("change", () => {
+			filterMarmaData(db);
+			showCircle(1,"filter-button");
+		});
+	});
 
-        const store = getObjectStore(db, "marmaStore", 'readwrite'); // Pass db to getObjectStore
-        console.log("start filtering...");
-
-        // Open a cursor to iterate over the data
-        store.openCursor().onsuccess = function(event) {
-            const cursor = event.target.result;
-            if (cursor) {
-                const DBvalue_MarmaName = cursor.value.marmaName.sanskrit;
-                const DBvalue_MarmaGRP = cursor.value.marmaGrp.de;
-                const DBvalue_bodyRegion = cursor.value.location.bodyRegion;
-                const DBvalue_bodySide = cursor.value.location.bodySide;
-
-                // Filter logic
-                const matchesFilter = checkFilters(
-                    DBvalue_MarmaName, 
-                    DBvalue_MarmaGRP, 
-                    DBvalue_bodyRegion, 
-                    DBvalue_bodySide,
-                    filterValue_marmaName, 
-                    filterValue_marmaGRP, 
-                    filterValue_bodyRegion, 
-                    filterValue_bodySide
-                );
-
-                if (matchesFilter) {
-                    myArray.push(cursor.key);
-                }
-
-                cursor.continue(); // Continue to the next cursor
-            } else {
-                console.log("All data processed.");
-                console.log("Marmas at ", filterValue_bodyRegion, myArray);
-
-                // jump to first marma
-                if (myArray.length > 0) {
-                    sessionStorage.setItem("marmaID", myArray[0]);
-                    console.log(myArray[0]);
-                    console.log("load next...");
-                    console.log("Saving filtered Marmalist");
-                }
-
-                localStorage.setItem('myArray', JSON.stringify(myArray));
-                location.reload();
-            }
-        };
-    }
-
-    // Define a helper function to encapsulate filtering logic
-    function checkFilters(DBvalue_MarmaName, DBvalue_MarmaGRP, DBvalue_bodyRegion, DBvalue_bodySide, 
-                         filterValue_marmaName, filterValue_marmaGRP, filterValue_bodyRegion, filterValue_bodySide) {
-        if (filterValue_marmaName !== "" && filterValue_marmaGRP === "") {
-            return (
-                (DBvalue_MarmaName === filterValue_marmaName && DBvalue_bodyRegion === filterValue_bodyRegion && DBvalue_bodySide === filterValue_bodySide) ||
-                (filterValue_bodySide === "" && DBvalue_MarmaName === filterValue_marmaName && DBvalue_bodyRegion === filterValue_bodyRegion) ||
-                (filterValue_bodyRegion === "" && DBvalue_MarmaName === filterValue_marmaName && DBvalue_bodySide === filterValue_bodySide) ||
-                (filterValue_bodyRegion === "" && filterValue_bodySide === "" && DBvalue_MarmaName == filterValue_marmaName)
-            );
-        }
-
-        if (filterValue_marmaGRP !== "") {
-            return (
-                (DBvalue_MarmaName === filterValue_marmaName && DBvalue_MarmaGRP === filterValue_marmaGRP && DBvalue_bodyRegion === filterValue_bodyRegion && DBvalue_bodySide === filterValue_bodySide) ||
-                (filterValue_marmaName === "" && DBvalue_MarmaGRP === filterValue_marmaGRP && DBvalue_bodyRegion === filterValue_bodyRegion && DBvalue_bodySide === filterValue_bodySide) ||
-                (filterValue_bodyRegion === "" && DBvalue_MarmaName === filterValue_marmaName && DBvalue_MarmaGRP === filterValue_marmaGRP && DBvalue_bodySide === filterValue_bodySide) ||
-                (filterValue_bodySide === "" && DBvalue_MarmaName === filterValue_marmaName && DBvalue_MarmaGRP === filterValue_marmaGRP && DBvalue_bodyRegion === filterValue_bodyRegion) ||
-                (filterValue_marmaName === "" && filterValue_bodyRegion === "" && DBvalue_MarmaGRP === filterValue_marmaGRP && DBvalue_bodySide === filterValue_bodySide) ||
-                (filterValue_bodyRegion === "" && filterValue_bodySide === "" && DBvalue_MarmaName === filterValue_marmaName && DBvalue_MarmaGRP === filterValue_marmaGRP) ||
-                (filterValue_marmaName === "" && filterValue_bodySide === "" && DBvalue_MarmaGRP === filterValue_marmaGRP && DBvalue_bodyRegion === filterValue_bodyRegion) ||
-                (filterValue_marmaName === "" && filterValue_bodyRegion === "" && filterValue_bodySide === "" && DBvalue_MarmaGRP === filterValue_marmaGRP)
-            );
-        }
-
-        if (filterValue_bodyRegion !== "" && filterValue_marmaGRP === "" && filterValue_marmaName === "") {
-            return (
-                (DBvalue_bodyRegion === filterValue_bodyRegion && DBvalue_bodySide === filterValue_bodySide) ||
-                (filterValue_bodySide === "" && DBvalue_bodyRegion === filterValue_bodyRegion)
-            );
-        }
-
-        if (filterValue_bodySide !== "" && filterValue_marmaGRP === "" && filterValue_marmaName === "") {
-            return (DBvalue_bodySide === filterValue_bodySide);
-        }
-
-        // If all filter values are empty, return true to match all records
-        return (filterValue_marmaName === "" && filterValue_marmaGRP === "" && filterValue_bodyRegion === "" && filterValue_bodySide === "");
-    }
-
-    document.getElementById("filter-button").addEventListener("click", filterData);
-
+	document.getElementById("resetFilter").addEventListener("click", () => {
+		resetSelectOptions();
+		closeAll();
+	});
+	document.getElementById("filter-button").addEventListener("click", applyFilter);
 
 }).catch(error => {
     console.error('Error initializing the database:', error);
@@ -962,44 +794,31 @@ function closeBodyInspector() {
 //Navigation
 //###################################################################################		
 
-// set old filter value (on page reload)
-function selectFilterElement(id, valueToSelect) {    
-	var selectElement = document.getElementById(id);
-	if (valueToSelect) {
-		var optionElement = document.createElement('option');
-		optionElement.value = valueToSelect;
-		optionElement.textContent = valueToSelect;
-		selectElement.appendChild(optionElement);
-		selectElement.value = valueToSelect; // Set the newly created option as selected
-		console.log("saved Marma: " + selectElement.value);
-	}
-}
-
 document.getElementsByClassName('circle-badge')[0].style.display = 'flex';
-document.getElementById("filterHits").innerHTML = myArray.length;
-if (myArray.length === 1) {
+document.getElementById("filterHits").innerHTML = filteredMarmas.length;
+if (filteredMarmas.length === 1) {
     document.getElementById("pervious").classList.add("hidden");
     document.getElementById("pervious2").classList.add("hidden");
     document.getElementById("next").classList.add("hidden");
 }
 
 function nextElement() {
-	console.log(myArray);
+	console.log(filteredMarmas);
 	let setMarma = sessionStorage.getItem("marmaID");
 	console.log("Current marmaID from sessionStorage:", setMarma);
 	
-	let myIndex = myArray.indexOf(setMarma);
-	console.log("Current index of marmaID in myArray:", myIndex);
+	let myIndex = filteredMarmas.indexOf(setMarma);
+	console.log("Current index of marmaID in filteredMarmas:", myIndex);
 	
 	// Increment index by 1
 	myIndex += 1;
-	console.log("Next index of marmaID in myArray:", myIndex);
+	console.log("Next index of marmaID in filteredMarmas:", myIndex);
 	
-	if (myIndex >= myArray.length){
+	if (myIndex >= filteredMarmas.length){
 		myIndex = 0;
 	}
-	sessionStorage.setItem("marmaID", myArray[myIndex]);
-	console.log("New marmaID set in sessionStorage:", myArray[myIndex]);
+	sessionStorage.setItem("marmaID", filteredMarmas[myIndex]);
+	console.log("New marmaID set in sessionStorage:", filteredMarmas[myIndex]);
 	console.log("load next...")
 	location.reload()
 };
@@ -1008,8 +827,8 @@ function previousElement() {
     let setMarma = sessionStorage.getItem("marmaID");
     console.log("Current marmaID from sessionStorage:", setMarma);
     
-	let myIndex = myArray.indexOf(setMarma);
-    console.log("Current index of marmaID in myArray:", myIndex);
+	let myIndex = filteredMarmas.indexOf(setMarma);
+    console.log("Current index of marmaID in filteredMarmas:", myIndex);
 	
 	// Decrement index by 1
     myIndex -= 1;
@@ -1017,11 +836,10 @@ function previousElement() {
 	console.log("previous")
 
 	if (myIndex < 0){
-		myIndex = myArray.length -1;
+		myIndex = filteredMarmas.length -1;
 	}
-	//document.getElementById('marmaID').value = myArray[myIndex]
-	sessionStorage.setItem("marmaID", myArray[myIndex]);
-	console.log("New marmaID set in sessionStorage:", myArray[myIndex]);
+	sessionStorage.setItem("marmaID", filteredMarmas[myIndex]);
+	console.log("New marmaID set in sessionStorage:", filteredMarmas[myIndex]);
     console.log("load previous...");
 	location.reload()
 };
