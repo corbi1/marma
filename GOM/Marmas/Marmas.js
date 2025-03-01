@@ -338,10 +338,16 @@ initDB().then(db => {
 			sideDiv.classList.add("resultAddInfo");
 			sideDiv.textContent = marma.location.bodySide;
 			
+			
 			let button = document.createElement("button");
 			button.classList.add("callMarma");
 			button.addEventListener("click", function() {
-				applyFilter(marma.id);
+				if (typeof marma.id === 'string' && marma.id.trim() !== '') {
+					applyFilter(marma.id);
+				} else {
+					console.log("Invalid marmaID:", marma.id); // Logging for debugging
+				}
+				//applyFilter(marma.id);
 			});
 			
 			let buttonImage = document.createElement("img");
@@ -500,7 +506,8 @@ initDB().then(db => {
 
 		if (filteredMarmas.length > 0) {
 			sessionStorage.setItem("marmaID", filteredMarmas[0]);
-			if (marmaID){
+			if (typeof marmaID === 'string' && marmaID.trim() !== ''){
+				console.log("marmaID:", marmaID);
 				sessionStorage.setItem("marmaID", marmaID);
 			}
 			console.log("Saving filtered Marmalist");
