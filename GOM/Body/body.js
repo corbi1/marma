@@ -17,7 +17,6 @@ console.log(key);
 let marmaName;
 let meshName;
 if (key !== null){
-	console.log("test" + key);
 	marmaName = getQueryParam('marmaName');
 	meshName = key + "_" + marmaName;
 	document.getElementById('marmaFocusHelp').style.display = "block";
@@ -25,7 +24,6 @@ if (key !== null){
 	document.getElementById('helpbtn').style.color = "black";
 	document.getElementById('menueButton-container').style.display = "none";
 } else if (key == null) {
-	console.log("test2" + key);
 	document.getElementById('marmaFocusHelp').style.display = "none";
 	document.getElementById('camSliderHelp').style.display = "block";
 }
@@ -39,7 +37,7 @@ var mainColor1, mainColor2;
 console.log("style: " + marmaDesign);
 if (marmaDesign == "snayu") {
 	bgColor = "rgba(219, 214, 160, "
-	document.documentElement.style.background = "transparent";
+		document.documentElement.style.background = "transparent";
 	document.body.style.background = "transparent";
 } else if (marmaDesign == "mamsa"){
 	bgColor = "rgba(222, 176, 214, "
@@ -148,10 +146,10 @@ const createScene = function () {
 
 	BABYLON.SceneLoader.ImportMeshAsync(
 		"",
-		"https://raw.githubusercontent.com/corbi1/marma/main/",
+		"https://raw.githubusercontent.com/corbi1/marma/main/3D/",
 		"human3d_v8.7.glb"
 	).then((result) => {
-		console.log("loaded: human3d_v8.6.glb");
+		console.log("loaded: human3d_v8.7.glb");
 
 		// Iterate through each mesh to set rotation
 		result.meshes.forEach((mesh) => {
@@ -377,6 +375,13 @@ const createScene = function () {
 			}
 		});
 		
+		// invert x-axis for Marmas
+		var collectionMarma = scene.getTransformNodeByName("Marmas");
+		if (collectionMarma) {
+			console.log("Flip Marmas on x-axis");
+			collectionMarma.scaling.x *= -1; // Mirror the whole collection on the X-axis
+		}
+	
 		// Set appearance of snayu
 		var collectionSnayu = scene.getTransformNodeByName("snayu");
 		if (collectionSnayu) {
