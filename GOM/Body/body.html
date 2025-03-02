@@ -57,16 +57,21 @@
 	<!-- Camera controll slider will be dynamically added here -->
 	
 	</div>
-	<div id="menueButton-container" >
-			<button class="button" id="menueButton" onclick="location.href='../index.html';">
+	<div id="menueButton-container">
+		<a href="../index.html"> <!-- Ensures navigation works even without JavaScript -->
+			<button class="button" id="menueButton">
 				<img src="../resources/icons/menue-icon.webp">
 			</button>
+		</a>
 	</div>
     <div class="container" id="vizContrl">
 		<div class="column" id="column-1"><!-- Buttons and sliders will be dynamically added here --></div>
     </div>
 	
 	<div id="help" onclick="toggleHelp()">
+		<div class="circle-container" id="circle-container">
+            <div class="circle" id="effect-circle"></div>
+        </div>
 		<a href="javascript:void(0)" id="helpbtn" class="hidden" >?</a>
 		<div id="hint" class="hidden">
 			<p >Hilfe</p>
