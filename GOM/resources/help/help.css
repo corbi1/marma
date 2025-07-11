@@ -1,0 +1,172 @@
+/*
+########################################
+Help Overlay
+########################################
+*/
+
+:root {
+  --progress1: rgba(219 , 172, 52, 0.7);
+}
+
+h3 {
+	font-size: 1.2em;
+	line-height: 1.2em;
+	font-weight: bold;
+	margin: 30px auto 10px auto;
+}
+
+#helpOL, #helpOLTWO {
+  position: fixed;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction:column;
+  /*background-image: linear-gradient(to top, var(--bg-color-2) 0%, var(--bg-color-1) 50%);*/
+  background-color: var(--bg-color-2);
+  height: 0%;
+  width: 0%;
+}
+
+
+#helpOL {
+  z-index: 50;
+}
+#helpOLTWO {
+  z-index: 200;
+}
+
+#help, #helpTWO {
+  position: fixed;
+  top: 15px;
+  right: 0px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: auto;
+  border-radius: 10px;
+  text-decoration: none;
+  /*color: var(--white-080);*/
+  transition: background-color 0.5s ease, height 0.3s ease, width 0.3s ease;
+}
+#help, .help {
+  z-index: 55;
+}
+#helpTWO {
+  position:absolute;
+  right: 50px;
+  z-index: 205;
+}
+
+
+/*#hint,*/ #hintTWO, .hint {
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+  height: 0;
+  overflow: hidden; /* Ensure content is hidden during collapse */
+  transition: height 0.5s ease;
+}
+
+/*#helpbtn, #helpbtnTWO,*/ .toolButton {
+  font-size: 2.5em;
+  padding: 8px;
+  text-decoration: none;
+  color: var(--textColor, white);
+}
+.circle-container {
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	z-index: 1;
+	pointer-events: none;
+	transform: translate(-50%, -50%);
+}
+.circle {
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	background-color: var(--white-080);
+	border-radius: 50%;
+	display: none;
+}
+
+@keyframes radiate {
+	0% {
+		transform: scale(1);
+		opacity: 0.5;
+	}
+	100% {
+		transform: scale(3);
+		opacity: 0;
+	}
+}
+
+@keyframes shrink {
+	0% {
+		transform: scale(1.5);
+		opacity: 0.5;
+	}
+	100% {
+		transform: scale(0);
+		opacity: 0;
+	}
+}
+
+#helpNav .overlay{
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+}
+
+#helpOL .overlayContent, #helpOLTWO .overlayContent{
+	z-index: 210;
+	top:0;
+	width:auto;
+	margin:50px;
+	flex: 1;
+}
+#helpOL .overlayContent p, #helpOLTWO .overlayContent p{
+	text-align:justify;
+}
+#helpOL .overlayContent img, #helpOLTWO .overlayContent img{
+	margin: 15px 5px;
+	width: 40%;
+	max-width: 150px;
+    min-width: 50px;
+}
+
+#helpNav {
+  z-index: 210;
+  /*position: sticky;*/
+  bottom: 0;
+  margin: 0 50px 50px 50px;
+  /*background-color: rgba(0, 0, 0, 0.8);*/
+  text-align: center;
+  padding: 10px 0;
+}
+
+#helpOL .navButton, #helpOLTWO .navButton{
+	background-color: var(--progress1) !important;
+	width:70px;
+	height:70px;
+}
+#helpNav .navButton img{
+	width: auto;
+    height: 50px;
+}
+
+/*
+########################################
+responsive
+########################################
+*/
+
+@media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ 
+    #helpOL .content, #helpOLTWO .content,#helpOL #content, #helpOLTWO #content,#helpOL .overlayContent, #helpOLTWO .overlayContent {
+        max-width: 650px;
+		margin: 50px auto;
+    }
+}
