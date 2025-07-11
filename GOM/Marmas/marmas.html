@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="de">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+	<title id="title" class="MarmaNameSK">Marma</title>
+	<link href="Marmas.css" rel="stylesheet" type="text/css" />
+	<link href="../resources/help/help.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript"></script>
+	<script src="../create_db.js"></script>
+	<script src="Marmas.js" defer></script>
+	<script src="../resources/help/help_script.js"></script>
+	<script src="../resources/help/helpTWO_script.js"></script>
+	<script src="../resources/help/circle.js"></script>
+	
+	
+	<script>
+	//**** help ****
+	function resetZIndexTWO() {
+		document.getElementById("filterMarmaNAME").style.zIndex = "";
+		document.getElementById("filterMarmaNAME").style.boxShadow = "none";
+		document.getElementById("filterMarmaGRP").style.zIndex = "";
+		document.getElementById("filterMarmaGRP").style.boxShadow = "none";
+		document.getElementById("filterBodyPart").style.zIndex = "";
+		document.getElementById("filterBodyPart").style.boxShadow = "none";
+		document.getElementById("filterBodySide").style.zIndex = "";
+		document.getElementById("filterBodySide").style.boxShadow = "none";
+		
+		document.getElementById("filterResults").style.zIndex = "0"; 
+		document.getElementById("filterResults").style.boxShadow = "none";
+		
+		document.getElementById("filter-button").style.zIndex = ""; 
+		document.getElementById("filter-button").style.boxShadow = "none";
+		document.getElementById("resetFilter").style.zIndex = ""; 
+		document.getElementById("resetFilter").style.boxShadow = "none";
+		
+		
+	}
+
+	function updateZIndexTWO(index) {
+		resetZIndexTWO();
+		if (index === 0) {
+			document.getElementById("filterMarmaNAME").style.zIndex = "205"; 
+			document.getElementById("filterMarmaNAME").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+			document.getElementById("filterMarmaGRP").style.zIndex = "205";
+			document.getElementById("filterMarmaGRP").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+			document.getElementById("filterBodyPart").style.zIndex = "205";
+			document.getElementById("filterBodyPart").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+			document.getElementById("filterBodySide").style.zIndex = "205";
+			document.getElementById("filterBodySide").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+		} else if (index === 1) {
+			document.getElementById("filterResults").style.zIndex = "205"; 
+			document.getElementById("filterResults").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+		} else if (index === 2) {
+/*			document.getElementById("filter-button").style.zIndex = "205"; 
+			document.getElementById("filter-button").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+			document.getElementById("resetFilter").style.zIndex = "205"; 
+			document.getElementById("resetFilter").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+*/		}
+	}
+	function resetZIndex() {
+	}
+	function updateZIndex(index) {
+		resetZIndex();
+	}
+    </script>
+
+</head>
+
+<header>
+	<div id="titleBar">
+		<div id="headline">
+		<h1 id="headline1"><span class="MarmaNameSK" ></span></h1>
+		<h2> <span id="headline2">Title</span> - <span class="BodyRegion" >BodyRegion</span></h2>
+		</div>
+	</div>
+	<div id="help" onclick="toggleHelp()">
+		<div class="circle-container">
+            <div class="circle"></div>
+        </div>
+		<a href="javascript:void(0)" id="helpbtn" class="toolButton">?</a>
+		<div class="hint hidden">
+			<p >Hilfe</p>
+		</div>
+	</div>
+	<div class="toolBar">
+		<button class="toolButton"  id="openFilterMenue" onclick="openFilterMenue(true)"><img src="../resources/icons/search-icon.webp"></button>		
+	</div>
+</header>
+
+<body id="body">
+<div id="content">
+
+<section id="visualSection">
+	<div id="visual">
+		<img id="visual_img" alt="icon des Marmas" onclick="openBodyInspector()"> <br />
+	</div>
+</section>
+
+<section id="infoSection">
+		<p id="AnatomicalLoc">Das <span class="MarmaNameSK" ></span> befindet sich <span id="Explanation" ></span>.</br>
+		</p>
+</section>
+
+<section id="evaluationSection">
+	<div id="evaluation">
+		<div class="slidecontainer">
+			<div class="popup">
+				<p id="localisationLabel" class="sLabel show" onclick="locFunctionShow()">Lokalisation: <img src="../resources/icons/info-icon.webp"></p>
+				<p id="localisationExpl" class="sExpl" onclick="locFunctionHide()">Ich kenne den Ort ... <img src="../resources/icons/info-icon.webp"></p>
+				<span class="popuptext" id="localisationPopup" onclick="locFunctionHide()">Popup</span>
+				<span ></span>
+			</div> 
+			<input type="range" min="1" max="5" class="slider" id="localisation">
+		</div>
+		<div class="slidecontainer">
+			<div class="popup">
+				
+				<p id="awarenessLabel" class="sLabel show" onclick="awFunctionShow()">Stärke der Wahrnehmung: <img src="../resources/icons/info-icon.webp"></p>
+				<p id="awarenessExpl" class="sExpl" onclick="awFunctionHide()">Ich spüre das Marma ... <img src="../resources/icons/info-icon.webp"></p>
+				<span class="popuptext" id="awarenessPopup" onclick="awFunctionHide()">Popup</span>
+				<span ></span>
+			</div> 
+			<input type="range" min="1" max="5" class="slider" id="awareness">
+		</div>
+		<div class="slidecontainer">
+			<div class="popup">
+				
+				<p id="frequencyLabel" class="sLabel show" onclick="freqFunctionShow()">Häufigkeit der Wahrnehmung: <img src="../resources/icons/info-icon.webp"></p>
+				<p id="frequencyExpl" class="sExpl" onclick="freqFunctionHide()">Ich spüre das Marma ... <img src="../resources/icons/info-icon.webp"></p>
+				<span class="popuptext" id="frequencyPopup" onclick="freqFunctionHide()">Popup</span>
+				<span ></span>
+			</div> 
+			<input type="range" min="1" max="6" class="slider" id="frequency">
+		</div>
+	</div>
+</section>
+	
+<section id="addInfoSection">
+
+	<button class="accordion" id="Tipp">Tipp</button>
+	<div class="panel">
+		<div id="infoList">
+		  <ul id="addInfoList">
+			<li>
+				<span id="MarmaTipp" ></span>
+			</li>
+		  </ul>
+		</div>
+	</div>
+	<button class="accordion" id="addInfo">Weitere Infos</button>
+	<div class="panel">
+		<div id="infoList">
+		  <ul id="addInfoList">
+			<li><span class="MarmaNameSK bold" ></span><span> - </span><span class="bold" id="Typography" ></span>
+			</li>
+			<li><span class="MarmaNameSK" >Marmaname Sanskrit</span> ist ein <span class="MarmaGrpDE bold" >Marmagruppe Deutsch</span> (<span class="MarmaGrpSK" >Marmagruppe Sanskrit</span>).
+			</li>
+			<li>Übersetzung / Herleitung </br>
+				<span id="Origin" >Begriffserklärung</span>
+			</li>
+		  </ul>
+		</div>
+	</div>
+	<button class="accordion" id="addInfo_anatomy">Anatomie</button>
+	<div class="panel">
+		<div id="infoList">
+		  <ul>
+			<li><span class="MarmaNameSK bold" >Marmaname Sanskrit</span> befindet sich <span class="bold" id="BodySide" >Körperseite</span> am <span class="BodyRegion bold" >BodyRegion</span>.</li>
+			<li>Ort: </br>
+				<span class="Anatomy" >Anatomischer Ort</span></li>
+		  </ul>
+		</div>
+		<span class="MarmaNameSK" >Marmaname Sanskrit</span> im 3d Modell:</br>
+		</br>
+		<button class="navButton" id="anatomyButton" onclick="openBodyInspector()">
+				<img src="../resources/icons/body-icon.webp">
+		</button>
+		
+		
+		<div class="overlay" id="3d_Body_Inspector">
+		  <a href="javascript:void(0)" class="closebtn" id="closeBody" onclick="closeBodyInspector()">&times;</a>
+		  <div class="overlayIFrame">
+			<iframe id="inspectorFrame" title="3d body inspector"></iframe> 
+		  </div>
+		  <a href="javascript:void(0)" class="colapsbtn" onclick="closeBodyInspector()"><img src="../resources/icons/down-icon.webp" alt="body inspector schließen"></a>
+		</div>
+<!-- hilfe marma seite -->		
+	<div class="overlay" id="helpOL">
+	  <div class="overlayContent">
+		<div id="help1">
+			<h3>Marma Suche</h3>
+			<p>Mit der 🔍 öffnest du den Suchdialog. Du findest die Schaltfläche am rechten Rand oder ganz unten in der Navigationsleiste.</p>
+			</br>
+			<p>An der Lupe in der Navigationsleiste findest du den Hinweis, wie viele Marmas mit der Sucheinstellung gefunden wurden. Mit den Pfeilen links und rechts kannst du durch die gefundenen Marmas blättern.</p>
+			</br>
+			<p>Wenn du wieder aus allen Suchparameter wählen möchtes, setzte im geöffneten Suchdialog mit ⭯ die Eingaben zurück.</p>
+
+		</div>
+		<div class="hidden" id="help2">
+			<h3>Marmas bewerten</h3>
+			<p>Mit den Reglern kannst du verschiede Aspekte des Marmas bewerten. So kannst du den Überblick behalten wie gut du das Marma schon kennst.</p>
+			</br>
+			</br>
+			<p>Mit dem ersten Regler <b>Lokalisation</b> kannst du angeben wie gut du den Ort an deinem Körper schon kennst an dem sich das Marma befindet. Von ganz links "überhaupt nicht" bis ganz rechts "genau".</p>
+			</br>
+			<p>Mit dem zweiten Regler <b>Stärke der Wahrnehmung</b> kannst du angeben wie gut du das Marma schon spürst. Von ganz links "überhaupt nicht" bis ganz rechts "sehr stark".</p>
+			</br>
+			<p>Mit dem dritten Regler <b>Häufigkeit der Wahrnehmung</b> kannst du angeben wie oft du das Marma schon spürst. Von ganz links "überhaupt nicht" bis ganz rechts "(fast) immer".</p>
+			</br>
+			</br>
+			<p>Mit dem &#128712; kannst du einblenden wo du bei dem Marma gerade stehst.</p>
+		</div>
+		<div class="hidden" id="help3">
+			<h3>Zusätzliche Informationen</h3>
+			<p>Unterhalb der Regler findest du den Bereich mit weiteren Infos und der Anatomie. Klappe den Bereich auf um die Informationen zu sehen. </p>
+			</br>
+			<p>Unter Anatomie findest du eine Schaltfläche. Diese bringt dich zum 3d Modell des Körpers, direkt an die Stelle des Marmas.</p>
+			<img src="../resources/icons/body-icon.webp" alt="3d body viewer icon">
+		</div>
+		<div class="hidden" id="help4">
+			<h3>Navigation</h3>
+			<p>Ganz unten findest du die Navigationsleiste.</p>
+			</br>
+			<p>Mit der 🔍 öffnest du den Suchdialog um die Suche zu verfeinern oder anzupassen. Rechts oberhalb der Lupe findest du die Anzahl der Marmas mit der aktuellen Sucheinstellung.</p>
+			<p>Wenn die Suche mehr als ein Marma findet kannst du mit den Pfeilen links und rechts durch die gefundenen Marmas blättern.</p>
+			</br>
+			<p>Mit dem Menüknopf gelangst du wieder zum Hauptmenü.</p>
+		</div>
+		<div class="hidden" id="help5">
+			<h3>Farben</h3>
+			<p>Je nach Marma Gruppe wird die Marmaseite in einem anderen Farbstil dargestellt.</p>
+			</br>
+			<p>Sehnen Marmas (snayu) in einem Gelbton: </p><div style="background-color: rgba(219, 214, 160, 1);width: 30px;height: 30px;margin: auto;border: solid 1px black;border-radius: 50%;box-shadow: black 0 0 5px;"></div>
+			</br>
+			<p>Muskel Marmas (mamsa) in einem Rosaton: </p><div style="background-color: rgba(222, 176, 214, 1);width: 30px;height: 30px;margin: auto;border: solid 1px black;border-radius: 50%;box-shadow: black 0 0 5px;"></div>
+			</br>
+			<p>Gelenk Marmas (sandhi) in einem Hellblauton: </p><div style="background-color: rgba(162, 168, 222, 1);width: 30px;height: 30px;margin: auto;border: solid 1px black;border-radius: 50%;box-shadow: black 0 0 5px;"></div>
+			</br>
+			<p>Blutgefäß Marmas (sira) in einem Rotton: </p><div style="background-color: rgba(223, 107, 112, 1);width: 30px;height: 30px;margin: auto;border: solid 1px black;border-radius: 50%;box-shadow: black 0 0 5px;"></div>
+			</br>
+			<p>Knochen Marmas (asthi) in einem Lila-/Grauton: </p><div style="background-color: rgba(194, 179, 190, 1);width: 30px;height: 30px;margin: auto;border: solid 1px black;border-radius: 50%;box-shadow: black 0 0 5px;"></div>
+		</div>
+	  </div>
+		<div class="" id="helpNav">
+			<button class="navButton" id="nextHelp"><img src="../resources/icons/white/next-icon.webp" alt="weiter"></button>
+		</div>
+</section>
+
+</div>
+
+<footer id="footer">
+
+    <div class="menueBar">
+        <div class="footer-button"><button class="navButton" id="pervious"><img src="../resources/icons/previous-icon.webp" alt="zurück"></button></div>
+        <div class="footer-button menue_toolButton">
+		  <div class="button">
+			<button class="navButton" id="menue" onclick="location.href='../index.html';">
+				<img src="../resources/icons/menue-icon.webp" alt="Hauptmenü">
+			</button>
+		  </div>
+          <div class="button">
+			<button class="navButton" id="search" onclick="openFilterMenue(true)">
+				<img src="../resources/icons/search-icon.webp" alt="Suche">
+			    <div class="circle-badge">
+					<span id="filterHits"></span>
+				</div>
+			</button>
+		  </div>
+          <!--<div class="button">Center Button 2</div>-->
+        </div>
+		<div class="footer-button menue_navButtons">
+			<div class="footer-button">
+			<button class="navButton" id="pervious2"> <img src="../resources/icons/previous-icon.webp" alt="zurück"></button>
+			</div>
+			<div class="footer-button"><button class="navButton" id="next"><img src="../resources/icons/next-icon.webp" alt="weiter"></button></div>
+		</div>
+    </div>
+<!-- Filter -->			
+	<div class="overlay" id="filterMenue">
+	<div id="helpTWO" onclick="toggleHelpTWO()">
+		<div class="circle-container" id="circle-container2">
+            <div class="circle" id="effect-circle2"></div>
+        </div>
+		<a href="javascript:void(0)" id="helpbtnTWO" >?</a>
+		<div id="hintTWO" class="hidden">
+			<p >Hilfe</p>
+		</div>
+	</div>
+	  <a href="javascript:void(0)" class="closebtn" onclick="closeFilterMenue(true)">&times;</a>
+	  <div class="overlayContent">
+		<div><h3>Wähle die Marmas aus, die du gerne näher betrachten willst.</h3><div>
+		<div class="filterSelect"> 
+			<select name="Marma" id="filterMarmaNAME" size="1"> <!-- use <selectmenu> when supported in the future-->
+			</select>
+		</div>
+		<div class="filterSelect"> 
+			<select name="Marma Gruppe" id="filterMarmaGRP" size="1">
+			</select>
+		</div>
+		<div class="filterSelect"> 
+			<select name="Körperteil" id="filterBodyPart" size="1">
+			</select>
+		</div>
+		<div class="filterSelect"> 
+			<select name="Körperseite" id="filterBodySide" size="1">
+			</select>
+		</div>
+		<button class="accordion" id="filterResults">Trefferliste: </button>
+		<div class="panel" id="resultPanel">
+			<div id="resultsContainer"></div>
+		</div>
+			<button class="navButton" id="menue" onclick="location.href='../index.html';"><img src="../resources/icons/menue-icon.webp" alt="Hauptmenü"></button>
+			<button class="navButton" id="resetFilter"><img src="../resources/icons/reset-icon.webp" alt="Zurücksetzen"></button>
+			<button class="navButton" id="filter-button">
+				<div class="circle-container" >
+					<div class="circle"></div>
+				</div>
+				<img src="../resources/icons/search-icon.webp" alt="Suche starten">
+			</button>
+
+		</div>
+
+<!-- Filter Help-->		
+	<div class="overlay" id="helpOLTWO">
+	  <div class="overlayContent">
+		<div id="help1">
+			<h3>Marmas suchen</h3>
+			<p>Wähle über die Eingabefelder Kategorien aus um die Suche auf die relevanten Marmas einzugrenzen. </p>
+
+		</div>
+		<div class="hidden" id="help2">
+			<h3>Marmas auswählen</h3>
+			<p>Je nach ausgewählten Kategorien kannst du die Anzahl der relevanten Marmas immer stärker eingrenzen. Die Anzahl der Marmas, die deiner Auswahl entsprechend, wir dir unter den Eingabefelder angezeigt.</p>
+			<br/>
+			<p>Mit einem Klick auf die Anzeige der Trefferanzahl öffnet sich die Trefferliste. Von hier aus kannst du direkt zu einem gewünschten Marma springen.</p>
+
+		</div>
+		<div class="hidden" id="help3">
+			<h3>Suche Starten</h3>
+			<p>Anstatt ein Marma aus der Ergebnisliste auszuwählen kannst du auch mit der 🔍 direkt zum ersten Marma springen. Mit ⭯ kannst du alle Eingaben zurücksetzen.</p>
+
+		</div>
+
+	  </div>
+		<div class="" id="helpNav">
+			<!--<button class="navButton" id="previous"> <img src="../resources/icons/white/previous-icon.webp" alt="zurück"></button>-->
+			<button class="navButton" id="nextHelpTWO"><img src="../resources/icons/white/next-icon.webp" alt="weiter"></button>
+		</div>
+		
+	</div>
+</footer>
+
+</body>
