@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Die Gelenke</title>
+
+	<link href="../../../Body/body.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Body/resources/babylon.js"></script>
+    <script src="../../../Body/resources/babylonjs.loaders.min.js"></script>
+    <script src="../../../Body/resources/pep.js"></script>
+	<style>
+	:root {
+		--item-margin: 2px ;
+		--item-width: auto;
+	}
+	
+	#licInfo{
+		font-size: x-small;
+		top: auto;
+		bottom:0;
+	}
+	
+	#licInfo1 {
+		padding-top: 5px;
+	}
+	#header {
+	  position: absolute;
+	  top: 0;
+	  width: 100%;
+	  display: flex;
+	  justify-content: center;  
+	  align-items: center;
+	  padding: 5px 0;
+	}
+
+	#headline {
+	  font-size: 1.5em;
+	  flex-grow: 1;
+	  text-align: center;
+	  padding-left:50px;
+	}
+
+	#dInfo {
+	  position: relative;
+	  display: flex;
+	}
+
+	#dInfo img {
+	  width: 50px;
+	}
+
+	.button {
+	  font-size: 1.5em;
+	}
+
+	</style>
+  </head>
+
+  <body>
+    <canvas id="renderCanvas" touch-action="none"></canvas>
+	<div id="header">
+		<div id="headline"> </div>
+		<div id="dInfo"> 
+			<img src="../../../resources/icons/white/3d-icon.webp">			
+		</div>
+	</div>
+	<div id="licInfo" onclick="showLic()"> 
+		<img src="../../../resources/icons/white/info-icon.webp">
+		<p id="licInfo1" class="hidden"> 
+			source 3d material: BodyParts3D &copy;			
+		</p>
+		<p id="licInfo2" class="hidden">
+			<a href="http://lifesciencedb.jp/bp3d/?lng=en#" target="_blank">The Database Center for Life Science</a></br>
+			licensed under <a href="https://creativecommons.org/licenses/by-sa/2.1/jp/" target="_blank">CC Attribution-Share Alike 2.1 Japan</a>
+		</p>
+	</div>
+	<div id="loading-screen">
+	  <div class="spinner"></div>
+	</div>
+	<div class="container">
+		<div class="column" id="column-1">
+			<div class="item">
+				<button class="button" style="background-image: ;" onclick="changeCameraAnimated(50,690,0,200,0)"><div>1.</div></button>
+			</div>
+			<div class="item">
+				<button class="button" style="background-image: ;" onclick="changeCameraAnimated(0,400,-50,150,1)"><div>2.</div></button>
+			</div>
+			<div class="item">
+				<button class="button" style="background-image: ;" onclick="changeCameraAnimated(0,170,-30,100,2)"><div>3.</div></button>
+			</div>
+			<div class="item">
+				<button class="button" style="background-image: ;" onclick="changeCameraAnimated(0,140,-30,100,3)"><div>4.</div></button>
+			</div>
+			<div class="item">
+				<button class="button" style="background-image: ;" onclick="changeCameraAnimated(-30,150,-25,100,4)"><div>5.</div></button>
+			</div>
+			<div class="item">
+				<button class="button" style="background-image: ;" onclick="changeCameraAnimated(0,50,-10,80,5)"><div>6.</div></button>
+			</div>
+		</div>
+    </div>
+
+    <script>
+const canvas = document.getElementById("renderCanvas"); // Get the canvas element
+const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
+const scene = new BABYLON.Scene(engine);
+
+function getQueryParam(param) {
+  let urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+/**** Colors *****/
+let jointType = "";
+jointType = getQueryParam('jointType');
+console.log("jointType: " + jointType);
+
+var bgColor;
+var hlColor, mainColor1, mainColor2;
+	bgColor = "rgba(81, 35, 112, "
+	mainColor1 = "rgba(33, 13, 38, 0.9)";
+	mainColor2 = "rgba(40, 36, 54, 21)";
+	textColor = "white";
+	document.documentElement.style.setProperty('--mainColor-1', mainColor1);
+	document.documentElement.style.setProperty('--mainColor-2', mainColor2);
+	document.documentElement.style.setProperty('--textColor', textColor);
+
+console.log(bgColor);
+document.documentElement.style.setProperty('--bg-color-005', bgColor + " 0.05)");
+document.documentElement.style.setProperty('--bg-color-010', bgColor + " 0.10)");
+document.documentElement.style.setProperty('--bg-color-030', bgColor + " 0.30)");
+document.documentElement.style.setProperty('--bg-color-050', bgColor + " 0.50)");
+document.documentElement.style.setProperty('--bg-color-090', bgColor + " 0.90)");
+document.documentElement.style.setProperty('--bg-color-100', bgColor + " 1.00)");
+document.documentElement.style.setProperty('--hl-color', hlColor);
+
+const transparent = new BABYLON.Color4(0,0,0,0.0000000000000001);
+const transparentHex = transparent.toHexString();
+
+
+/**** build human body *****/
+const createScene = function () {
+
+/**** build world *****/
+
+//var ground = BABYLON.MeshBuilder.CreateGround("ground1", {width: 500, height: 500, subdivisions: 0}, scene);
+//ground.position.x = -20;
+//ground.position.y = -15;
+//ground.position.z = -100;
+// Create a material for the ground
+//var groundMaterial = new BABYLON.StandardMaterial("groundMaterial");
+//groundMaterial.diffuseColor = new BABYLON.Color3(0.21961, 0.09020, 0.25490); //  Blue Mat=(0.00784, 0.77647, 0.96471)
+//ground.material = groundMaterial;
+
+scene.clearColor = transparent;
+//new BABYLON.AxesViewer(scene, 1000);
+//scene.debugLayer.show()
+
+/**** Materials *****/
+		//color
+		const bonecolor = new BABYLON.StandardMaterial("bonecolor");
+		bonecolor.diffuseColor = new BABYLON.Color3(0.79608, 0.79608, 0.79608);
+		bonecolor.alpha = 1.0;
+		
+		if (jointType === "1") {
+
+		} else if (jointType === "2") {
+
+		}
+
+        BABYLON.SceneLoader.ImportMeshAsync(
+			"",
+			"https://raw.githubusercontent.com/corbi1/marma/main/3D/",
+			"joints3d_v3.glb"
+		).then((result) => {
+			console.log("imported")
+			
+			// Iterate through each mesh to set rotation
+			result.meshes.forEach((mesh) => {
+				// Ensure transformations are baked into the geometry
+				if (mesh.parent) {
+					mesh.computeWorldMatrix(true); // Ensure world matrix is up-to-date
+					mesh.bakeCurrentTransformIntoVertices();
+				}
+				
+				// Apply additional rotation if needed
+				mesh.rotationQuaternion = null;
+				mesh.rotation.x += Math.PI / 2;
+			});
+
+			// Apply position offsets
+			result.meshes.forEach((mesh) => {
+
+			if (mesh.parent) {
+					mesh.parent.computeWorldMatrix(true); // Update parent world matrix
+					mesh.parent.position.set(0, 0, 0); // Reset parent position
+					mesh.parent.rotationQuaternion = null; // Ensure no quaternion overrides
+					mesh.parent.rotation.set(0, 0, 0); // Reset parent rotation
+					mesh.parent.scaling.set(1, 1, 1); // Reset parent scale
+				}
+
+				mesh.setAbsolutePosition(new BABYLON.Vector3(0, 0, 0)); //x = left and right (red); y = up and down (green); z = back and forth (blue)
+			});
+
+			// Recursive function to apply changes to all descendants of a node
+			function applyChangesToDescendants(node, changesFunction) {
+				node.getChildren().forEach(function (child) {
+					// Apply changes to the current child
+					changesFunction(child);
+					
+					// Recursively apply changes to its descendants
+					applyChangesToDescendants(child, changesFunction);
+				});
+			}
+
+			// Set appearance of bones
+			var collectionBones = scene.getTransformNodeByName("Knochen");
+			if (collectionBones) {
+				console.log("Set appearance of bones")
+				applyChangesToDescendants(collectionBones, function(mesh) {
+					if (mesh.material) {
+						mesh.material = bonecolor; // Apply color
+						mesh.material.backFaceCulling = false;
+						mesh.alwaysSelectAsActiveMesh = true; // Prevent frustum culling
+						//mesh.refreshBoundingInfo();
+						//mesh.showBoundingBox = true;
+					} else if (!mesh.material){
+						collectionBones = scene.getTransformNodeByName(mesh);
+					}
+				});
+			}
+			
+			// Register a render loop to repeatedly render the scene
+			engine.runRenderLoop(function () {
+				scene.render();
+			});
+		initializeUI(scene);
+		showLic();
+		});
+	};
+
+function setLight(camera, scene) {
+/**** Set light *****/
+		const light = new BABYLON.PointLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+		light.intensity = 0.5;
+		light.specular = new BABYLON.Color3.Black();
+		const light1 = new BABYLON.DirectionalLight("FrontRightLight", new BABYLON.Vector3(5, -1, 5), scene);
+		light1.specular = new BABYLON.Color3.Black();
+		light1.intensity = 0.6;
+		const light2 = new BABYLON.DirectionalLight("FrontLeftLight", new BABYLON.Vector3(-5, -1, 5), scene);
+		light2.specular = new BABYLON.Color3.Black();
+		light2.intensity = 0.6;
+		const light3 = new BABYLON.DirectionalLight("BackLight", new BABYLON.Vector3(0, -1, -5), scene);
+		light3.specular = new BABYLON.Color3.Black();
+		
+		scene.registerBeforeRender(function () {
+			light.position = camera.position;
+		});
+        return scene;
+};
+
+/**** License Info *****/
+var licviz = 1;
+function showLic(){
+	if (licviz == 1){
+		document.getElementById("licInfo1").classList.add('visible');
+		document.getElementById("licInfo1").classList.remove('hidden');
+		document.getElementById("licInfo2").classList.add('hidden');
+		document.getElementById("licInfo2").classList.remove('visible');
+		licviz = 0;
+	} else if (licviz == 0){
+		document.getElementById("licInfo2").classList.add('visible');
+		document.getElementById("licInfo2").classList.remove('hidden');
+		licviz = 1;
+	}
+}
+
+var camera;
+function initializeUI(scene) {
+    /**** Set camera *****/
+    const modelheight = 680;
+    var cameraY = modelheight / 2;
+    camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 10, new BABYLON.Vector3(0, cameraY, 0), scene);
+    camera.useAutoRotationBehavior = true;
+    camera.alpha = 5;
+    camera.beta = 1.5;
+    camera.radius = 1200;
+    camera.attachControl(canvas, true);
+
+    // Set camera limits
+    camera.lowerRadiusLimit = 10;
+    camera.upperRadiusLimit = modelheight * 5;
+
+    // Adjust zoom speed
+    camera.useNaturalPinchZoom = true;
+    camera.wheelPrecision = 0.5;
+
+	setLight(camera, scene);
+	document.getElementById("loading-screen").style.display = "none";
+
+}
+
+// Function to set camera focus and animate
+function changeCameraAnimated(xValue, yValue, zValue, RadiusV, id) {
+    if (!camera || !scene) {
+        console.error("Camera or scene is not initialized yet!");
+        return;
+    }
+
+    const targetPosition = new BABYLON.Vector3(xValue, yValue, zValue);
+    const targetRadius = RadiusV;
+    const targetBeta = Math.PI / 2; // Optional: Keep the camera upright
+
+    // Animation for beta (optional to animate to an upright view)
+    const betaAnimation = new BABYLON.Animation(
+        "betaAnimation",
+        "beta",
+        60,
+        BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+        BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+    );
+
+    // Animation for radius
+    const radiusAnimation = new BABYLON.Animation(
+        "radiusAnimation",
+        "radius",
+        60,
+        BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+        BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+    );
+
+    // Animation for target position
+    const targetAnimation = new BABYLON.Animation(
+        "targetAnimation",
+        "target",
+        60,
+        BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
+        BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+    );
+
+    const betaKeys = [
+        { frame: 0, value: camera.beta },
+        { frame: 30, value: targetBeta }
+    ];
+
+    const radiusKeys = [
+        { frame: 0, value: camera.radius },
+        { frame: 30, value: targetRadius }
+    ];
+
+    const targetKeys = [
+        { frame: 0, value: camera.target.clone() },
+        { frame: 30, value: targetPosition }
+    ];
+
+    // Set keys for animations
+    betaAnimation.setKeys(betaKeys);
+    radiusAnimation.setKeys(radiusKeys);
+    targetAnimation.setKeys(targetKeys);
+
+    // Attach animations to the camera
+    camera.animations = [betaAnimation, radiusAnimation, targetAnimation];
+
+    // Start the animations
+    scene.beginAnimation(camera, 0, 30, false);
+	
+	const jointNames = [
+	  "Kugelgelenk", 
+	  "Zapfengelenk", 
+	  "Eigelenk", 
+	  "Planes Gelenk", 
+	  "Sattelgelenk", 
+	  "Scharniergelenk"
+	];
+	document.getElementById('headline').textContent = jointNames[id];
+	document.getElementById('header').style.backgroundColor = 'var(--mainColor-1)';
+}
+
+
+
+
+const load = createScene(); //Call the createScene function
+
+// Watch for browser/canvas resize events
+window.addEventListener("resize", function () {
+engine.resize();
+});
+
+    </script>
+  </body>
+</html>

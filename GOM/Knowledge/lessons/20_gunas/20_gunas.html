@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Responsive Qualities Table</title>
+  <style>
+	table {
+	  border-collapse: collapse;
+	  margin: auto;
+	  width: 100%;
+	  max-width: 700px;
+	  table-layout: fixed;
+	}
+
+	td {
+	  border: 1px solid #ccc;
+	  padding: 12px;
+	  text-align: center;
+	  vertical-align: middle;
+	  word-wrap: break-word;
+	}
+
+	td:first-child,
+	td:last-child {
+	  width: calc((100% - 40px) / 2);
+	}
+
+    td:nth-child(2) {
+      font-size: 2em;
+      width: 40px;
+    }
+
+    td span.german {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 450px) {
+      table, tbody, tr, td {
+        display: block;
+        width: 100%;
+      }
+
+      tr {
+        margin-bottom: 20px;
+        border: none;
+      }
+
+      td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        padding: 10px;
+        text-align: center;
+      }
+
+      td:first-child {
+        border-bottom: none;
+      }
+
+		td:first-child,
+		td:last-child {
+		  width: 100%;
+		}
+
+      /* Hide original arrow, show new down arrow */
+      td:nth-child(2) {
+        position: relative;
+        visibility: hidden;
+        height: 1.5em;
+		width: 100%;
+      }
+
+      td:nth-child(2)::after {
+        content: "⬍";
+        visibility: visible;
+        font-size: 1.5em;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #333;
+      }
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <tr>
+      <td><span class="german">schwer</span>Guru (गुरु)</td>
+      <td>⬌</td>
+      <td><span class="german">leicht</span>Laghu (लघु)</td>
+    </tr>
+    <tr>
+      <td><span class="german">kühl</span>Śīta (शीत)</td>
+      <td>⬌</td>
+      <td><span class="german">heiß</span>Uṣṇa (उष्ण)</td>
+    </tr>
+    <tr>
+      <td><span class="german">ölig</span>Snigdha (स्निग्ध)</td>
+      <td>⬌</td>
+      <td><span class="german">trocken</span>Rūkṣa (रूक्ष)</td>
+    </tr>
+    <tr>
+      <td><span class="german">langsam / träge</span>Manda (मन्द)</td>
+      <td>⬌</td>
+      <td><span class="german">schnell / scharfsinnig</span>Tīkṣṇa (तीक्ष्ण)</td>
+    </tr>
+    <tr>
+      <td><span class="german">stabil</span>Sthira (स्थिर)</td>
+      <td>⬌</td>
+      <td><span class="german">fließend / beweglich</span>Sara (सर)</td>
+    </tr>
+    <tr>
+      <td><span class="german">hart</span>Kaṭhina (कठिन)</td>
+      <td>⬌</td>
+      <td><span class="german">weich</span>Mṛdu (मृदु)</td>
+    </tr>
+    <tr>
+      <td><span class="german">zäh / schleimig</span>Picchila (पिच्छिल)</td>
+      <td>⬌</td>
+      <td><span class="german">klar / rein</span>Viśada (विशद)</td>
+    </tr>
+    <tr>
+      <td><span class="german">weich, glatt</span>Ślakṣṇa (श्लक्ष्ण)</td>
+      <td>⬌</td>
+      <td><span class="german">hart / rau</span>Khara (खर)</td>
+    </tr>
+    <tr>
+      <td><span class="german">grob / roh</span>Sthūla (स्थूल)</td>
+      <td>⬌</td>
+      <td><span class="german">subtil / delikat</span>Sūkṣma (सूक्ष्म)</td>
+    </tr>
+    <tr>
+      <td><span class="german">fest / dicht</span>Sāndra (सान्द्र)</td>
+      <td>⬌</td>
+      <td><span class="german">flüssig</span>Drava (द्रव)</td>
+    </tr>
+  </table>
+</body>
+</html>

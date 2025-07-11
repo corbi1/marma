@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Pranas</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 1em;
+    }
+
+    /* DESKTOP TABLE */
+    table.desktop {
+      width: 100%;
+	  max-width:1000px;
+      border-collapse: collapse;
+      text-align: center;
+      margin: auto;
+    }
+
+    .desktop th, .desktop td {
+      border: 1px solid #ccc;
+      padding: 12px;
+    }
+
+    .desktop th {
+      background-color: #f9f9f9;
+      font-weight: bold;
+    }
+
+    .detail {
+      font-size: 0.7em;
+      font-weight: normal;
+    }
+
+    .arrow {
+      font-size: 2em;
+    }
+
+    /* MOBILE TABLE */
+    table.mobile {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2em;
+    }
+
+    .mobile th, .mobile td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      vertical-align: middle;
+      text-align: left;
+    }
+
+    .mobile th {
+      background-color: #f0f0f0;
+      width: 30%;
+    }
+
+    .mobile td {
+      width: 30%;
+    }
+
+    .mobile ol {
+      margin: 0;
+      padding-left: 1em;
+    }
+
+    .mobile ol li {
+      margin: 0.2em 0;
+    }
+
+    @media (max-width: 600px) {
+      table.desktop {
+        display: none;
+      }
+
+      table.mobile {
+        display: table;
+      }
+
+      .mobile td, .mobile th {
+        border-left: none;
+        border-right: none;
+      }
+    }
+
+    @media (min-width: 601px) {
+      table.mobile {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DESKTOP -->
+  <table class="desktop">
+    <tr>
+      <th colspan="6">Prakriti<br><span class="detail">(Persönliche Natur des Menschen)</span></th>
+      <th rowspan="2">
+        Purusha<br><span class="detail">(Selbst, Bewusstsein, subjektiver Faktor)</span><br>
+        <span class="arrow">↓</span>
+      </th>
+    </tr>
+    <tr>
+      <th colspan="3">Doshas<br><span class="detail">(Biologie, Physiologie, Psychosomatik)</span></th>
+      <th colspan="3">TriGunas<br><span class="detail">(Psychologie, Sāṃkhya-Philosophie, Ayurveda)</span></th>
+    </tr>
+    <tr>
+      <td>Vata</td>
+      <td>Pitta</td>
+      <td>Kapha</td>
+      <td>Sattva</td>
+      <td>Rajas</td>
+      <td>Tamas</td>
+      <td>Atman</td>
+    </tr>
+  </table>
+
+  <!-- MOBILE -->
+  <table class="mobile">
+    <tr>
+      <th rowspan="2">Prakriti<br><span class="detail">(Persönliche Natur des Menschen)</span></th>
+      <td><strong>Doshas</strong></td>
+      <td>
+        <ol>
+          <li>Vata</li>
+          <li>Pitta</li>
+          <li>Kapha</li>
+        </ol>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>TriGunas</strong></td>
+      <td>
+        <ol start="4">
+          <li>Sattva</li>
+          <li>Rajas</li>
+          <li>Tamas</li>
+        </ol>
+      </td>
+    </tr>
+    <tr>
+      <th>Purusha<br><span class="detail">(Selbst, Bewusstsein, subjektiver Faktor)</span></th>
+      <td class="arrow">→</td>
+      <td>
+        <ol start="7">
+          <li>Atman</li>
+        </ol>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

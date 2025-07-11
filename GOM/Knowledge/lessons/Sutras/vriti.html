@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>vriti</title>
+  <style>
+    /* Base Table Style */
+    table {
+      width: 100%;
+	  max-width: 1000px;
+	  margin: auto;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: center;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f5f5f5;
+    }
+
+    /* Responsive Cards (hidden by default) */
+    .card-container {
+      display: none;
+    }
+	
+	ol{
+		margin:0;
+		padding-left: 16px;
+	}
+
+    .detail {
+      font-size: 0.7em;
+      font-weight: normal;
+    }
+    .card {
+      border: 1px solid #ccc;
+      padding: 16px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      background-color: #fff;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      font-size: 1.2em;
+      color: #333;
+	  text-align:center;
+    }
+
+    .card .short {
+      font-weight: bold;
+      margin: 8px 0;
+	  text-align:center;
+    }
+
+    .card .long {
+      font-size: 0.95em;
+    }
+
+    /* Media Query for Small Screens */
+    @media (max-width: 600px) {
+      table {
+        display: none;
+      }
+
+      .card-container {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DESKTOP TABLE -->
+  <table>
+    <thead>
+      <tr>
+        <th>Pramāṇa<br><span class="detail">प्रमाण</span></th>
+        <th>Viparyaya<br><span class="detail">विपर्यय </span></th>
+        <th>Vikalpa<br><span class="detail">विकल्प</span></th>
+        <th>Nidrā<br><span class="detail">निद्रा</span></th>
+        <th>Smṛti<br><span class="detail">स्मृति</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>richtige Wahrnehmung / gültiges Wissen</td>
+        <td>falsche Wahrnehmung / Fehler</td>
+        <td>Konzeptualisierung</td>
+        <td>Schlaf</td>
+        <td>Erinnerung</td>
+      </tr>
+      <tr>
+        <td>Wahrnehmung, Schlussfolgerung, Vergleich und Schriften/Recherche.²</td>
+        <td style="text-align:left;">
+			<ol>
+				<li>Unwissenheit, Ignoranz oder falsche Identifizierung³</li>
+				<li>Egoissmuss, Selbstsucht³</li>
+				<li>Sucht, Drang zur Leidenschaft³</li>
+				<li>Wut, Hass, Abneigung vom Guten³</li>
+				<li>Angst vor dem Tod³</li>
+			</ol>
+        </td>
+        <td>Zweifel, Unsicherheit, Unentschlossenheit, Zögern⁴ oder Gedankenkarussel</td>
+        <td>Schlaf</td>
+        <td>Erinnerung, Gedächtnis</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- MOBILE CARDS -->
+  <div class="card-container">
+    <div class="card">
+      <h3>Pramāṇa (प्रमाण)</h3>
+      <div class="short">richtige Wahrnehmung / gültiges Wissen</div>
+      <div class="long">Wahrnehmung, Schlussfolgerung, Vergleich und Schriften/Recherche.²</div>
+    </div>
+    <div class="card">
+      <h3>Viparyaya (विपर्यय)</h3>
+      <div class="short">falsche Wahrnehmung / Fehler</div>
+      <div class="long">
+			<ol>
+				<li>Unwissenheit, Ignoranz oder falsche Identifizierung³</li>
+				<li>Egoissmuss, Selbstsucht³</li>
+				<li>Sucht, Drang zur Leidenschaft³</li>
+				<li>Wut, Hass, Abneigung vom Guten³</li>
+				<li>Angst vor dem Tod³</li>
+			</ol>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Vikalpa (विकल्प)</h3>
+      <div class="short">Konzeptualisierung</div>
+      <div class="long">Zweifel, Unsicherheit, Unentschlossenheit, Zögern⁴ oder Gedankenkarussel</div>
+    </div>
+    <div class="card">
+      <h3>Nidrā (निद्रा)</h3>
+      <div class="short">Schlaf</div>
+      <div class="long"></div>
+    </div>
+    <div class="card">
+      <h3>Smṛti (स्मृति)</h3>
+      <div class="short">Erinnerung</div>
+      <div class="long">Erinnerung, Gedächtnis</div>
+    </div>
+  </div>
+
+</body>
+</html>
