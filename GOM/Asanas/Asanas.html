@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="de">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+	<title id="title" class="AsanaNameSK">Asana</title>
+	<link href="../GOM.css" rel="stylesheet" type="text/css" />
+	<link href="Asanas.css" rel="stylesheet" type="text/css" />
+	<link href="../resources/help/help.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript"></script>
+	<script src="../resources/database/asanasDB.js"></script>
+	<script src="../create_db.js"></script>
+	<script src="Asanas.js" defer></script>
+	<script src="../resources/help/help_script.js"></script>
+	<script src="../resources/help/helpTWO_script.js"></script>
+	<script src="../resources/help/circle.js"></script>
+	
+	
+	<script>
+	/**** help ****/
+	function resetZIndexTWO() {
+/*		document.getElementById("filterMarmaNAME").style.zIndex = "";
+		document.getElementById("filterMarmaNAME").style.boxShadow = "none";
+		document.getElementById("filterMarmaGRP").style.zIndex = "";
+		document.getElementById("filterMarmaGRP").style.boxShadow = "none";
+		document.getElementById("filterBodyPart").style.zIndex = "";
+		document.getElementById("filterBodyPart").style.boxShadow = "none";
+		document.getElementById("filterBodySide").style.zIndex = "";
+		document.getElementById("filterBodySide").style.boxShadow = "none";
+		
+		document.getElementById("filterResults").style.zIndex = "0"; 
+		document.getElementById("filterResults").style.boxShadow = "none";
+		
+		document.getElementById("filter-button").style.zIndex = ""; 
+		document.getElementById("filter-button").style.boxShadow = "none";
+		document.getElementById("resetFilter").style.zIndex = ""; 
+		document.getElementById("resetFilter").style.boxShadow = "none";
+		
+*/		
+	}
+
+	function updateZIndexTWO(index) {
+		resetZIndexTWO();
+/*		if (index === 0) {
+			document.getElementById("filterMarmaNAME").style.zIndex = "205"; 
+			document.getElementById("filterMarmaNAME").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+			document.getElementById("filterMarmaGRP").style.zIndex = "205";
+			document.getElementById("filterMarmaGRP").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+			document.getElementById("filterBodyPart").style.zIndex = "205";
+			document.getElementById("filterBodyPart").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+			document.getElementById("filterBodySide").style.zIndex = "205";
+			document.getElementById("filterBodySide").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+		} else if (index === 1) {
+			document.getElementById("filterResults").style.zIndex = "205"; 
+			document.getElementById("filterResults").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+		} else if (index === 2) {
+			document.getElementById("filter-button").style.zIndex = "205"; 
+			document.getElementById("filter-button").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+			document.getElementById("resetFilter").style.zIndex = "205"; 
+			document.getElementById("resetFilter").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+		}
+*/	}
+	function resetZIndex() {
+	}
+	function updateZIndex(index) {
+		resetZIndex();
+	}
+  </script>
+
+</head>
+
+<header>
+	<div id="titleBar">
+		<div id="headline">
+		<h1 id="headline1"><span class="AsanaNameSK" ></span></h1>
+		<h2> <span id="headline2">Title</span></h2>
+		</div>
+	</div>
+	<div id="help" onclick="toggleHelp('horizontal')">
+		<div class="circle-container">
+            <div class="circle"></div>
+        </div>
+		<a href="javascript:void(0)" id="helpbtn" class="toolButton">?</a>
+		<div class="hint hidden">
+			<p >Hilfe</p>
+		</div>
+	</div>
+	
+<!-- hilfe marma seite -->		
+	<div class="overlay" id="helpOL">
+	  <div class="overlayContent">
+		<div id="help1">
+			<h3>Marma Suche</h3>
+			<p>Mit der 🔍 öffnest du den Suchdialog. Du findest die Schaltfläche am rechten Rand oder ganz unten in der Navigationsleiste.</p>
+			</br>
+			<p>An der Lupe in der Navigationsleiste findest du den Hinweis, wie viele Asanas mit der Sucheinstellung gefunden wurden. Mit den Pfeilen links und rechts kannst du durch die gefundenen Asanas blättern.</p>
+			</br>
+			<p>Wenn du wieder aus allen Suchparameter wählen möchtes, setzte im geöffneten Suchdialog mit ⭯ die Eingaben zurück.</p>
+
+		</div>
+		<div class="hidden" id="help2">
+			<h3>Zusätzliche Informationen</h3>
+			<p>Unterhalb der Anleitung findest du den Bereich mit weiteren Infos. Klappe den Bereich auf um die Informationen zu sehen. </p>
+		</div>
+		<div class="hidden" id="help3">
+			<h3>Navigation</h3>
+			<p>Ganz unten findest du die Navigationsleiste.</p>
+			</br>
+			<p>Mit der 🔍 öffnest du den Suchdialog um die Suche zu verfeinern oder anzupassen. Rechts oberhalb der Lupe findest du die Anzahl der Asanas mit der aktuellen Sucheinstellung.</p>
+			<p>Wenn die Suche mehr als ein Asana findet kannst du mit den Pfeilen links und rechts durch die gefundenen Asanas blättern.</p>
+			</br>
+			<p>Mit dem Menüknopf gelangst du wieder zum Hauptmenü.</p>
+		</div>
+	  </div>
+		<div class="" id="helpNav">
+			<button class="navButton" id="nextHelp"><img src="../resources/icons/white/next-icon.webp" alt="weiter"></button>
+		</div>
+	</div>
+	
+	<div class="toolBar">
+		<button class="toolButton"  id="openFilterMenue" onclick="openFilterMenue(true)"><img src="../resources/icons/white/search-icon.webp"></button>		
+	</div>
+</header>
+
+<body id="body">
+<div id="content">
+
+	<section id="visualSection">
+		<div id="visual">
+			<img id="asanaIcon" alt="icon des Asanas" onclick="openBodyInspector()"> <br />
+		</div>
+	</section>
+
+	<section id="infoSection">
+		<div id="description" class="justify">
+
+		</div>
+
+		<div id="aids">
+			Hilfsmittel:
+			<img id="block" src="../resources/asana_icons/white/yoga_blocks.webp" alt="Yogaklotz">
+			<img id="belt" src="../resources/asana_icons/white/yoga_belt.webp" alt="Gürtel">
+			<img id="bolster" src="../resources/asana_icons/white/yoga_bolster.webp" alt="Rolle oder Kissen">
+			<img id="blanket" src="../resources/asana_icons/white/yoga_blanket.webp" alt="Decke">
+			<img id="chair" src="../resources/asana_icons/white/yoga_chair.webp" alt="Stuhl">
+			<img id="wall" src="../resources/asana_icons/white/yoga_wall.webp" alt="Wand">
+		</div>
+		
+		<div id="stats">
+			<div id="position"><span id="posLabel"></span><img id="posIMG" src="" alt=""></div>
+			<div id="symetric"><span id="symLabel"></span><img id="symIMG" src="" alt=""></div>
+			<div id="level"><span id="lvlLabel">Stufe</span><span id="lvlValue"></span></div>
+			<div id="difficulty"><span id="diffLabel">Schwierigkeit</span><span id="diffValue"></span></div>
+			
+		</div>
+	</section>
+	
+	<section id="instructions">
+		<hr> 
+		<h3>Das Asana aufbauen</h3>
+		<p id="instrIn" class="justify"></p>
+		<h3>Das Asana halten</h3>
+		<p id="instrStay" class="justify"></p>
+		<button class="accordion" id="trigger">Hinweise</button>
+			<div class="panel">
+				<div id="instrTrigger">
+				</div>
+			</div>
+		<h3>Das Asana auflösen</h3>
+		<p id="instrOut" class="justify"></p>
+	</section>
+
+	<section id="variants">
+		<h3>Andere Varianten</h3>
+	    <div class="carousel">
+			<div class="carousel-inner">
+
+			</div>
+			<button class="carousel-button prev-button"><img src="../resources/icons/white/previous-icon.webp" alt="zurück"></button>
+			<button class="carousel-button next-button"><img src="../resources/icons/white/next-icon.webp" alt="nächstes"></button>
+		</div>
+	</section>
+	
+	<section id="addInfoSection">
+		
+		<h3>Weitere Infos</h3>
+		<button class="accordion" id="relatedBTN">Ähnliche Asanas</button>
+		<div class="panel">
+			<div id="related"></div>
+		</div>
+		<button class="accordion" id="dangersBTN">Gefahren</button>
+		<div class="panel">
+			<div id="dangers"></div>
+		</div>
+		<button class="accordion" id="problemsBTN">Probleme</button>
+		<div class="panel">
+			<div id="problems"></div>
+		</div>
+		<button class="accordion" id="nameBTN">Begriff</button>
+		<div class="panel">
+			<h3 id="name"></h3>
+			<div id="origin"></div>
+			<div id="synonym"></div>
+		</div>
+
+	</section>
+
+
+</div>
+
+<footer id="footer">
+
+    <div class="menueBar">
+        <div class="footer-button"><button class="navButton" id="pervious"><img src="../resources/icons/white/previous-icon.webp" alt="zurück"></button></div>
+        <div class="footer-button menue_toolButton">
+		  <div class="button">
+			<button class="navButton" id="menue" onclick="location.href='../index.html';">
+				<img src="../resources/icons/white/menue-icon.webp" alt="Hauptmenü">
+			</button>
+		  </div>
+          <div class="button">
+			<button class="navButton" id="search" onclick="openFilterMenue(true)">
+				<img src="../resources/icons/white/search-icon.webp" alt="Suche">
+			    <div class="circle-badge">
+					<span id="filterHits"></span>
+				</div>
+			</button>
+		  </div>
+          <!--<div class="button">Center Button 2</div>-->
+        </div>
+		<div class="footer-button menue_navButtons">
+			<div class="footer-button">
+			<button class="navButton" id="pervious2"> <img src="../resources/icons/white/previous-icon.webp" alt="zurück"></button>
+			</div>
+			<div class="footer-button"><button class="navButton" id="next"><img src="../resources/icons/white/next-icon.webp" alt="weiter"></button></div>
+		</div>
+    </div>
+<!-- Filter -->			
+	<div class="overlay" id="filterMenue">
+	<div id="helpTWO" onclick="toggleHelpTWO()">
+		<div class="circle-container" id="circle-container2">
+            <div class="circle" id="effect-circle2"></div>
+        </div>
+		<a href="javascript:void(0)" id="helpbtnTWO" >?</a>
+		<div id="hintTWO" class="hidden">
+			<p >Hilfe</p>
+		</div>
+	</div>
+	  <a href="javascript:void(0)" class="closebtn" onclick="closeFilterMenue(true)">&times;</a>
+	  <div class="overlayContent">
+		<div><h3>Wähle die Marmas aus, die du gerne näher betrachten willst.</h3><div>
+		<div class="filterSelect"> 
+			<select name="Asana" id="filterAsanaNAME" size="1"> <!-- use <selectmenu> when supported in the future-->
+			</select>
+		</div>
+<!--		<div class="filterSelect"> 
+			<select name="Marma Gruppe" id="filterMarmaGRP" size="1">
+			</select>
+		</div>
+		<div class="filterSelect"> 
+			<select name="Körperteil" id="filterBodyPart" size="1">
+			</select>
+		</div>
+		<div class="filterSelect"> 
+			<select name="Körperseite" id="filterBodySide" size="1">
+			</select>
+		</div>
+-->		<button class="accordion" id="filterResults">Trefferliste: </button>
+		<div class="panel" id="resultPanel">
+			<div id="resultsContainer"></div>
+		</div>
+			<button class="navButton" id="menue" onclick="location.href='../index.html';"><img src="../resources/icons/menue-icon.webp" alt="Hauptmenü"></button>
+			<button class="navButton" id="resetFilter"><img src="../resources/icons/reset-icon.webp" alt="Zurücksetzen"></button>
+			<button class="navButton" id="filter-button">
+				<div class="circle-container" >
+					<div class="circle"></div>
+				</div>
+				<img src="../resources/icons/search-icon.webp" alt="Suche starten">
+			</button>
+
+		</div>
+
+<!-- Filter Help-->		
+	<div class="overlay" id="helpOLTWO">
+	  <div class="overlayContent">
+		<div id="help1">
+			<h3>Asanas suchen</h3>
+			<p>Wähle über die Eingabefelder Kategorien aus um die Suche auf die relevanten Asanas einzugrenzen. </p>
+
+		</div>
+		<div class="hidden" id="help2">
+			<h3>Asanas auswählen</h3>
+			<p>Je nach ausgewählten Kategorien kannst du die Anzahl der relevanten Asanas immer stärker eingrenzen. Die Anzahl der Asanas, die deiner Auswahl entsprechend, wir dir unter den Eingabefelder angezeigt.</p>
+			<br/>
+			<p>Mit einem Klick auf die Anzeige der Trefferanzahl öffnet sich die Trefferliste. Von hier aus kannst du direkt zu einem gewünschten Asana springen.</p>
+
+		</div>
+		<div class="hidden" id="help3">
+			<h3>Suche Starten</h3>
+			<p>Anstatt ein Asana aus der Ergebnisliste auszuwählen kannst du auch mit der 🔍 direkt zum ersten Asana springen. Mit ⭯ kannst du alle Eingaben zurücksetzen.</p>
+
+		</div>
+
+	  </div>
+		<div class="" id="helpNav">
+			<!--<button class="navButton" id="previous"> <img src="../resources/icons/white/previous-icon.webp" alt="zurück"></button>-->
+			<button class="navButton" id="nextHelpTWO"><img src="../resources/icons/white/next-icon.webp" alt="weiter"></button>
+		</div>
+		
+	</div>
+</footer>
+
+</body>

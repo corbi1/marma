@@ -1,0 +1,669 @@
+/*
+########################################
+colors
+########################################
+*/
+
+:root {
+  --bg-color-005: rgba(81, 35, 112, 0.05);
+  --bg-color-010: rgba(81, 35, 112, 0.10);
+  --bg-color-030: rgba(81, 35, 112, 0.30);
+  --bg-color-050: rgba(81, 35, 112, 0.50);
+  --bg-color-090: rgba(81, 35, 112, 0.90);
+  --bg-color-100: rgba(81, 35, 112, 1.00)
+}
+
+/*
+########################################
+Main Elemnts
+########################################
+*/
+hr{
+	width: 100%;
+	color: var(--textColor);
+}
+
+/*
+########################################
+header (title)
+########################################
+*/
+
+
+/*
+########################################
+toolBar 
+########################################
+*/
+
+.toolBar{
+	position: fixed;
+	top: 7em;
+	right:0;
+	z-index: 1; 
+}
+
+.toolButton{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 40px;
+	aspect-ratio: 1;
+	padding: 5px;
+	margin:2px;
+	border-radius: 50% 0 0 50%;
+	background-color: var(--bg-color-2);
+	border: 2px solid var(--textColor);
+	cursor:pointer;
+	border-right:none;
+}
+
+.toolButton img{
+	width: 30px;
+}
+
+/*
+########################################
+visual
+########################################
+*/
+
+#visual{
+	max-width: 350px;
+	overflow: hidden;
+	cursor: pointer;
+	margin:auto;
+}
+#asanaIcon{
+	width: 100%;
+	transform: scale(1.1);
+	transform-origin: center;
+}
+
+/*
+########################################
+Info
+########################################
+*/
+
+#infoSection{
+	padding-bottom: 1em 10%;
+}
+
+#infoSection div {
+	margin-top: 1em;
+}
+
+#aids{
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+#aids img{
+	width:50px;
+}
+
+#stats{
+	display:flex;
+	justify-content: space-evenly;
+	align-items: flex-start;
+	flex-wrap: wrap;
+}
+
+#stats div{
+	display:flex;
+	align-items: center;
+	justify-content: space-evenly;
+	flex-direction: column;
+	flex-wrap: wrap;
+	width:25%;
+	min-width:120px;
+}
+#stats img{
+	width:50px;
+	padding: 5px;
+}
+
+#stats div span:nth-child(2){
+  padding-top: 15px;
+  font-size: larger;
+  font-weight: bold;
+}
+
+/*
+########################################
+instructions
+########################################
+*/
+
+#instructions{
+	margin-bottom: 3em;
+}
+#trigger{
+	margin-top: 1em;
+}
+.trigger-list {
+	list-style: none;
+	padding: 0;
+	margin: 2em;
+}
+.trigger-list li {
+	display: flex;
+	align-items: center;
+	margin-bottom: 8px;
+	text-align: left;
+}
+.trigger-list img {
+	width: 50px;
+	margin-right: 20px;
+}
+
+
+/*
+########################################
+Carousel Asana Variants
+########################################
+*/
+
+.carousel {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.carousel-item {
+    min-width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    background-color: var(--bg-color-2);
+}
+
+.carousel-button {
+    position: absolute;
+    /*top: 50%;*/
+    transform: translateY(-100%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.prev-button {
+    left: 0px;
+	img {
+		width:auto;
+		height: 30px;
+	}
+}
+
+.next-button {
+    right: 0px;
+	img {
+		width:auto;
+		height: 30px;
+	}
+}
+
+.variantIcon{
+	max-width: 150px;
+	overflow: hidden;
+	margin:auto;	
+}
+
+.variantIcon img{
+	width: 100%;
+	transform: scale(1.1);
+	transform-origin: center;
+}
+
+
+
+
+/*
+########################################
+addInfoSection (Zusatzinfo)
+########################################
+*/
+
+li{
+	padding-bottom:1em;
+}
+
+.accordion {
+  background-color: var(--bg-color-030);
+  color: var(--textColor);
+  font-weight: bold;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+}
+
+.active, .accordion:hover {
+  background-color: var(--bg-color-100) !important;
+}
+
+.accordion:after {
+  content: '\25BE';
+  color: var(--textColor);
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: '\25B4'; 
+
+}
+
+.panel {
+  padding: 0 18px;
+  background-color: var(--bg-color-050);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+#addInfoSection .panel div{
+	margin:1em 0;
+}
+
+/*
+########################################
+iFrame Body Inspector
+########################################
+*/
+
+#anatomyButton, #anatomyButton img {
+  height: 90px;
+  width: 90px;
+}
+
+#anatomyButton img {
+  height: 70px;
+  width: 70px;
+  max-height: 70px;
+}
+
+.overlayIFrame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  overflow: hidden;
+}
+
+iFrame{
+  width: 100%;
+  height: 100%;
+  z-index:4;
+}
+
+.colapsbtn {
+    color: var(--textColor);
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+	background-color: var(--white-080);
+	border-radius: 5px 5px 0 0;
+    font-size: 60px;
+    z-index: 100;
+}
+
+.colapsbtn img {
+    width: 60px;
+}
+
+/*
+########################################
+navigationBar 
+########################################
+*/
+
+.menueBar{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;	
+}
+
+.buttonSpace {
+	padding: 10px;
+	margin: 5px;
+	min-width: 100px;
+	text-align: center;
+}
+
+.menue_toolButton, .menue_navButtons{
+	display: flex;
+  	justify-content: center;
+	align-items: center;
+/*	flex-wrap: wrap;*/
+}
+
+.menue_toolButton .button{
+	margin: 0;
+}
+
+.navButton img{
+	width: auto;
+	max-height: 30px;
+}
+
+#pervious{
+	float: inline-start;
+}
+
+#pervious2{
+	display: none;
+}
+
+.circle-badge {
+	position: relative;
+	top: -50px;
+	right: -30px;
+	background-color: red;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+}
+.circle-badge span {
+	color: white;
+	font-size: 12px;
+}
+
+#next{
+	float: inline-end;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (max-width: 350px) {
+	.menueBar {
+		flex-direction: column;
+		align-items: stretch;
+		height:auto;
+	}
+	.footer-button {
+		width: 100%;
+	}
+	.menue_toolButton .button{
+		margin: 0 1% 2% 1%;
+	}
+	#pervious{
+	display:none;
+	}
+	#pervious2{
+	display:inherit;
+	}
+}
+
+/*
+########################################
+Filter Overlay
+########################################
+*/
+
+.overlay {
+  margin-bottom: 0;
+  overflow-y: scroll;
+}
+
+#filterMenue{
+  height: 100%;
+  color: var(--textColor);
+  overflow-x:hidden;
+}
+
+.no-transition {
+  transition: none !important;
+}
+
+.overlayContent {
+  position: relative;
+  top: 20%;
+  width: 100%;
+  text-align: center;
+  margin: auto;
+}
+
+.overlay a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 36px;
+  color: var(--textColor);
+  display: block;
+  transition: 0.3s;
+}
+
+.overlay a:hover, .overlay a:focus {
+  color: #f1f1f1;
+}
+
+.overlay .closebtn {
+  color: var(--textColor);
+  position: absolute;
+  top: 20px;
+  right: 0px;
+  font-size: 60px;
+  z-index:5;
+}
+#closeBody {
+	display: none;
+}
+
+.filterSelect {
+  min-width: 250px;
+  position: relative;
+  margin:5%;
+}
+
+.overlay button {
+	background-color: var(--white-080) !important;
+	position: relative;
+}
+
+select {
+  appearance: none;
+  /*  safari  */
+  -webkit-appearance: none;
+  /*  other styles for aesthetics */
+  width: 100%;
+  font-size: 1.15rem;
+  padding: 0.675em 2em 0.675em 1em;
+  background-color: var(--white-080);
+  border: 1px solid #caced1;
+  border-radius: 0.25rem;
+  color: #000;
+  cursor: pointer;
+}
+
+.filterSelect::before,
+.filterSelect::after {
+  --size: 0.3rem;
+  content: "";
+  position: absolute;
+  right: 1rem;
+  pointer-events: none;
+}
+
+.filterSelect::before {
+  border-left: var(--size) solid transparent;
+  border-right: var(--size) solid transparent;
+  /*border-bottom: var(--size) solid black;*/
+  top: 40%;
+}
+
+.filterSelect::after {
+  border-left: var(--size) solid transparent;
+  border-right: var(--size) solid transparent;
+  border-top: var(--size) solid black;
+  top: 55%;
+}
+
+/*
+########################################
+filter results
+########################################
+*/
+
+#filterResults{
+	background-color: var(--white-080) !important;
+	text-align: center;
+	color: var(--bg-color-2);
+}
+#filterResults.accordion:after {
+  color: var(--bg-color-2);
+
+}
+
+#resultPanel{
+	background-color: var(--white-020) !important;
+	margin-bottom: 1em;
+}
+
+#resultsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.asana-result {
+    display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+    padding: 10px 0;
+	margin: 10px 0;
+    border-radius: 5px;
+    background-color: var(--bg-color-1);
+}
+
+.resultIcon{
+	max-width: 100px;
+	overflow: hidden;
+	cursor: pointer;
+	margin:auto;
+}
+.resultIcon img{
+	width: 100%;
+	transform: scale(1.1);
+	transform-origin: center;
+}
+
+.resultTitle{
+	font-weight:bold;
+}
+
+.resultInfo-container {
+    display: flex;
+	flex-grow: 1;
+    flex-direction: column;
+}
+
+.resultStats{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+
+.resultAids{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+
+.resultAids div img{
+	width: 50px;
+}
+
+
+.resultMain {
+    width: 100%;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.callAsana {
+    flex-shrink: 0;
+    cursor: pointer;
+	min-width: 50px;
+	height: 50px;
+	border: none;
+	padding: 0.7em;
+	margin: 5px;
+	border-radius: 50%;
+}
+
+.callAsana img {
+	width: auto;
+	max-height: 30px;
+}
+
+#filterAsanaNAME, /*#filterMarmaGRP, #filterBodyPart, #filterBodySide*/{
+    position: relative;
+}
+
+#filter-button{
+	box-shadow: var(--bg-color-050) 0px 0px 15px 0px;
+}
+
+/*
+########################################
+help
+########################################
+*/
+#helpbtn, #helpbtnTWO {
+	color: var(--textColor);
+}
+/*
+########################################
+Desktop
+########################################
+*/
+
+@media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ 
+    .content, #content, .overlayContent {
+        max-width: 650px;
+    }
+	.resultcontainer {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+@media screen and (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */ 
+    .content, #content, .overlayContent {
+        max-width: 650px;
+    }
+}
+
+@media screen and (min-width: 1025px) { /* big landscape tablets, laptops, and desktops */
+    .content, #content, .overlayContent {
+        max-width: 750px;
+    }
+}
