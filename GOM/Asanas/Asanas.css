@@ -71,7 +71,7 @@ visual
 #visual{
 	max-width: 350px;
 	overflow: hidden;
-	cursor: pointer;
+	/*cursor: pointer;*/
 	margin:auto;
 }
 #asanaIcon{
@@ -225,7 +225,15 @@ Carousel Asana Variants
 	transform-origin: center;
 }
 
+.variantAids {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
 
+.variantAids div img{
+	width: 50px;
+}
 
 
 /*
@@ -279,57 +287,6 @@ li{
 
 #addInfoSection .panel div{
 	margin:1em 0;
-}
-
-/*
-########################################
-iFrame Body Inspector
-########################################
-*/
-
-#anatomyButton, #anatomyButton img {
-  height: 90px;
-  width: 90px;
-}
-
-#anatomyButton img {
-  height: 70px;
-  width: 70px;
-  max-height: 70px;
-}
-
-.overlayIFrame {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  overflow: hidden;
-}
-
-iFrame{
-  width: 100%;
-  height: 100%;
-  z-index:4;
-}
-
-.colapsbtn {
-    color: var(--textColor);
-    position: absolute;
-    bottom: 0px;
-    left: 50%;
-    transform: translateX(-50%);
-	background-color: var(--white-080);
-	border-radius: 5px 5px 0 0;
-    font-size: 60px;
-    z-index: 100;
-}
-
-.colapsbtn img {
-    width: 60px;
 }
 
 /*
@@ -487,6 +444,8 @@ Filter Overlay
 	position: relative;
 }
 
+/* selects */
+
 select {
   appearance: none;
   /*  safari  */
@@ -525,6 +484,79 @@ select {
   top: 55%;
 }
 
+/* checkboxes */
+#variantCheckbox{
+	margin-bottom: 2em;
+}
+
+#aidsFilter{
+	display: flex;
+	justify-content: space-evenly;
+	flex-wrap: wrap;
+	margin: 1em 0;
+}
+
+.iconCheckbox {
+	display: inline-block;
+	position: relative;
+	cursor: pointer;
+	user-select: none;
+}
+
+.iconCheckbox input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+}
+
+.iconCheckbox label {
+	cursor: pointer;
+}
+
+.checkmark {
+	position: relative;
+	top: 0;
+	left: 0;
+	margin-bottom: 5px;
+	width: 50px;
+	aspect-ratio: 1;
+	background-color: none;/*var(--white-020);*/
+	border-radius: 4px;
+	box-shadow: inset 0 0 5px 1px var(--bg-color-100);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#variantFilter .checkmark {
+	padding:5px;
+	margin-bottom:5px;
+	width:auto;
+	aspect-ratio:auto;
+}
+#variantFilter img {
+	max-height: 40px;
+    padding: 0.5em;
+
+}
+
+.iconCheckbox:hover input ~ .checkmark, .iconCheckbox:hover input:checked ~ .checkmark {
+	background-color: var(--bg-color-050);
+	box-shadow: none;
+}
+
+.iconCheckbox input:checked ~ .checkmark {
+	background-color: var(--bg-color-100);
+	box-shadow: none;
+}
+
+.checkmark img {
+	max-width: 80%;
+	max-height: 80%;
+}
+
 /*
 ########################################
 filter results
@@ -535,6 +567,7 @@ filter results
 	background-color: var(--white-080) !important;
 	text-align: center;
 	color: var(--bg-color-2);
+	margin-top: 1em;
 }
 #filterResults.accordion:after {
   color: var(--bg-color-2);

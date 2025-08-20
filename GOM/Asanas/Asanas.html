@@ -19,45 +19,16 @@
 	<script>
 	/**** help ****/
 	function resetZIndexTWO() {
-/*		document.getElementById("filterMarmaNAME").style.zIndex = "";
-		document.getElementById("filterMarmaNAME").style.boxShadow = "none";
-		document.getElementById("filterMarmaGRP").style.zIndex = "";
-		document.getElementById("filterMarmaGRP").style.boxShadow = "none";
-		document.getElementById("filterBodyPart").style.zIndex = "";
-		document.getElementById("filterBodyPart").style.boxShadow = "none";
-		document.getElementById("filterBodySide").style.zIndex = "";
-		document.getElementById("filterBodySide").style.boxShadow = "none";
-		
-		document.getElementById("filterResults").style.zIndex = "0"; 
-		document.getElementById("filterResults").style.boxShadow = "none";
-		
-		document.getElementById("filter-button").style.zIndex = ""; 
-		document.getElementById("filter-button").style.boxShadow = "none";
-		document.getElementById("resetFilter").style.zIndex = ""; 
-		document.getElementById("resetFilter").style.boxShadow = "none";
-		
-*/		
 	}
 
 	function updateZIndexTWO(index) {
 		resetZIndexTWO();
 /*		if (index === 0) {
-			document.getElementById("filterMarmaNAME").style.zIndex = "205"; 
-			document.getElementById("filterMarmaNAME").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
-			document.getElementById("filterMarmaGRP").style.zIndex = "205";
-			document.getElementById("filterMarmaGRP").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
-			document.getElementById("filterBodyPart").style.zIndex = "205";
-			document.getElementById("filterBodyPart").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
-			document.getElementById("filterBodySide").style.zIndex = "205";
-			document.getElementById("filterBodySide").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+
 		} else if (index === 1) {
-			document.getElementById("filterResults").style.zIndex = "205"; 
-			document.getElementById("filterResults").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+
 		} else if (index === 2) {
-			document.getElementById("filter-button").style.zIndex = "205"; 
-			document.getElementById("filter-button").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
-			document.getElementById("resetFilter").style.zIndex = "205"; 
-			document.getElementById("resetFilter").style.boxShadow = "0px 0px 10px 10px var(--progress1)";
+
 		}
 */	}
 	function resetZIndex() {
@@ -127,7 +98,7 @@
 
 	<section id="visualSection">
 		<div id="visual">
-			<img id="asanaIcon" alt="icon des Asanas" onclick="openBodyInspector()"> <br />
+			<img id="asanaIcon" alt="icon des Asanas"> <br />
 		</div>
 	</section>
 
@@ -153,21 +124,7 @@
 			<div id="difficulty"><span id="diffLabel">Schwierigkeit</span><span id="diffValue"></span></div>
 			
 		</div>
-	</section>
-	
-	<section id="instructions">
-		<hr> 
-		<h3>Das Asana aufbauen</h3>
-		<p id="instrIn" class="justify"></p>
-		<h3>Das Asana halten</h3>
-		<p id="instrStay" class="justify"></p>
-		<button class="accordion" id="trigger">Hinweise</button>
-			<div class="panel">
-				<div id="instrTrigger">
-				</div>
-			</div>
-		<h3>Das Asana auflösen</h3>
-		<p id="instrOut" class="justify"></p>
+		<hr>
 	</section>
 
 	<section id="variants">
@@ -181,13 +138,34 @@
 		</div>
 	</section>
 	
+	<section id="instructions"> 
+		<h3>Das Asana aufbauen</h3>
+		<p id="instrIn" class="justify"></p>
+		<h3>Das Asana halten</h3>
+		<p id="instrStay" class="justify"></p>
+		<button class="accordion" id="trigger">Hinweise</button>
+			<div class="panel">
+				<div id="instrTrigger">
+				</div>
+			</div>
+		<h3>Das Asana auflösen</h3>
+		<p id="instrOut" class="justify"></p>
+	</section>
+
+	<section id="relatedAsanas">
+		<h3>Ähnliche Asanas</h3>
+	    <div class="carousel">
+			<div class="carousel-inner">
+
+			</div>
+			<button class="carousel-button prev-button"><img src="../resources/icons/white/previous-icon.webp" alt="zurück"></button>
+			<button class="carousel-button next-button"><img src="../resources/icons/white/next-icon.webp" alt="nächstes"></button>
+		</div>
+	</section>
+	
 	<section id="addInfoSection">
 		
 		<h3>Weitere Infos</h3>
-		<button class="accordion" id="relatedBTN">Ähnliche Asanas</button>
-		<div class="panel">
-			<div id="related"></div>
-		</div>
 		<button class="accordion" id="dangersBTN">Gefahren</button>
 		<div class="panel">
 			<div id="dangers"></div>
@@ -248,24 +226,65 @@
 	</div>
 	  <a href="javascript:void(0)" class="closebtn" onclick="closeFilterMenue(true)">&times;</a>
 	  <div class="overlayContent">
-		<div><h3>Wähle die Marmas aus, die du gerne näher betrachten willst.</h3><div>
+		<div><h3>Wähle das Asana aus, das du gerne näher betrachten willst.</h3><div>
 		<div class="filterSelect"> 
 			<select name="Asana" id="filterAsanaNAME" size="1"> <!-- use <selectmenu> when supported in the future-->
 			</select>
 		</div>
-<!--		<div class="filterSelect"> 
-			<select name="Marma Gruppe" id="filterMarmaGRP" size="1">
-			</select>
-		</div>
 		<div class="filterSelect"> 
-			<select name="Körperteil" id="filterBodyPart" size="1">
+			<select name="Asana Position" id="filterAsanaPOSITION" size="1">
 			</select>
 		</div>
-		<div class="filterSelect"> 
-			<select name="Körperseite" id="filterBodySide" size="1">
-			</select>
+		<div id="variantFilter">
+			<div class="iconCheckbox">
+				<input type="checkbox" id="variantCheckbox">
+				<label class="checkmark" for="variantCheckbox">
+					<img src="..\resources\knowledge\white\check-mark-icon.webp" alt="Varianten einblenden">
+					<span>Varianten einblenden</span>
+				</label>
+			</div>
 		</div>
--->		<button class="accordion" id="filterResults">Trefferliste: </button>
+
+		<div id="aidsFilter">
+			<div class="iconCheckbox">
+				<input type="checkbox" id="beltCheckbox" checked>
+				<label class="checkmark" for="beltCheckbox">
+					<img src="..\resources\asana_icons\white\yoga_belt.webp" alt="Belt">
+				</label>
+			</div>
+			<div class="iconCheckbox">
+				<input type="checkbox" id="blockCheckbox" checked>
+				<label class="checkmark" for="blockCheckbox">
+					<img src="..\resources\asana_icons\white\yoga_blocks.webp" alt="Blocks">
+				</label>
+			</div>
+			<div class="iconCheckbox">
+				<input type="checkbox" id="blanketCheckbox" checked>
+				<label class="checkmark" for="blanketCheckbox">
+					<img src="..\resources\asana_icons\white\yoga_blanket.webp" alt="Blanket">
+				</label>
+			</div>
+			<div class="iconCheckbox">
+				<input type="checkbox" id="chairCheckbox" checked>
+				<label class="checkmark" for="chairCheckbox">
+					<img src="..\resources\asana_icons\white\yoga_chair.webp" alt="Chair">
+				</label>
+			</div>
+			<div class="iconCheckbox">
+				<input type="checkbox" id="bolsterCheckbox" checked>
+				<label class="checkmark" for="bolsterCheckbox">
+					<img src="..\resources\asana_icons\white\yoga_bolster.webp" alt="Bolster">
+				</label>
+			</div>
+			<div class="iconCheckbox">
+				<input type="checkbox" id="wallCheckbox" checked>
+				<label class="checkmark" for="wallCheckbox">
+					<img src="..\resources\asana_icons\white\yoga_wall.webp" alt="Wall">
+				</label>
+			</div>
+		</div>
+
+		<button class="accordion" id="filterResults">Trefferliste: </button>
 		<div class="panel" id="resultPanel">
 			<div id="resultsContainer"></div>
 		</div>

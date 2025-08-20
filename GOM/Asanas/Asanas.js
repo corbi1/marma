@@ -1,20 +1,32 @@
 var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
-//var db;
-//var data;
 var update = 0;
-var InspectorLoaded = 0;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const variantCheckbox = document.getElementById('variantCheckbox');
+    const aidsFilterContainer = document.getElementById('aidsFilter');
+    aidsFilterContainer.classList.toggle('hidden', !variantCheckbox.checked);
+});
+
 
 const AppState = {
-	currentAsanaID: null,
-	currentAsanaData: [],
-	asanaName: null,
-	filteredAsanas: [],
-	selects: {
-		asanaName: new Set(),
-//		marmaGRP: new Set(),
-//		bodyRegion: new Set(),
-//		bodySide: new Set()
-	}
+    currentAsanaID: null,
+    currentAsanaData: [],
+	positionFilteredAsanas: [], 
+    asanaName: null,
+    filteredAsanas: [],
+    selects: {
+        asanaName: new Set(),
+        asanaPosition: new Set(),
+    },
+    filters: {
+        variant: false,
+        belt: false,
+        block: false,
+        roll: false,
+        blanket: false,
+        chair: false,
+        wall: false,
+    }
 };
 
 
@@ -234,14 +246,6 @@ function retrieveDataFromStores() {
 			document.getElementById("addInfoSection").style.display = "none";
 		}else{
 			document.getElementById("addInfoSection").style.display = "initial";
-			// populate related Asanas
-			if (data.relatedAsanas !== ""){
-				document.getElementById("related").innerHTML = data.relatedAsanas;
-				document.getElementById("relatedBTN").style.display = "initial";
-			} else {
-				document.getElementById("relatedBTN").style.display = "none";
-			}
-
 			// populate danger
 			if (data.dangers !== ""){
 				document.getElementById("dangers").innerHTML = data.dangers;
@@ -300,9 +304,11 @@ initDB().then(db => {
 			if (AppState.filteredAsanas.length > 0) {
 				AppState.currentAsanaID = AppState.filteredAsanas[0];
 				console.log("Defaulting to first Asana:", AppState.currentAsanaID);
+				retrieveDataFromStores()
 			} else {
 				console.warn("filteredAsanas is empty, no IDs found.");
-				AppState.currentAsanaID = "tadasana1";
+				AppState.currentAsanaID = "adhomukhasvanasana_1";
+				retrieveDataFromStores()
 			}
 		}).catch(error => {
 			console.error("Error loading data from DB:", error);
@@ -324,7 +330,7 @@ initDB().then(db => {
 	}
 
 	// Event Listeners
-	const filters = ["filterAsanaNAME"];
+	const filters = ["filterAsanaNAME","variantCheckbox","filterAsanaPOSITION"];
 	filters.forEach(id => {
 		document.getElementById(id).addEventListener("change", () => {
 			filterAsanaData(db);
@@ -349,418 +355,490 @@ initDB().then(db => {
     console.error('Error initializing the database:', error);
 });
 
-	//###################################################################################
-	//Filtering
-	//###################################################################################
+//###################################################################################
+//Filtering
+//###################################################################################
 
-	function filterAsanaData(db) {
-		asanaStore = getObjectStore(db, "asanaStore", 'readonly');
+// Helper: Update UI after filtering
+function updateUI() {
+    const filteredData = AppState.filteredAsanas.map(id =>
+        AppState.currentAsanaData.find(asana => asana.id === id)
+    );
+    updateSelectOptions(filteredData);
+    populateResultTable(filteredData);
+	recalculateFilterResultsHeight();
+    updateHitCounter();
+}
 
-		// get parsed asana
-		if (startAsana) {
-			console.log("startAsana from URL:", startAsana);
-			let request = asanaStore.get(startAsana);
-			request.onsuccess = function (event) {
-				let asanaEntry = event.target.result;
-				if (asanaEntry) {
-					let filteredData = [asanaEntry];
-					console.log("Found Asana by ID:", asanaEntry);
-					AppState.filteredAsanas  = filteredData.map(asana => asana.id);
-					console.log("Filtered IDs:", AppState.filteredAsanas);
-					updateSelectOptions(filteredData);
-					populateResultTable(filteredData);
-					updateHitCounter();
-					startAsana = "";
-				} else {
-					console.warn("No Asana found for startAsana ID:", startAsana);
-					applyNextFilters([]); // Proceed with empty data
-				}
-			};
-			return; // Skip the rest of the function
-		}
+function filterByAsanaName(db) {
+    AppState.asanaName = document.getElementById("filterAsanaNAME").value;
+    const asanaStore = getObjectStore(db, "asanaStore", 'readonly');
+    if (AppState.asanaName) {
+        asanaStore.index("asanaNameSK").getAll(AppState.asanaName).onsuccess = function(event) {
+            AppState.currentAsanaData = event.target.result;
+            AppState.filteredAsanas = AppState.currentAsanaData.map(asana => asana.id);
+            filterByPosition(db); // Proceed to position filter
+        };
+    } else {
+        asanaStore.getAll().onsuccess = function(event) {
+            AppState.currentAsanaData = event.target.result;
+            AppState.filteredAsanas = AppState.currentAsanaData.map(asana => asana.id);
+            filterByPosition(db); // Proceed to position filter
+        };
+    }
+}
 
-		//get the userinput
-		let filterValue_asanaName = document.getElementById("filterAsanaNAME").value;
-//		let filterValue_marmaGRP = document.getElementById("filterMarmaGRP").value;
-//		let filterValue_bodyRegion = document.getElementById("filterBodyPart").value;
-//		let filterValue_bodySide = document.getElementById("filterBodySide").value;
+function filterByPosition(db) {
+    const position = document.getElementById("filterAsanaPOSITION").value;
+    if (position) {
+        const asanaStore = getObjectStore(db, "asanaStore", 'readonly');
+        asanaStore.index("position").getAll(position).onsuccess = function(event) {
+            const positionFiltered = event.target.result;
+            AppState.positionFilteredAsanas = positionFiltered.map(asana => asana.id);
+            AppState.filteredAsanas = [...AppState.positionFilteredAsanas]; // Reset to position-filtered list
+            filterByVariant(); // Proceed to variant filter
+        };
+    } else {
+        // No position filter: use all asanas after name filter
+        AppState.positionFilteredAsanas = AppState.currentAsanaData.map(asana => asana.id);
+        AppState.filteredAsanas = [...AppState.positionFilteredAsanas]; // Reset to all asanas after name filter
+        filterByVariant(); // Proceed to variant filter
+    }
+}
 
-		/** Get Initial Data Based on First Available Filter */
-		if (filterValue_asanaName) {
-			console.log("Asana selected:",filterValue_asanaName);
-			let index = asanaStore.index("asanaNameSK");
-			let request = index.getAll(filterValue_asanaName);
-			request.onsuccess = function (event) {
-				let filteredData = event.target.result;
-				applyNextFilters(filteredData);
-			};
-		} else {
-			console.log("No Asana selected");
-			let request = asanaStore.getAll();
-			request.onsuccess = function (event) {
-				let allData = event.target.result;
-				applyNextFilters(allData);
-			};
-		}
+function filterByVariant() {
+    if (!AppState.filters.variant) {
+        // Apply variant filter to position-filtered list
+        AppState.filteredAsanas = AppState.filteredAsanas.filter(id => id.endsWith('_1'));
+        updateUI();
+    } else {
+        // No variant filter: proceed to aids filter
+        filterByAids();
+    }
+}
 
-		/** Apply Additional Filters in Sequence */
-		function applyNextFilters(filteredData) {
-/*			console.log("Marma Group:",filterValue_marmaGRP);
-			if (filterValue_marmaGRP) {
-				filteredData = filteredData.filter(marma => marma.marmaGrp.de === filterValue_marmaGRP);
+function filterByAids() {
+    // Start with the position-filtered asanas
+    let filtered = [...AppState.currentAsanaData].filter(asana =>
+        AppState.positionFilteredAsanas.includes(asana.id)
+    );
+
+    // Apply aids filters if not variant
+    if (AppState.filters.variant) {
+        if (!AppState.filters.belt)   filtered = filtered.filter(asana => asana.aids.belt !== 1);
+        if (!AppState.filters.block)  filtered = filtered.filter(asana => asana.aids.block !== 1);
+        if (!AppState.filters.roll)   filtered = filtered.filter(asana => asana.aids.roll !== 1);
+        if (!AppState.filters.blanket) filtered = filtered.filter(asana => asana.aids.blanket !== 1);
+        if (!AppState.filters.chair)  filtered = filtered.filter(asana => asana.aids.chair !== 1);
+        if (!AppState.filters.wall)   filtered = filtered.filter(asana => asana.aids.wall !== 1);
+    }
+
+    // Update the global state and UI
+    AppState.filteredAsanas = filtered.map(asana => asana.id);
+    updateUI();
+}
+
+function filterAsanaData(db) {
+    // Set initial filter states from DOM
+    AppState.filters.variant = document.getElementById('variantCheckbox').checked;
+    AppState.filters.belt = document.getElementById('beltCheckbox').checked;
+    AppState.filters.block = document.getElementById('blockCheckbox').checked;
+    AppState.filters.roll = document.getElementById('bolsterCheckbox').checked;
+    AppState.filters.blanket = document.getElementById('blanketCheckbox').checked;
+    AppState.filters.chair = document.getElementById('chairCheckbox').checked;
+    AppState.filters.wall = document.getElementById('wallCheckbox').checked;
+    // Start filtering
+
+	if (startAsana) {
+		const asanaStore = getObjectStore(db, "asanaStore", 'readonly');
+		asanaStore.get(startAsana).onsuccess = function(event) {
+			const asanaEntry = event.target.result;
+			if (asanaEntry) {
+				AppState.currentAsanaData = [asanaEntry];
+				AppState.filteredAsanas = [asanaEntry.id];
+				updateUI();
+				startAsana = "";
+			} else {
+				console.warn("No Asana found for startAsana ID:", startAsana);
+				filterByAsanaName(db);
 			}
-
-			console.log("Body Region:",filterValue_bodyRegion);
-			if (filterValue_bodyRegion) {
-				filteredData = filteredData.filter(marma => marma.location.bodyRegion === filterValue_bodyRegion);
-			}
-
-			console.log("Body Side:",filterValue_bodySide);
-			if (filterValue_bodySide) {
-				filteredData = filteredData.filter(marma => marma.location.bodySide === filterValue_bodySide);
-			}
-*/			
-			AppState.filteredAsanas = filteredData.map(asana => asana.id);
-			console.log("Filtered IDs:", AppState.filteredAsanas );
-			
-			updateSelectOptions(filteredData); // Final result after all filters applied
-			populateResultTable(filteredData);
-			updateHitCounter(filteredData);
-		}
-	}
-
-	//###################################################################################
-	//Update Filteroptions
-	//###################################################################################
-
-	// Create the options lists after filtering
-	function updateSelectOptions(filteredData) {
-		const selects = AppState.selects;
-
-		// Clear all sets before adding new values
-		selects.asanaName.clear();
-//		selects.marmaGRP.clear();
-//		selects.bodyRegion.clear();
-//		selects.bodySide.clear();
-
-		// Populate sets with values from filteredData
-		filteredData.forEach(asana => {
-			selects.asanaName.add(asana.asanaName.sanskrit);
-//			selects.marmaGRP.add(marma.marmaGrp.de);
-//			selects.bodyRegion.add(marma.location.bodyRegion);
-//			selects.bodySide.add(marma.location.bodySide);
-		});
-
-		// Get current filter values
-		const filterValue_asanaName = document.getElementById("filterAsanaNAME").value;
-//		const filterValue_marmaGRP = document.getElementById("filterMarmaGRP").value;
-//		const filterValue_bodyRegion = document.getElementById("filterBodyPart").value;
-//		const filterValue_bodySide = document.getElementById("filterBodySide").value;
-
-		if (filteredData.length > 0) {
-			populateDropdown("filterAsanaNAME", selects.asanaName, filterValue_asanaName);
-//			populateDropdown("filterMarmaGRP", selects.marmaGRP, filterValue_marmaGRP);
-//			populateDropdown("filterBodyPart", selects.bodyRegion, filterValue_bodyRegion);
-//			populateDropdown("filterBodySide", selects.bodySide, filterValue_bodySide);
-		} else {
-			console.warn("Skipping dropdown update – No results!");
-		}
-	}
-
-	//populate the selection elemnts with the options, either from filter or restored
-	function populateDropdown(selectId, optionsSet, storedValue) {
-		let selectElement = document.getElementById(selectId);
-
-		selectElement.innerHTML = ""; // Clear existing options
-
-		// Default option text for each select
-		let defaultOptions = {
-			"filterAsanaNAME": "Asana auswählen",
-//			"filterMarmaGRP": "Marma Gruppe auswählen",
-//			"filterBodyPart": "Körperteil auswählen",
-//			"filterBodySide": "Bereich auswählen"
 		};
-
-		// If a value is selected, change the default text
-		if (storedValue !== "") {
-			defaultOptions = {
-				"filterAsanaNAME": "Asana zurücksetzen",
-//				"filterMarmaGRP": "Marma Gruppe zurücksetzen",
-//				"filterBodyPart": "Körperteil zurücksetzen",
-//				"filterBodySide": "Seite zurücksetzen"
-			};
-		}
-
-		// Add default option
-		let defaultOption = document.createElement("option");
-		defaultOption.value = "";
-		defaultOption.text = defaultOptions[selectId] || "Select an option";
-		selectElement.appendChild(defaultOption);
-
-		// Add actual options
-		optionsSet.forEach(option => {
-			let newOption = document.createElement("option");
-			newOption.value = option;
-			newOption.text = option;
-			selectElement.appendChild(newOption);
-		});
-
-		// Restore selection if it exists in the new dataset
-		if (optionsSet.has(storedValue)) {
-			selectElement.value = storedValue;
-		} else {
-			selectElement.value = ""; // Reset if not found
-		}
+	} else {
+		filterByAsanaName(db);
 	}
+}
+
+// Asana Name Select Change
+document.getElementById('filterAsanaNAME').addEventListener('change', function() {
+    filterByAsanaName();
+});
+
+// Position Select Change
+document.getElementById('filterAsanaPOSITION').addEventListener('change', function() {
+    filterByPosition();
+});
+
+// Variant Checkbox Change
+document.getElementById('variantCheckbox').addEventListener('change', function() {
+    AppState.filters.variant = this.checked;
+	const aidsFilterContainer = document.getElementById('aidsFilter');
+    aidsFilterContainer.classList.toggle('hidden', !this.checked);
 	
-	function populateResultTable(filteredData){
+	const label = document.querySelector('label[for="variantCheckbox"]');
+    const span = label.querySelector('span');
+    const img = label.querySelector('img');
+
+    if (this.checked) {
+        span.textContent = "Varianten ausblenden"; // Change text
+        img.src = "..\\resources\\icons\\white\\x-icon.webp"; // Change image
+    } else {
+        span.textContent = "Varianten einblenden"; // Change text
+        img.src = "..\\resources\\knowledge\\white\\check-mark-icon.webp"; // Change image
+    }
+	filterByVariant();
+});
+
+// Aids Checkboxes Change
+document.getElementById('beltCheckbox').addEventListener('change', function() {
+    AppState.filters.belt = this.checked;
+    filterByAids();
+});
+document.getElementById('blockCheckbox').addEventListener('change', function() {
+    AppState.filters.block = this.checked;
+    filterByAids();
+});
+document.getElementById('bolsterCheckbox').addEventListener('change', function() {
+    AppState.filters.roll = this.checked;
+    filterByAids();
+});
+document.getElementById('blanketCheckbox').addEventListener('change', function() {
+    AppState.filters.blanket = this.checked;
+    filterByAids();
+});
+document.getElementById('chairCheckbox').addEventListener('change', function() {
+    AppState.filters.chair = this.checked;
+    filterByAids();
+});
+document.getElementById('wallCheckbox').addEventListener('change', function() {
+    AppState.filters.wall = this.checked;
+    filterByAids();
+});
+
+
+//###################################################################################
+//Update Filteroptions
+//###################################################################################
+
+// Create the options lists after filtering
+function updateSelectOptions(filteredData) {
+	const selects = AppState.selects;
+
+	// Clear all sets before adding new values
+	selects.asanaName.clear();
+	selects.asanaPosition.clear();
+
+	// Populate sets with values from filteredData
+	filteredData.forEach(asana => {
+		selects.asanaName.add(asana.asanaName.sanskrit);
+		selects.asanaPosition.add(asana.info.position);
+	});
+
+	// Get current filter values
+	const filterValue_asanaName = document.getElementById("filterAsanaNAME").value;
+	const filterValue_asanaPosition = document.getElementById("filterAsanaPOSITION").value;
+
+	if (filteredData.length > 0) {
+		populateDropdown("filterAsanaNAME", selects.asanaName, filterValue_asanaName);
+		populateDropdown("filterAsanaPOSITION", selects.asanaPosition, filterValue_asanaPosition);
+	} else {
+		console.warn("Skipping dropdown update – No results!");
+	}
+}
+
+//populate the selection elemnts with the options, either from filter or restored
+function populateDropdown(selectId, optionsSet, storedValue) {
+	let selectElement = document.getElementById(selectId);
+
+	selectElement.innerHTML = ""; // Clear existing options
+
+	// Default option text for each select
+	let defaultOptions = {
+		"filterAsanaNAME": "Asana auswählen",
+		"filterAsanaPOSITION": "Position auswählen",
+	};
+
+	// If a value is selected, change the default text
+	if (storedValue !== "") {
+		defaultOptions = {
+			"filterAsanaNAME": "Asana zurücksetzen",
+			"filterAsanaPOSITION": "Position zurücksetzen",
+		};
+	}
+
+	// Add default option
+	let defaultOption = document.createElement("option");
+	defaultOption.value = "";
+	defaultOption.text = defaultOptions[selectId] || "Select an option";
+	selectElement.appendChild(defaultOption);
+
+	// Add actual options
+	optionsSet.forEach(option => {
+		let newOption = document.createElement("option");
+		newOption.value = option;
 		
-		// Update resultlist with hit count
-		let accordionHeader = document.getElementById("filterResults");
-		if (filteredData.length == 1){
-			accordionHeader.textContent = `${filteredData.length} Asana gefunden`;
-		} else{
-			accordionHeader.textContent = `${filteredData.length} Asanas gefunden`;
+		
+		if (selectId === "filterAsanaPOSITION" && positionData[option]) { // set labels for position data
+			newOption.text = positionData[option].label;
+		} else {
+			newOption.text = option; // set lable the same as value
 		}
+		
+		selectElement.appendChild(newOption);
+	});
+
+	// Restore selection if it exists in the new dataset
+	if (optionsSet.has(storedValue)) {
+		selectElement.value = storedValue;
+	} else {
+		selectElement.value = ""; // Reset if not found
+	}
+}
+
+function populateResultTable(filteredData){
 	
-		// Clear results container
-		let resultsContainer = document.getElementById("resultsContainer");
-		resultsContainer.innerHTML = "";
+	// Update resultlist with hit count
+	let accordionHeader = document.getElementById("filterResults");
+	if (filteredData.length == 1){
+		accordionHeader.textContent = `${filteredData.length} Asana gefunden`;
+	} else{
+		accordionHeader.textContent = `${filteredData.length} Asanas gefunden`;
+	}
 
-		let filteredStorageData = [];
+	// Clear results container
+	let resultsContainer = document.getElementById("resultsContainer");
+	resultsContainer.innerHTML = "";
 
-		// Gather all options and create results overview
-		filteredData.forEach(asana => {
-			// Create a div for each result
-			let resultDiv = document.createElement("div");
-			resultDiv.classList.add("asana-result");
+	let filteredStorageData = [];
 
-			// Create icon div
-			let iconDiv = document.createElement("div");
-			iconDiv.classList.add("resultIcon");
-			let iconIMG = document.createElement("img");
-			iconIMG.setAttribute("src", "../resources/asana_icons/asana2d/" + asana.id + ".webp");
-			iconIMG.setAttribute("alt", "icon of " + asana.asanaName.sanskrit);
-			iconDiv.appendChild(iconIMG);
+	// Gather all options and create results overview
+	filteredData.forEach(asana => {
+		// Create a div for each result
+		let resultDiv = document.createElement("div");
+		resultDiv.classList.add("asana-result");
 
-			// Create info container
-			let infoContainer = document.createElement("div");
-			infoContainer.classList.add("resultInfo-container");
+		// Create icon div
+		let iconDiv = document.createElement("div");
+		iconDiv.classList.add("resultIcon");
+		let iconIMG = document.createElement("img");
+		iconIMG.setAttribute("src", "../resources/asana_icons/asana2d/" + asana.id + ".webp");
+		iconIMG.setAttribute("alt", "icon of " + asana.asanaName.sanskrit);
+		iconDiv.appendChild(iconIMG);
 
-			// Create title div
-			let titleDiv = document.createElement("div");
-			titleDiv.classList.add("resultTitle");
-			titleDiv.textContent = asana.asanaName.title;
+		// Create info container
+		let infoContainer = document.createElement("div");
+		infoContainer.classList.add("resultInfo-container");
 
-			// Create nested info container
-			let nestedInfoContainer = document.createElement("div");
-			nestedInfoContainer.classList.add("resultInfo-container");
+		// Create title div
+		let titleDiv = document.createElement("div");
+		titleDiv.classList.add("resultTitle");
+		titleDiv.textContent = asana.asanaName.title;
 
-			// Create name div
-			let nameDiv = document.createElement("div");
-			nameDiv.classList.add("resultName");
-			nameDiv.textContent = asana.asanaName.sanskrit;
+		// Create nested info container
+		let nestedInfoContainer = document.createElement("div");
+		nestedInfoContainer.classList.add("resultInfo-container");
 
-			// Create stats div
-			let statsDiv = document.createElement("div");
-			statsDiv.classList.add("resultStats");
+		// Create name div
+		let nameDiv = document.createElement("div");
+		nameDiv.classList.add("resultName");
+		nameDiv.textContent = asana.asanaName.sanskrit;
 
-			if (positionData[asana.info.position]) {
-				let posDiv = document.createElement("div");
-				posDiv.classList.add("resultPOS");
-				posDiv.textContent = positionData[asana.info.position].label
-				statsDiv.appendChild(posDiv);
-			}else {
-				console.error("Invalid position value: " + asana.asanaName.sanskrit);
+		// Create stats div
+		let statsDiv = document.createElement("div");
+		statsDiv.classList.add("resultStats");
+
+		if (positionData[asana.info.position]) {
+			let posDiv = document.createElement("div");
+			posDiv.classList.add("resultPOS");
+			posDiv.textContent = positionData[asana.info.position].label
+			statsDiv.appendChild(posDiv);
+		}else {
+			console.error("Invalid position value: " + asana.asanaName.sanskrit);
+		}
+
+		if (levelData[asana.info.level]) {
+			let lvlDiv = document.createElement("div");
+			lvlDiv.classList.add("resultLVL");
+			lvlDiv.textContent = levelData[asana.info.level];
+			statsDiv.appendChild(lvlDiv);
+		}else {
+			console.error("Invalid Level value: " + asana.asanaName.sanskrit);
+		}
+
+		// Create aids div
+		let aidsDiv = document.createElement("div");
+		aidsDiv.classList.add("resultAids");
+
+		// Create belt div with image
+		if (asana.aids.belt) {
+			let beltDiv = document.createElement("div");
+			beltDiv.classList.add("resultBelt");
+			let beltIMG = document.createElement("img");
+			beltIMG.setAttribute("src", "../resources/asana_icons/white/yoga_belt.webp");
+			beltIMG.setAttribute("alt", "Gürtel");
+			beltDiv.appendChild(beltIMG);
+			aidsDiv.appendChild(beltDiv);
+		}
+
+		// Create block div with image
+		if (asana.aids.block) {
+			let blockDiv = document.createElement("div");
+			blockDiv.classList.add("resultBlock");
+			let blockIMG = document.createElement("img");
+			blockIMG.setAttribute("src", "../resources/asana_icons/white/yoga_blocks.webp");
+			blockIMG.setAttribute("alt", "Block");
+			blockDiv.appendChild(blockIMG);
+			aidsDiv.appendChild(blockDiv);
+		}
+
+		// Create blanket div with image
+		if (asana.aids.blanket) {
+			let blanketDiv = document.createElement("div");
+			blanketDiv.classList.add("resultBlanket");
+			let blanketIMG = document.createElement("img");
+			blanketIMG.setAttribute("src", "../resources/asana_icons/white/yoga_blanket.webp");
+			blanketIMG.setAttribute("alt", "Decke");
+			blanketDiv.appendChild(blanketIMG);
+			aidsDiv.appendChild(blanketDiv);
+		}
+
+		// Create chair div with image
+		if (asana.aids.chair) {
+			let chairDiv = document.createElement("div");
+			chairDiv.classList.add("resultChair");
+			let chairIMG = document.createElement("img");
+			chairIMG.setAttribute("src", "../resources/asana_icons/white/yoga_chair.webp");
+			chairIMG.setAttribute("alt", "Stuhl");
+			chairDiv.appendChild(chairIMG);
+			aidsDiv.appendChild(chairDiv);
+		}
+
+		// Create bolster div with image
+		if (asana.aids.bolster) {
+			let bolsterDiv = document.createElement("div");
+			bolsterDiv.classList.add("resultBolster");
+			let bolsterIMG = document.createElement("img");
+			bolsterIMG.setAttribute("src", "../resources/asana_icons/white/yoga_bolster.webp");
+			bolsterIMG.setAttribute("alt", "Rolle");
+			bolsterDiv.appendChild(bolsterIMG);
+			aidsDiv.appendChild(bolsterDiv);
+		}
+
+		// Create wall div with image
+		if (asana.aids.wall) {
+			let wallDiv = document.createElement("div");
+			wallDiv.classList.add("resultWall");
+			let wallIMG = document.createElement("img");
+			wallIMG.setAttribute("src", "../resources/asana_icons/white/yoga_wall.webp");
+			wallIMG.setAttribute("alt", "Wand");
+			wallDiv.appendChild(wallIMG);
+			aidsDiv.appendChild(wallDiv);
+		}
+
+		nestedInfoContainer.appendChild(nameDiv);
+		nestedInfoContainer.appendChild(statsDiv);
+		nestedInfoContainer.appendChild(aidsDiv);
+
+		infoContainer.appendChild(titleDiv);
+		infoContainer.appendChild(nestedInfoContainer);
+
+		// Create button
+		let button = document.createElement("button");
+		button.classList.add("callAsana");
+		button.addEventListener("click", function() {
+			if (typeof asana.id === 'string' && asana.id.trim() !== '') {
+				applyFilter(asana.id);
+				console.log("asanaID:", asana.id);
+			} else {
+				console.log("Invalid asanaID:", asana.id);
 			}
-
-			if (levelData[asana.info.level]) {
-				let lvlDiv = document.createElement("div");
-				lvlDiv.classList.add("resultLVL");
-				lvlDiv.textContent = levelData[asana.info.level];
-				statsDiv.appendChild(lvlDiv);
-			}else {
-				console.error("Invalid Level value: " + asana.asanaName.sanskrit);
-			}
-
-			// Create aids div
-			let aidsDiv = document.createElement("div");
-			aidsDiv.classList.add("resultAids");
-
-			// Create belt div with image
-			if (asana.aids.belt) {
-				let beltDiv = document.createElement("div");
-				beltDiv.classList.add("resultBelt");
-				let beltIMG = document.createElement("img");
-				beltIMG.setAttribute("src", "../resources/asana_icons/white/yoga_belt.webp");
-				beltIMG.setAttribute("alt", "Gürtel");
-				beltDiv.appendChild(beltIMG);
-				aidsDiv.appendChild(beltDiv);
-			}
-
-			// Create block div with image
-			if (asana.aids.block) {
-				let blockDiv = document.createElement("div");
-				blockDiv.classList.add("resultBlock");
-				let blockIMG = document.createElement("img");
-				blockIMG.setAttribute("src", "../resources/asana_icons/white/yoga_blocks.webp");
-				blockIMG.setAttribute("alt", "Block");
-				blockDiv.appendChild(blockIMG);
-				aidsDiv.appendChild(blockDiv);
-			}
-
-			// Create blanket div with image
-			if (asana.aids.blanket) {
-				let blanketDiv = document.createElement("div");
-				blanketDiv.classList.add("resultBlanket");
-				let blanketIMG = document.createElement("img");
-				blanketIMG.setAttribute("src", "../resources/asana_icons/white/yoga_blanket.webp");
-				blanketIMG.setAttribute("alt", "Decke");
-				blanketDiv.appendChild(blanketIMG);
-				aidsDiv.appendChild(blanketDiv);
-			}
-
-			// Create chair div with image
-			if (asana.aids.chair) {
-				let chairDiv = document.createElement("div");
-				chairDiv.classList.add("resultChair");
-				let chairIMG = document.createElement("img");
-				chairIMG.setAttribute("src", "../resources/asana_icons/white/yoga_chair.webp");
-				chairIMG.setAttribute("alt", "Stuhl");
-				chairDiv.appendChild(chairIMG);
-				aidsDiv.appendChild(chairDiv);
-			}
-
-			// Create bolster div with image
-			if (asana.aids.bolster) {
-				let bolsterDiv = document.createElement("div");
-				bolsterDiv.classList.add("resultBolster");
-				let bolsterIMG = document.createElement("img");
-				bolsterIMG.setAttribute("src", "../resources/asana_icons/white/yoga_bolster.webp");
-				bolsterIMG.setAttribute("alt", "Rolle");
-				bolsterDiv.appendChild(bolsterIMG);
-				aidsDiv.appendChild(bolsterDiv);
-			}
-
-			// Create wall div with image
-			if (asana.aids.wall) {
-				let wallDiv = document.createElement("div");
-				wallDiv.classList.add("resultWall");
-				let wallIMG = document.createElement("img");
-				wallIMG.setAttribute("src", "../resources/asana_icons/white/yoga_wall.webp");
-				wallIMG.setAttribute("alt", "Wand");
-				wallDiv.appendChild(wallIMG);
-				aidsDiv.appendChild(wallDiv);
-			}
-
-			nestedInfoContainer.appendChild(nameDiv);
-			nestedInfoContainer.appendChild(statsDiv);
-			nestedInfoContainer.appendChild(aidsDiv);
-
-			infoContainer.appendChild(titleDiv);
-			infoContainer.appendChild(nestedInfoContainer);
-
-			// Create button
-			let button = document.createElement("button");
-			button.classList.add("callAsana");
-			button.addEventListener("click", function() {
-				if (typeof asana.id === 'string' && asana.id.trim() !== '') {
-					applyFilter(asana.id);
-					console.log("asanaID:", asana.id);
-				} else {
-					console.log("Invalid asanaID:", asana.id);
-				}
-			});
-
-			let buttonImage = document.createElement("img");
-			buttonImage.setAttribute("src", "../resources/icons/goto-icon.webp");
-			buttonImage.setAttribute("alt", asana.asanaName.sanskrit + " aufrufen");
-
-			button.appendChild(buttonImage);
-
-			resultDiv.appendChild(iconDiv);
-			resultDiv.appendChild(infoContainer);
-			resultDiv.appendChild(button);
-
-			resultsContainer.appendChild(resultDiv);
 		});
 
-	}
+		let buttonImage = document.createElement("img");
+		buttonImage.setAttribute("src", "../resources/icons/goto-icon.webp");
+		buttonImage.setAttribute("alt", asana.asanaName.sanskrit + " aufrufen");
 
-	function updateHitCounter(){
-		document.getElementById("filterHits").innerHTML = AppState.filteredAsanas .length;
-		console.log("Number Hits:", AppState.filteredAsanas .length);
-		if (AppState.filteredAsanas .length === 1) {
-			document.getElementById("pervious").classList.add("hidden");
-			document.getElementById("pervious2").classList.add("hidden");
-			document.getElementById("next").classList.add("hidden");
-		} else {
-			document.getElementById("pervious").classList.remove("hidden");
-			document.getElementById("pervious2").classList.remove("hidden");
-			document.getElementById("next").classList.remove("hidden");
+		button.appendChild(buttonImage);
+
+		resultDiv.appendChild(iconDiv);
+		resultDiv.appendChild(infoContainer);
+		resultDiv.appendChild(button);
+
+		resultsContainer.appendChild(resultDiv);
+	});
+}
+
+// Function to recalculate height for the filterResults accordion
+function recalculateFilterResultsHeight() {
+    const filterResultsAccordion = document.getElementById('filterResults');
+    if (filterResultsAccordion.classList.contains('active')) {
+        const resultPanel = document.getElementById('resultPanel');
+        resultPanel.style.maxHeight = resultPanel.scrollHeight + "px";
+    }
+}
+
+function updateHitCounter(){
+	document.getElementById("filterHits").innerHTML = AppState.filteredAsanas .length;
+	console.log("Number Hits:", AppState.filteredAsanas .length);
+	if (AppState.filteredAsanas .length === 1) {
+		document.getElementById("pervious").classList.add("hidden");
+		document.getElementById("pervious2").classList.add("hidden");
+		document.getElementById("next").classList.add("hidden");
+	} else {
+		document.getElementById("pervious").classList.remove("hidden");
+		document.getElementById("pervious2").classList.remove("hidden");
+		document.getElementById("next").classList.remove("hidden");
+	}
+}
+
+// Save selected values
+function saveSelection() {
+	AppState.selects.asanaName.clear();
+	AppState.selects.asanaPosition.clear();
+
+	document.querySelectorAll("#filterAsanaNAME option").forEach(opt => AppState.selects.asanaName.add(opt.value));
+	document.querySelectorAll("#filterAsanaPOSITION option").forEach(opt => AppState.selects.asanaPosition.add(opt.value));
+
+	console.log("Filter values saved in memory.");
+}
+
+// Reset filter options
+function resetSelectOptions() {
+	document.getElementById("filterAsanaNAME").value = "";
+	document.getElementById("filterAsanaPOSITION").value = "";
+	console.log("Filter reset...");
+	filterAsanaData(db);
+}
+
+// Apply filter and store selected items
+function applyFilter(asanaID) {
+	console.log("scroll")
+	window.scrollTo(0, 0);
+	setQueryParam("filterWindow", 0);
+	closeFilterMenue(true);
+	saveSelection();
+	console.log("Filter applied:", AppState.filteredAsanas);
+
+	if (AppState.filteredAsanas.length > 0) {
+		AppState.currentAsanaID = AppState.filteredAsanas[0];
+		if (typeof asanaID === 'string' && asanaID.trim() !== '') {
+			AppState.currentAsanaID = asanaID;
 		}
+		console.log("Filtered Asanalist saved to memory");
 	}
 
-	// Save selected values
-	function saveSelection() {
-		AppState.selects.asanaName.clear();
-//		AppState.selects.marmaGRP.clear();
-//		AppState.selects.bodyRegion.clear();
-//		AppState.selects.bodySide.clear();
-
-		document.querySelectorAll("#filterAsanaNAME option").forEach(opt => AppState.selects.asanaName.add(opt.value));
-//		document.querySelectorAll("#filterMarmaGRP option").forEach(opt => AppState.selects.marmaGRP.add(opt.value));
-//		document.querySelectorAll("#filterBodyPart option").forEach(opt => AppState.selects.bodyRegion.add(opt.value));
-//		document.querySelectorAll("#filterBodySide option").forEach(opt => AppState.selects.bodySide.add(opt.value));
-
-		console.log("Filter values saved in memory.");
-	}
-
-	// Restore selected values and update dropdowns
-/*	function restoreSelection() {
-		const savedAsanaName = document.getElementById("filterAsanaNAME").value || "";
-//		const savedMarmaGRP = document.getElementById("filterMarmaGRP").value || "";
-//		const savedBodyRegion = document.getElementById("filterBodyPart").value || "";
-//		const savedBodySide = document.getElementById("filterBodySide").value || "";
-
-		populateDropdown("filterAsanaNAME", AppState.selects.asanaName, savedAsanaName);
-//		populateDropdown("filterMarmaGRP", AppState.selects.marmaGRP, savedMarmaGRP);
-//		populateDropdown("filterBodyPart", AppState.selects.bodyRegion, savedBodyRegion);
-//		populateDropdown("filterBodySide", AppState.selects.bodySide, savedBodySide);
-
-		updateHitCounter();
-		populateResultTable();
-	}
-*/
-	// Reset filter options
-	function resetSelectOptions() {
-		document.getElementById("filterAsanaNAME").value = "";
-//		document.getElementById("filterMarmaGRP").value = "";
-//		document.getElementById("filterBodyPart").value = "";
-//		document.getElementById("filterBodySide").value = "";
-		console.log("Filter reset...");
-		filterAsanaData(db);
-	}
-
-	// Apply filter and store selected items
-	function applyFilter(asanaID) {
-		setQueryParam("filterWindow", 0);
-		closeFilterMenue(true);
-		saveSelection();
-		console.log("Filter applied:", AppState.filteredAsanas);
-
-		if (AppState.filteredAsanas.length > 0) {
-			AppState.currentAsanaID = AppState.filteredAsanas[0];
-			if (typeof asanaID === 'string' && asanaID.trim() !== '') {
-				AppState.currentAsanaID = asanaID;
-			}
-			console.log("Filtered Asanalist saved to memory");
-		}
-
-		// Update UI without reload
-		retrieveDataFromStores();
-	}
-
+	// Update UI without reload
+	retrieveDataFromStores();
+}
 
 
 // Utility function to update multiple elements with the same class
@@ -803,47 +881,58 @@ function closeFilterMenue(withTransition = true) {
 //###################################################################################
 //Carousel
 //###################################################################################
-
 // Function to update button visibility
-function updateButtonVisibility() {
-    const prevButton = document.querySelector('.prev-button');
-    const nextButton = document.querySelector('.next-button');
-    const carouselItems = document.querySelectorAll('.carousel-item');
+function updateButtonVisibility(carouselElement, validSlidesCount) {
+    const prevButton = carouselElement.querySelector('.prev-button');
+    const nextButton = carouselElement.querySelector('.next-button');
+    const currentSlide = parseInt(carouselElement.getAttribute('data-current-slide')) || 0;
 
-    if (currentVariant <= 0) {
-        prevButton.style.display = 'none';
+    if (currentSlide <= 0) {
+        prevButton.style.visibility = 'hidden';
     } else {
-        prevButton.style.display = 'block';
+        prevButton.style.visibility = 'visible';
     }
 
-    if (currentVariant >= carouselItems.length - 1) {
-        nextButton.style.display = 'none';
+    if (currentSlide >= validSlidesCount - 1) {
+        nextButton.style.visibility = 'hidden';
     } else {
-        nextButton.style.display = 'block';
+        nextButton.style.visibility = 'visible';
     }
 }
 
-// Function to initialize or reinitialize the carousel
-function initCarousel() {
-    const carouselItems = document.querySelectorAll('.carousel-item');
-    const prevButton = document.querySelector('.prev-button');
-    const nextButton = document.querySelector('.next-button');
+function initCarousel(carouselElement, validSlidesCount) {
+	console.log("Valid Asanas;", validSlidesCount);
+	const sectionId = carouselElement.closest('section').id;
+	if (!carouselElement || validSlidesCount === 0) {
+        console.warn("Carousel element not found or no valid slides for section", sectionId);
+		document.getElementById(sectionId).style.display = "none";
+        return;
+    }
+	document.getElementById(sectionId).style.display = "block";
 	
+    const carouselInner = carouselElement.querySelector('.carousel-inner');
+    const prevButton = carouselElement.querySelector('.prev-button');
+    const nextButton = carouselElement.querySelector('.next-button');
+
+    let isDragging = false;
+    let startX;
+    let currentTranslate = 0;
+    let currentSlide = 0;
+
+    carouselElement.setAttribute('data-current-slide', currentSlide);
+
     carouselInner.addEventListener('mousedown', dragStart);
     carouselInner.addEventListener('touchstart', dragStart);
-
     carouselInner.addEventListener('mousemove', drag);
     carouselInner.addEventListener('touchmove', drag);
-
     carouselInner.addEventListener('mouseup', dragEnd);
     carouselInner.addEventListener('touchend', dragEnd);
-
     carouselInner.addEventListener('mouseleave', dragEnd);
-	
-	prevButton.addEventListener('click', goToPreviousSlide);
+
+    prevButton.addEventListener('click', goToPreviousSlide);
     nextButton.addEventListener('click', goToNextSlide);
-	
-    updateButtonVisibility();
+
+    updateButtonVisibility(carouselElement, validSlidesCount);
 
     function dragStart(e) {
         startX = getClientX(e);
@@ -854,132 +943,107 @@ function initCarousel() {
     function drag(e) {
         if (!isDragging) return;
         const x = getClientX(e);
-        const walk = (x - startX) * 2; // Adjust the multiplier for sensitivity
+        const walk = (x - startX) * 2;
         currentTranslate = walk;
-        carouselInner.style.transform = `translateX(calc(-${currentVariant * 100}% + ${walk}px))`;
+        carouselInner.style.transform = `translateX(calc(-${currentSlide * 100}% + ${walk}px))`;
     }
 
     function dragEnd() {
         if (!isDragging) return;
         isDragging = false;
         carouselInner.style.transition = 'transform 0.5s ease';
-
-        // Determine if the swipe was significant enough to change the slide
         if (Math.abs(currentTranslate) > 50) {
-            if (currentTranslate > 0 && currentVariant > 0) {
-                // Swipe right: move to the previous slide
-                currentVariant--;
-            } else if (currentTranslate < 0 && currentVariant < carouselItems.length - 1) {
-                // Swipe left: move to the next slide
-                currentVariant++;
+            if (currentTranslate > 0 && currentSlide > 0) {
+                currentSlide--;
+            } else if (currentTranslate < 0 && currentSlide < validSlidesCount - 1) {
+                currentSlide++;
             }
         }
-
-        // Reset the translate value and snap to the current slide
         currentTranslate = 0;
-        carouselInner.style.transform = `translateX(-${currentVariant * 100}%)`;
-		updateButtonVisibility();
+        carouselInner.style.transform = `translateX(-${currentSlide * 100}%)`;
+        carouselElement.setAttribute('data-current-slide', currentSlide);
+        updateButtonVisibility(carouselElement, validSlidesCount);
     }
-	
+
     function goToPreviousSlide() {
-        if (currentVariant > 0) {
-            currentVariant--;
-            carouselInner.style.transform = `translateX(-${currentVariant * 100}%)`;
-			updateButtonVisibility();
+        if (currentSlide > 0) {
+            currentSlide--;
+            carouselInner.style.transform = `translateX(-${currentSlide * 100}%)`;
+            carouselElement.setAttribute('data-current-slide', currentSlide);
+            updateButtonVisibility(carouselElement, validSlidesCount);
         }
     }
 
     function goToNextSlide() {
-        if (currentVariant < carouselItems.length - 1) {
-            currentVariant++;
-            carouselInner.style.transform = `translateX(-${currentVariant * 100}%)`;
-			updateButtonVisibility();
+        if (currentSlide < validSlidesCount - 1) {
+            currentSlide++;
+            carouselInner.style.transform = `translateX(-${currentSlide * 100}%)`;
+            carouselElement.setAttribute('data-current-slide', currentSlide);
+            updateButtonVisibility(carouselElement, validSlidesCount);
         }
     }
-	
+
     function getClientX(e) {
         return e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
     }
 }
 
-// Populate carousel items
-function createCarouselItems() {
-	// Clear carousel
-	carouselInner.innerHTML = "";
-	
-    const variants = AppState.currentAsanaData.variants.split(','); // Split variants by comma
-    console.log("Variants of " + AppState.currentAsanaID + ": ", variants);
+function populateCarouselItems(asanas, carouselInnerElement) {
+    let validAsanas = [];
 
-    let completedRequests = 0;
-    const totalRequests = variants.length;
+    asanas.forEach(asanaId => {
+        if (asanaId !== "") {
+            const asanaStore = getObjectStore(db, "asanaStore", 'readonly');
+            let asanaDataRequest = asanaStore.get(asanaId);
 
-	if (variants[0] !== ""){
-		variants.forEach(variant => {
-			try {
-				const asanaStore = getObjectStore(db, "asanaStore", 'readonly');
-				let asanaDataRequest = asanaStore.get(variant);
+            asanaDataRequest.onsuccess = function(evt) {
+                const asana = evt.target.result;
+                if (asana) {
+                    validAsanas.push(asanaId);
+                    const carouselItem = document.createElement('div');
+                    carouselItem.className = 'carousel-item';
 
-				asanaDataRequest.onsuccess = function(evt) {
-					const asana = evt.target.result;
+                    // Create and append elements to carouselItem as before
+                    let iconDiv = document.createElement("div");
+                    iconDiv.classList.add("variantIcon");
+                    let iconIMG = document.createElement("img");
+                    iconIMG.setAttribute("src", "../resources/asana_icons/asana2d/" + asanaId + ".webp");
+                    iconIMG.setAttribute("alt", "icon of " + asana.asanaName.sanskrit);
+                    iconDiv.appendChild(iconIMG);
 
-					if (!asana) {
-						console.error(`Variant not found in asanaStore: ${variant}`);
-						return; // Skip the rest of the code for this variant
-					}
+                    let infoContainer = document.createElement("div");
+                    infoContainer.classList.add("variantInfo-container");
 
-					console.log(variant);
+                    let titleDiv = document.createElement("h4");
+                    titleDiv.classList.add("variantTitle");
+                    titleDiv.textContent = asana.asanaName.title;
 
-					// Create a div for each variant
-					const carouselItem = document.createElement('div');
-					carouselItem.className = 'carousel-item';
+                    let nestedInfoContainer = document.createElement("div");
+                    nestedInfoContainer.classList.add("variantInfo-container");
 
-					// Create icon div
-					let iconDiv = document.createElement("div");
-					iconDiv.classList.add("variantIcon");
-					let iconIMG = document.createElement("img");
-					iconIMG.setAttribute("src", "../resources/asana_icons/asana2d/" + variant + ".webp");
-					iconIMG.setAttribute("alt", "icon of " + asana.asanaName.sanskrit);
-					iconDiv.appendChild(iconIMG);
+                    let statsDiv = document.createElement("div");
+                    statsDiv.classList.add("resultStats");
 
-					// Create info container
-					let infoContainer = document.createElement("div");
-					infoContainer.classList.add("variantInfo-container");
+                    if (positionData[asana.info.position]) {
+                        let posDiv = document.createElement("div");
+                        posDiv.classList.add("variantPOS");
+                        posDiv.textContent = positionData[asana.info.position].label;
+                        statsDiv.appendChild(posDiv);
+                    } else {
+                        console.error("Invalid position value: " + asana.asanaName.sanskrit);
+                    }
 
-					// Create title div
-					let titleDiv = document.createElement("h4");
-					titleDiv.classList.add("variantTitle");
-					titleDiv.textContent = asana.asanaName.title;
+                    if (levelData[asana.info.level]) {
+                        let lvlDiv = document.createElement("div");
+                        lvlDiv.classList.add("variantLVL");
+                        lvlDiv.textContent = levelData[asana.info.level];
+                        statsDiv.appendChild(lvlDiv);
+                    } else {
+                        console.error("Invalid Level value: " + asana.asanaName.sanskrit);
+                    }
 
-					// Create nested info container
-					let nestedInfoContainer = document.createElement("div");
-					nestedInfoContainer.classList.add("variantInfo-container");
-
-					// Create stats div
-					let statsDiv = document.createElement("div");
-					statsDiv.classList.add("resultStats");
-
-					// Assuming positionData and levelData are defined somewhere in your code
-					if (positionData[asana.info.position]) {
-						let posDiv = document.createElement("div");
-						posDiv.classList.add("variantPOS");
-						posDiv.textContent = positionData[asana.info.position].label;
-						statsDiv.appendChild(posDiv);
-					} else {
-						console.error("Invalid position value: " + asana.asanaName.sanskrit);
-					}
-
-					if (levelData[asana.info.level]) {
-						let lvlDiv = document.createElement("div");
-						lvlDiv.classList.add("variantLVL");
-						lvlDiv.textContent = levelData[asana.info.level];
-						statsDiv.appendChild(lvlDiv);
-					} else {
-						console.error("Invalid Level value: " + asana.asanaName.sanskrit);
-					}
-
-					// Create aids div
-					let aidsDiv = document.createElement("div");
-					aidsDiv.classList.add("variantAids");
+                    let aidsDiv = document.createElement("div");
+                    aidsDiv.classList.add("variantAids");
 
 					// Create belt div with image
 					if (asana.aids.belt) {
@@ -1047,62 +1111,94 @@ function createCarouselItems() {
 						aidsDiv.appendChild(wallDiv);
 					}
 
-					nestedInfoContainer.appendChild(statsDiv);
-					nestedInfoContainer.appendChild(aidsDiv);
+                    nestedInfoContainer.appendChild(statsDiv);
+                    nestedInfoContainer.appendChild(aidsDiv);
+                    infoContainer.appendChild(titleDiv);
+                    infoContainer.appendChild(nestedInfoContainer);
 
-					infoContainer.appendChild(titleDiv);
-					infoContainer.appendChild(nestedInfoContainer);
+                    let button = document.createElement("button");
+                    button.classList.add("callAsana");
+                    button.addEventListener("click", function() {
+                        if (typeof asana.id === 'string' && asanaId.trim() !== '') {
+                            applyFilter(asanaId);
+                            console.log("asanaID:", asanaId);
+                        } else {
+                            console.log("Invalid asanaID:", asanaId);
+                        }
+                    });
 
-					// Create button
-					let button = document.createElement("button");
-					button.classList.add("callAsana");
-					button.addEventListener("click", function() {
-						if (typeof asana.id === 'string' && variant.trim() !== '') {
-							applyFilter(variant);
-							console.log("asanaID:", variant);
-						} else {
-							console.log("Invalid asanaID:", variant);
-						}
-					});
+                    let buttonImage = document.createElement("img");
+                    buttonImage.setAttribute("src", "../resources/icons/goto-icon.webp");
+                    buttonImage.setAttribute("alt", asana.asanaName.sanskrit + " aufrufen");
+                    button.appendChild(buttonImage);
 
-					let buttonImage = document.createElement("img");
-					buttonImage.setAttribute("src", "../resources/icons/goto-icon.webp");
-					buttonImage.setAttribute("alt", asana.asanaName.sanskrit + " aufrufen");
+                    carouselItem.appendChild(iconDiv);
+                    carouselItem.appendChild(infoContainer);
+                    carouselItem.appendChild(button);
+                    carouselInnerElement.appendChild(carouselItem);
 
-					button.appendChild(buttonImage);
+                    if (validAsanas.length === asanas.length) {
+                        initCarousel(carouselInnerElement.closest('.carousel'), validAsanas.length);
+						console.log("Valid Asanas;", validAsanas.length);
+                    }
+                } else {
+                    if (validAsanas.length + 1 === asanas.length) {
+                        initCarousel(carouselInnerElement.closest('.carousel'), validAsanas.length);
+						console.log("Valid Asanas;", validAsanas.length);
+                    }
+                }
+            };
 
-					carouselItem.appendChild(iconDiv);
-					carouselItem.appendChild(infoContainer);
-					carouselItem.appendChild(button);
+            asanaDataRequest.onerror = function(evt) {
+                console.error(`Error fetching asana ${asanaId} from asanaStore:`, evt.target.error);
+                if (validAsanas.length + 1 === asanas.length) {
+                    initCarousel(carouselInnerElement.closest('.carousel'), validAsanas.length);
+					console.log("Valid Asanas;", validAsanas.length);
+                }
+            };
+        } else {
+            if (validAsanas.length + 1 === asanas.length) {
+                initCarousel(carouselInnerElement.closest('.carousel'), validAsanas.length);
+				console.log("Valid Asanas;", validAsanas.length);
+            }
+        }
+    });
+}
 
-					carouselInner.appendChild(carouselItem);
+function createVariantCarouselItems() {
+    console.log("Creating variants...");
+    const variants = AppState.currentAsanaData.variants.split(',');
+    const variantsCarousel = document.getElementById('variants');
+    const carouselInner = document.querySelector('#variants .carousel-inner');
+	carouselInner.innerHTML = ""; // Clear carousel
+	carouselInner.style.transform = `translateX(0%)`;  // focus first slide
+    if (variants[0] !== "") {
+        console.log(variants);
+        populateCarouselItems(variants, carouselInner);
+    } else {
+        console.log("No asana variants found");
+    }
+}
 
-					completedRequests++;
-					if (completedRequests === totalRequests) {
-						initCarousel();
-					}
-				};
+function createRelatedAsanasCarouselItems() {
+    console.log("Creating related asanas...");
+    const relatedAsanas = AppState.currentAsanaData.relatedAsanas.split(',');
+    const relatedAsanasCarousel = document.getElementById('relatedAsanas');
+    const carouselInner = document.querySelector('#relatedAsanas .carousel-inner');
+	carouselInner.innerHTML = ""; // Clear carousel
+	carouselInner.style.transform = `translateX(0%)`;  // focus first slide
+    if (relatedAsanas[0] !== "") {
+        console.log(relatedAsanas);
+        populateCarouselItems(relatedAsanas, carouselInner);
+    } else {
+        console.log("No related asanas found");
+    }
+}
 
-				asanaDataRequest.onerror = function(evt) {
-					console.error(`Error fetching variant ${variant} from asanaStore:`, evt.target.error);
-					completedRequests++;
-					if (completedRequests === totalRequests) {
-						initCarousel();
-					}
-				};
-			} catch (error) {
-				console.error(`Error processing variant ${variant}:`, error);
-				completedRequests++;
-				if (completedRequests === totalRequests) {
-					initCarousel();
-				}
-			}
-		});
-	}else{
-		document.getElementById("variants").style.display = "none";
-	};
-};
-
+function createCarouselItems() {
+    createVariantCarouselItems();
+    createRelatedAsanasCarouselItems();
+}
 
 
 //###################################################################################
@@ -1133,29 +1229,11 @@ function closeAll(){
 }
 
 //###################################################################################
-//3d Body inspector
-//###################################################################################
-
-
-function openBodyInspector() {
-  console.log("loading body inspector " + InspectorLoaded)
-  document.getElementById("3d_Body_Inspector").style.height = "100%";
-  if (InspectorLoaded === 0){
-	document.getElementById("inspectorFrame").src="../Body/body.html"; 
-	InspectorLoaded = 1;
-	console.log(InspectorLoaded)
-  }
-  console.log("open 3d Body inspector")
-}
-function closeBodyInspector() {
-  document.getElementById("3d_Body_Inspector").style.height = "0%";
-}
-
-//###################################################################################
 //Navigation
 //###################################################################################		
 
 function nextElement() {
+	window.scrollTo({top: 0, behavior: 'smooth'});
 	console.log("Current filteredAsanas:", AppState.filteredAsanas);
 	let currentAsanaID = AppState.currentAsanaID;
 	console.log("Current asanaID in AppState:", currentAsanaID);
@@ -1177,7 +1255,8 @@ function nextElement() {
 }
 
 function previousElement() {
-    const currentID = AppState.currentAsanaID;
+    window.scrollTo({top: 0, behavior: 'smooth'});
+	const currentID = AppState.currentAsanaID;
     console.log("Current asanaID from AppState:", currentID);
 
     const currentIndex = AppState.filteredAsanas.indexOf(currentID);
