@@ -53,8 +53,8 @@ const initialAsanaData = [
     "dangers": "Schmerzende Handgelenke: Hände auf einen Klotz; Einschlafende Arme: Ellenbogenspitzen nach außen, Schultern nicht zu den Armen ziehen. Brustkorb nicht nach vorne fallen lassen; Einschlafende Beine: Beine leicht winkeln; Zerren in den Waden: Fersen anheben, Beine leicht winkeln.",
     "problems": "",
     "contraindications": "",
-    "variants": "",
-    "relatedAsanas": ""
+    "variants": "test123",
+    "relatedAsanas": "uttanasana_1,rest123"
   },
   {
     "id": "dandasana_1",
@@ -101,8 +101,56 @@ const initialAsanaData = [
     "dangers": "Vermeide es, den Rücken zu runden. Achte darauf, den Rücken gerade zu halten, um Verletzungen zu vermeiden.",
     "problems": "Bei Rückenproblemen kann ein Kissen unter das Gesäß gelegt werden, um den Rücken zu entlasten.",
     "contraindications": "",
-    "variants": "",
-    "relatedAsanas": ""
+    "variants": "dandasana_2",
+    "relatedAsanas": "dandasana_1,janusirsasana_1,marichyasana_III_1,upavisthakonasana_1,paschimottanasana_1"
+  },
+  {
+    "id": "dandasana_2",
+    "asanaName": {
+      "sanskrit": "Dandāsana",
+      "de": "Stabhaltung",
+	  "title": "Dandāsana mit Klötzen",
+	  "synonym": "Dandāsana, Stabhaltung"
+    },
+    "info": {
+      "position": "2",
+      "level": "1",
+      "difficulty": "1",
+      "symetric": 1,
+      "description": "Sitzende Haltung mit gestreckten Beinen und aufrechtem Oberkörper. Die Hände stützen neben den Hüften auf Klötzen.",
+      "origin": "Danda = Stock & Āsana = Haltung - दण्डासन"
+    },
+    "explanation": {
+      "starting": "Setze dich auf den Boden und strecke beide Beine nach vorne aus. Die Füße sind hüftbreit auseinander. Stütze die Hände neben die Hüften auf Klötze, die Finger zeigen nach vorne. Richte den Oberkörper auf.",
+      "staying": "Die Beine bleiben gestreckt und die Füße sind aktiv. Halte den Rücken gerade und lang. Burstkorb und Schultern breiten sich seitlich aus. Arme stützen.",
+      "ending": "Löse die Haltung entspannt auf.",
+      "alternatives": ""
+    },
+    "triggers": {
+      "feet": "Die Füße sind hüftbreit auseinander die Fersen schieben nach vorne, Zehen schauen richtung Decke.",
+      "legs": "Die Beine sind gestreckt.",
+      "pelvis": "das Becken ist aufgerichtet, die Sitzbeinhöcker sind am Boden.",
+      "abdomen torso": "Der Rumpf ist aufrecht und lang gestreckt.",
+      "chest": "Der Brustkorb breitet sich nach links und rechts aus und ist nach vorne gerichtet.",
+      "back": "Der Rücken ist gerade und lang.",
+      "shoulders": "Die Schultern sind entspannt und entspennte ausdehnung nach links und rechts an den Schlüsselbeinen.",
+      "arms": "Aktive Arme sind gestreckt und unterstützen die Rupmfstreckung.",
+      "hands": "Die Hände liegen auf den Klötzen, die Finger zeigen nach vorne.",
+      "neck+head": "Der Kopf ist aufrecht, Schädeldecke orientiert sich zur Decke, der Blick geht geradeaus."
+    },
+    "aids": {
+      "belt": 0,
+      "block": 1,
+      "blanket": 0,
+      "chair": 0,
+      "bolster": 0,
+      "wall": 0
+    },
+    "dangers": "Vermeide es, den Rücken zu runden. Achte darauf, den Rücken gerade zu halten, um Verletzungen zu vermeiden.",
+    "problems": "Bei Rückenproblemen kann ein Kissen unter das Gesäß gelegt werden, um den Rücken zu entlasten.",
+    "contraindications": "",
+    "variants": "dandasana_1",
+    "relatedAsanas": "dandasana_1,janusirsasana_1,marichyasana_III_1,upavisthakonasana_1,paschimottanasana_1"
   },
   {
     "id": "janusirsasana_1",
@@ -150,7 +198,7 @@ const initialAsanaData = [
     "problems": "Wenn die Füße mit den Händen nicht erreicht werden können nutze ein Band, um die Hände zu unterstützen. Wenn es auf der Innenseite des angewinkelten Beins zerrt nutze Decken oder Klötze um es zu unterstützen. Bei Schwindelgefühl langsam aus der Position kommen.",
     "contraindications": "",
     "variants": "",
-    "relatedAsanas": ""
+    "relatedAsanas": "dandasana_1,janusirsasana_1,marichyasana_III_1,upavisthakonasana_1,paschimottanasana_1"
   },
   {
     "id": "marichyasana_I_1",
@@ -198,7 +246,7 @@ const initialAsanaData = [
     "problems": "Wenn die Vorstreckung nicht reicht um das gewinkelte Bein zu Umfassen versuche eine andere Variante.",
     "contraindications": "",
     "variants": "",
-    "relatedAsanas": ""
+    "relatedAsanas": "dandasana_1,janusirsasana_1,marichyasana_II_1,marichyasana_III_1,upavisthakonasana_1,paschimottanasana_1"
   },
   {
     "id": "marichyasana_III_1",
@@ -246,7 +294,7 @@ const initialAsanaData = [
     "problems": "Die Drehung nur soweit ausführen wie es ohne Zerren möglich ist, variiere wie du das aufgestellte Bein umfasst.",
     "contraindications": "",
     "variants": "marichyasana_III_1,marichyasana_III_2,marichyasana_III_3,marichyasana_III_4",
-    "relatedAsanas": ""
+    "relatedAsanas": "dandasana_1,janusirsasana_1,marichyasana_III_1,upavisthakonasana_1,paschimottanasana_1"
   },
   {
     "id": "marichyasana_III_2",
@@ -294,7 +342,7 @@ const initialAsanaData = [
     "problems": "Die Drehung nur soweit ausführen wie es ohne Zerren möglich ist, variiere wie du das aufgestellte Bein umfasst.",
     "contraindications": "",
     "variants": "marichyasana_III_1,marichyasana_III_2,marichyasana_III_3,marichyasana_III_4",
-    "relatedAsanas": ""
+    "relatedAsanas": "dandasana_1,janusirsasana_1,marichyasana_III_1,upavisthakonasana_1,paschimottanasana_1"
   },
   {
     "id": "marichyasana_III_3",
@@ -342,7 +390,7 @@ const initialAsanaData = [
     "problems": "Die Drehung nur soweit ausführen wie es ohne Zerren möglich ist, achte hier auch auf deine Schulter. Variiere wie du das aufgestellte Bein umfasst.",
     "contraindications": "",
     "variants": "marichyasana_III_1,marichyasana_III_2,marichyasana_III_3,marichyasana_III_4",
-    "relatedAsanas": ""
+    "relatedAsanas": "dandasana_1,janusirsasana_1,marichyasana_III_1,upavisthakonasana_1,paschimottanasana_1"
   },
   {
     "id": "marichyasana_III_4",
@@ -390,7 +438,7 @@ const initialAsanaData = [
     "problems": "Die Drehung nur soweit ausführen wie es ohne Zerren möglich ist, variiere wie du das aufgestellte Bein umfasst.",
     "contraindications": "",
     "variants": "marichyasana_III_1,marichyasana_III_2,marichyasana_III_3,marichyasana_III_4",
-    "relatedAsanas": ""
+    "relatedAsanas": "dandasana_1,janusirsasana_1,marichyasana_II_1,marichyasana_III_1,upavisthakonasana_1,paschimottanasana_1"
   },
   {
     "id": "parsvauttanasana_1",
@@ -438,7 +486,7 @@ const initialAsanaData = [
     "problems": "Bei Zerren in den Waden Beine leicht winkeln und mit dem Rumpf weniger tief gehen. Benutze Arme und Hilfsmittel um den Oberkörper zu stützen. Bei Schwindelgefühl langsam mit dem Oberkörper nach oben aus der Position kommen.",
     "contraindications": "",
     "variants": "",
-    "relatedAsanas": ""
+    "relatedAsanas": "uttanasana_1"
   },
   {
     "id": "paschimottanasana_1",
@@ -534,7 +582,7 @@ const initialAsanaData = [
     "problems": "Bei Rückenproblemen kann ein Kissen unter den Kopf gelegt werden, um den Nacken zu entlasten.",
     "contraindications": "",
     "variants": "",
-    "relatedAsanas": ""
+    "relatedAsanas": "suptapadangusthasana_1"
   },
   {
     "id": "prasaritapadottanasana_1",
@@ -582,7 +630,7 @@ const initialAsanaData = [
     "problems": "Bei Zerren in den Waden Beine leicht winkeln und mit dem Rumpf weniger tief gehen. Benutze Arme und Hilfsmittel um den Oberkörper zu stützen. Bei Schwindelgefühl langsam mit dem Oberkörper nach oben aus der Position kommen.",
     "contraindications": "",
     "variants": "",
-    "relatedAsanas": ""
+    "relatedAsanas": "upavisthakonasana_1,uttanasana_1"
   },
   {
     "id": "savasana_1",
@@ -678,7 +726,7 @@ const initialAsanaData = [
     "problems": "Bei steifen Beinen oder Rücken kann ein Gurt verwendet werden, um das Bein zu unterstützen. Bei Schwindelgefühl langsam aus der Position kommen.",
     "contraindications": "",
     "variants": "",
-    "relatedAsanas": ""
+    "relatedAsanas": "pavanmuktasana_1"
   },
   {
     "id": "tadasana_1",
@@ -725,8 +773,8 @@ const initialAsanaData = [
     "dangers": "",
     "problems": "",
     "contraindications": "",
-    "variants": "",
-    "relatedAsanas": ""
+    "variants": "urdvhvahastasana_1,urdvhvahastasana_2",
+    "relatedAsanas": "urdvhvahastasana_1"
   },
   {
     "id": "trikonasana_1",
@@ -773,8 +821,8 @@ const initialAsanaData = [
     "dangers": "Das vordere Bein muss in einer Achse stehen, keine Verdrehung im Knie.",
     "problems": "Bei Spannungsgefühlen in den Beinen den Fußabstand verringern. Beim Zwicken in den unteren (rechten) Rumpf Hilfsmittel wie Klötze verwenden für die Verlängerung der Armstütze.",
     "contraindications": "",
-    "variants": "",
-    "relatedAsanas": ""
+    "variants": "utthitatrikonasana_1",
+    "relatedAsanas": "utthitatrikonasana_1"
   },
   {
     "id": "upavisthakonasana_1",
@@ -869,8 +917,8 @@ const initialAsanaData = [
     "dangers": "",
     "problems": "",
     "contraindications": "",
-    "variants": "",
-    "relatedAsanas": ""
+    "variants": "tadasana_1,urdvhvahastasana_2",
+    "relatedAsanas": "tadasana_1,urdvhvahastasana_2,"
   },
   {
     "id": "urdvhvahastasana_2",
@@ -917,8 +965,8 @@ const initialAsanaData = [
     "dangers": "",
     "problems": "",
     "contraindications": "",
-    "variants": "",
-    "relatedAsanas": ""
+    "variants": "tadasana_1,urdvhvahastasana_1",
+    "relatedAsanas": "tadasana_1,urdvhvahastasana_1"
   },
   {
     "id": "uttanasana_1",
@@ -965,7 +1013,7 @@ const initialAsanaData = [
     "dangers": "Vermeide es, die Knie durchzustrecken und in den Kniekehlen zu lehnen, eine leichte Beugung ist besser als Druck im Kniegelenk. Achte darauf, den Rücken gerade zu halten. Die Vorstreckung kommt aus der Bewegung im Hüftgelenk, nicht aus der Beugung des Rumpfes.",
     "problems": "Bei Zerren in den Waden Beine leicht winkeln und mit dem Rumpf weniger tief gehen. Benutze Arme und Hilfsmittel um den Oberkörper zu stützen. Bei Schwindelgefühl langsam mit dem Oberkörper nach oben aus der Position kommen.",
     "variants": "",
-    "relatedAsanas": ""
+    "relatedAsanas": "prasaritapadottanasana_1,paschimottanasana_1"
   },
   {
     "id": "utthitaparshvakonasana_1",
@@ -1060,8 +1108,8 @@ const initialAsanaData = [
     "dangers": "Das vordere Bein muss in einer Achse stehen, keine Verdrehung im Knie.",
     "problems": "Bei Spannungsgefühlen in den Beinen den Fußabstand verringern. Beim Zwicken in den unteren (rechten) Rumpf Hilfsmittel wie Klötze verwenden für die Verlängerung der Armstütze.",
     "contraindications": "",
-    "variants": "",
-    "relatedAsanas": ""
+    "variants": "trikonasana_1",
+    "relatedAsanas": "utthitaparshvakonasana_1,trikonasana_1"
   },
   {
     "id": "virabhadrasana_I_1",
@@ -1266,7 +1314,7 @@ const initialAsanaData = [
 { id: 'marmas_Intro', order: 6, topic: 'marmas', category: 'marmas', lesson: 'Intro', icon: 'intro-icon.webp', content: {intro: 'In diesem Kapitel geht es um Marmas.', media: '', headline1: '', media1: '', text1: 'Das Konzept der Marmas mag in der heutigen Zeit mit moderner Medizin etwas veraltet wirken, liefert aber nach wie vor gute Dienste. ', headline2: '', media2: '', text2: 'Marmas beschreiben besondere Punkte im Körper. Diese besonderen Marma Punkte können uns dabei helfen ein besseres Körpergefühl zu entwickeln und uns in unserer Yogapraxis unterstützen. ', headline3: '', media3: '', text3: '', headline4: '', media4: '', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
 { id: 'marmas_Basics', order: 7, topic: 'marmas', category: 'marmas', lesson: 'Basics', icon: 'start-icon.webp', content: {intro: 'Ein Marma ist ein bedeutsamer, vitaler Ort im Körper eines Menschen.', media: '', headline1: 'Herkunft', media1: '', text1: 'Marmas kommen aus der ayurvedischen Biologie. “Es sind die zentralen Stellen am menschlichen Körper, die sensitiv, verletztbar sind. Sie liegen offen da und sind durch Unfälle, Krankheit oder Angriffe besonders gefährdet. Verletzungen können zur invalidität führen, bzw. totbringend sein.” ¹', headline2: 'Marmas im Yoga-Kontext', media2: '', text2: 'In der Yogapraxis können uns die Marmapunkte helfen  unseren Körper wahrzunehmen.', headline3: '', media3: '', text3: 'Während es unmöglich ist alle Musklen in unserem Arm einzeln wahrzunehmen und anzusteuern ist es deutlich leichter zu denken "ich greife nach dem Glas". Das gelernte automatische Bewegungsmuster der Muskeln befähigt uns dann das Glas sicher zu greifen.', headline4: '', media4: '', text4: 'Genauso helfen uns die Marmapunkte die Haltungsmuster im Yoga besser einzuüben und wahrzunehmen. Mit einer guten Kenntniss der wichtigsten Punkte im Körper und einer guten Wahrnehmeung an diesen Stellen können Fehlhaltungen selbst erkannt und verbessert werden.', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: '1) Yoga Ein Weg für dich, Reinhard Bögele 1996, Seite 43'}  },
 { id: 'marmas_MarmaGruppen', order: 8, topic: 'marmas', category: 'marmas', lesson: 'Marma Gruppen', icon: 'marmas.webp', content: {intro: '', media: '', headline1: 'Sehnen-Marma (Snāyu स्नायु)', media1: '', text1: 'Sehnen-Marmas sind im Yoga die kraftvollen Halteorte. Sie sind der Ort für schnelle, dynamische Bewegung sowie für Entspannung.', headline2: 'Muskel-Marma (Māṃsa मांस)', media2: '', text2: 'Im Yoga helfen uns die Muskel-Marmas gezielt Orte zu enstpannen oder auszudehnen und zu strecken. Muskeln übernehmen die Feinmotorik.', headline3: 'Knochen-Marma (Asthi अस्थि)', media3: '', text3: 'Knochen haben auch im Yoga eine stützende Funktion. Sie sind der Ansatzpunkt für die Sehnen.', headline4: 'Blutgefäß-Marma (Sirā सिरा)', media4: '', text4: 'Im Yoga möchten wir Blut und Nervenbahnen nicht blockieren, sondern einen guten Fluss ermöglichen. Die Blutfluss-Marmas helfen uns Blokaden zu erkennen und zu vermeiden.', headline5: 'Gelenk-Marma (Sandhi सन्धि)', media5: '', text5: 'Ein Gelenk ist eine stabile Verbindung von zwei oder mehr Knochen. Gelneke sind die Koordinationsorte von Bewegungen.', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
-{ id: 'marmas_DasKonzept', order: 9, topic: 'marmas', category: 'marmas', lesson: 'Das Konzept', icon: 'concept-icon.webp', content: {intro: 'Das in Gom beschriebene Yogakonzept geht auf das Yoga Forum München e.V. und Reinhard Bögele zurück.', media: '', headline1: 'Geschichte', media1: '', text1: 'Die Yogalehre wurde über sehr viele Generationen von Lehrer*in zu Schüler*in weitergegeben und hat sich stetig weiterentwickelt. T. Krishnamacharya (1888 - 1989) gillt als Vater des modernen Yoga. Er verband die Yogalehre auch mit den Lehren des Ayurveda. Einer seiner bekanntesten Schüler ist B. K. S. Iyengar. Sein Yogastiel zeichnet sich durch genaue Ausrichtung des Körpers in den Haltungen und vorallem das Nutzen von der Hilfsmitteln aus. Die enge Verknüpfung zwischen Yoga und der Marmalehre hat Rocque Lobo geprägt.', headline2: 'Die Marmalehre', media2: '<span class="justify">Reinhard Bögele greift das Konzept von Roque Lobo auf. In dem von Ihm entwickelten Konzept wird Yoga in seiner ursprünglichen Form vermittelt. Außerdem wird es mit Wissen aus den Partnerdisziplinen Samkya und Ayurveda angereichert.</span>', text2: 'Ein zentrales Thema ist die Marmalehre mit der Bögele die Brücke schlägt zwischen der Gesundheitslehre Ayurveda und Yoga. Beides zusammen liefert ein gutes Fundament für einen gesunden Umgang mit sich und seinem Körper.', headline3: '', media3: '', text3: 'Auch in Gom ist die Marmalehre das zentrale Element. Das Yogakonzept des Yoga Forum München e.V. Wird außerdem an vielen weiteren Stellen aufgegriffen.', headline4: 'Mehr Informationen', media4: '', text4: 'Mehr über die Marmas und das Yogakonzept erfahrst du in diesem Buch: ', headline5: '', media5: '<div><p style="text-align:center;">Praxisbuch</p><p style="text-align:center;">AYURVEDA YOGA</p><p style="text-align:center;">Mehr Energie durch Marma-Übungen</p><p style="text-align:center;">Reinhard Bögele</p></div>', text5: '', headline6: '', media6: '', text6: 'Im Buch findest du neben anschaulichen Grafiken und Erklärungen zu den Marmas auch Übungsanleitungen und noch mehr Hintergründe.', outro: '', quote: ''}  },
+{ id: 'marmas_DasKonzept', order: 9, topic: 'marmas', category: 'marmas', lesson: 'Das Konzept', icon: 'concept-icon.webp', content: {intro: 'Gom orientiert sich am Yogakonzept des Yoga Forum München e.V. unter der Leitung von Reinhard Bögele.', media: '', headline1: 'Geschichte', media1: '', text1: 'Yoga und Ayurveda als sich ergänzende Disziplinen gehen weit zurück. Diese Lehren wurde über sehr viele Generationen von Lehrer*in zu Schüler*in weitergegeben. Zuletzt wurden die beiden Lehren seltener als zusammengehörig betrachtet. T. Krishnamacharya (1888 - 1989) gillt als Vater des modernen Yoga, der die Yogalehre auch mit den Lehren des Ayurveda verband. Einer seiner bekanntesten Schüler ist B. K. S. Iyengar, dessen Yogastiel sich durch genaue Ausrichtung des Körpers in den Haltungen und vorallem das Nutzen von der Hilfsmitteln auszeichnet.', headline2: 'Die Marmalehre', media2: '<span class="justify">Reinhard Bögele greift die Yogalehre in seiner ursprünglichen Form auf und verknüpft die Lehren aus dem Ayurveda. Die etwas in Vergessneheit geratenen Marmas der Ayurvedalehre sind dabei zentral.</span>', text2: 'Bögele schlägt damit die Brücke zwischen der Gesundheitslehre Ayurveda und Yoga. Beides zusammen liefert ein gutes Fundament für einen gesunden Umgang mit sich und seinem Körper.', headline3: '', media3: '', text3: 'Auch in Gom ist die Marmalehre das zentrale Element. Das Yogakonzept des Yoga Forum München e.V. Wird außerdem an vielen weiteren Stellen aufgegriffen.', headline4: 'Mehr Informationen', media4: '', text4: 'Mehr über die Marmas und das Yogakonzept erfährst du in diesem Buch: ', headline5: '', media5: '<div><p style="text-align:center;">Praxisbuch</p><p style="text-align:center;">AYURVEDA YOGA</p><p style="text-align:center;">Mehr Energie durch Marma-Übungen</p><p style="text-align:center;">Reinhard Bögele</p></div>', text5: '', headline6: '', media6: '', text6: 'Im Buch findest du neben anschaulichen Grafiken und Erklärungen zu den Marmas auch Übungsanleitungen und noch mehr Hintergründe.', outro: '', quote: ''}  },
 { id: 'marmas_funfacts', order: 10, topic: 'marmas', category: 'marmas', lesson: 'fun facts', icon: 'fact-icon.webp', content: {intro: 'Weitere Fakten über Marmas', media: '', headline1: '', media1: '', text1: 'Marma wird im Sanskrit मर्म geschrieben. Die sprachliche Wurzel “mr" heißt sterben. Marman heißt unter anderem der Kern, das Herz einer Sache.', headline2: '', media2: '', text2: 'Es gibt insgesammt 107 Marmas die in 5 Gruppen unterteilt sind: Sehnen-Marmas, Muskel-Marmas, Knochen-Marmas, Blutgefäß-Marma und Gelenk-Marmas.', headline3: '', media3: '', text3: 'Zuerst ausführlich erwähnt wurden Marmas vom Chirurgen Sushruta ca 150 v. Chr. ', headline4: '', media4: '', text4: 'In der ayurvedischen Medizin haben Marmas 7 Bereiche: 3 Doshas und 3 Gunas (Prakriti) und Purusha.', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
 { id: 'fuß_Intro', order: 11, topic: 'fuß', category: 'anatomy', lesson: 'Intro', icon: 'intro-icon.webp', content: {intro: 'Der Fuß ist das Fundament für unseren Körper. Eine gute, gesunde Körperaltung beginnt also schon mit der richtigen Fußhaltung.', media: '', headline1: '', media1: '', text1: 'Im Yoga-Kontext ist der Fuß vergleichbar mit den Wurzeln eines Baumes: stützend und nährend. Diese stützende Rolle ist nicht nur in stehenden, sondern auch in sitzenden oder liegenden Haltungen wichtig.', headline2: '', media2: '', text2: 'Im nächsten Abschnitt lernen wir mehr über die Anatomie des Fußes.', headline3: '', media3: '', text3: '', headline4: '', media4: '', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
 { id: 'fuß_Anatomie', order: 12, topic: 'fuß', category: 'anatomy', lesson: 'Anatomie', icon: 'anatomy-icon.webp', content: {intro: 'Schauen wir uns den Fuß von den verschiedenen Seiten an:', media: '<iframe src="foot/anatomy_foot.html?footStyle=1"></iframe>', headline1: 'Obenansicht', media1: '<img src="foot/oberseite.png">', text1: 'Die Oberseite des Fußes wird Fußrücken genannt. Aus dieser Perspektive sehen wir gut die verschiedenen Bereiche: Das Fersenbein und Sprungbein (rot) zusammen mit den Kahn- und Keilbeinen (grün) bilden die Fußwurzel. Der Mittelfuß mit den fünf Mittelfußknochen ist blau eignegfärbt. Die Zehen, bestehend aus Grund-, Mittel- und Endgliedern sind gelb gekennzeichnet.', headline2: 'Außenansicht', media2: '<img src="foot/ausenseite.png">', text2: 'In der Außenansicht (Kleinzehenseite) sehen wir, dass der Fuß nur am hinteren Fersenknochen und erst wieder vorne am Ende des Mittelfußes und an den Zehen auf dem Boden aufsteht.', headline3: 'Innenansicht', media3: '<img src="foot/innenseite.png">', text3: 'Auch in der Innenansicht (Großzehenseite) sehen wir, dass der Fuß auf dem hinteren Teil der Ferse und erst wieder vorne am Ende des Mittelfußknochens  auf dem Boden steht.', headline4: 'Untenansicht', media4: '<img src="foot/unterseite.png">', text4: 'Betrachten wir die Fußsohle, also den Fuß von unten, fällt der stabile Fersenhöcker auf, der die Last des Körpers aufnehmen kann.', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
@@ -1288,12 +1336,12 @@ const initialAsanaData = [
 { id: 'Übung_3Sekunden-Regel', order: 28, topic: 'Übung', category: 'yoga', lesson: '3 Sekunden-Regel', icon: 'wait-sandclock-icon.webp', content: {intro: 'Laut dem Münchner Hirnforscher Ernst Pöppel strukturiert unser Bewusstsein die Wahrnehmung der Gegenwart in „Drei-Sekunden-Einheiten“, auch bekannt als die Drei-Sekunden-Regel.', media: '', headline1: '', media1: '', text1: 'Das heißt nur alle 3 Sekunden macht unser Gehirn eine "Bestandsaufname" der aktuellen Sinnenseindrücke.', headline2: '', media2: '', text2: 'Für Yoga bedeutet das, damit Eindrücke wirklich erfasst und gespeichert werden können sollte dem Bewustsein Zeit gegeben werden diese zu erfassen. Das ständige Nachkorrigieren in einer Haltung kann daher manchmal hinderlich sein.', headline3: '', media3: '', text3: '', headline4: '', media4: '', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: 'Pöppel,  E.  (1997).  Grenzen des Bewusstseins: wie kommen wir zur Zeit, und wie entsteht Wirklichkeit?.  Deutschland:  Insel-Verlag.'}  },
 { id: 'Verletzungen_Verletzung', order: 29, topic: 'Verletzungen', category: 'yoga', lesson: 'Verletzung', icon: 'medical-briefcase-icon.webp', content: {intro: 'Körperliche Einschränkungen wie z. B. Verletzungen bedeuten nicht unbedingt, dass man mit Yoga pausieren muss.', media: '', headline1: 'Schonen', media1: '', text1: 'Wird ein Körperteil verletzt, muss dieser geschont werden. Die Übungen werden dementsprechend sorgfältig ausgewählt und angepasst, sodass die Heilung des betroffenen Körperteils nicht beeinträchtigt wird.', headline2: 'Yoga findet zuerst im Kopf statt', media2: '', text2: 'Der verletzte Körperteil kann beim Wahrnehmen mit einbezogen werden. Mit den gesunden Körperteilen kann weiter Yoga geübt werden. Es gibt in der Wissenschaft die Vermutung, dass z.B. über Spiegelneuronen der verletzte Körperteil auch von Übungen mit dem gesunden Körperteil profitiert, also dass die mentale Übung einen Effekt hat.¹ ² Noch ist nicht komplett erforscht, wie dieser Effekt erzeugt werden kann.³ In der Yoga Praxis kann aber festgestellt werden, dass etwas auf einer Seite gelerntes dann leichter auch auf der zweiten Seite zu lernen ist.  Wir sprechen dann auch von einer Lehrer- und einer Schülerseite.', headline3: 'Sekundärer Krankeihtsgewinn', media3: '', text3: 'Sekundärer Krankeihtsgewinn beschreibt, wenn durch eine Verletzung andere positive Effekte auftreten. Widmet man einem bestimmten Marma durch eine Verletzung besonders viel Aufmerksamkeit, kann dieses nach der Verletzung sogar stärker sein als das nicht verletzte Pendant. ', headline4: 'Wichtig', media4: '<ul><li>Yoga sollte nicht aus Pflicht getan werden!</li><li>Yoga ist auch Mittel zur Regeneration bei Krankheit, Stress oder Belastung.</li><li>Yoga Unterstützungsmittel nutzen (Klötze, Rolle, Decke etc.).</li><li>Keine Überbeanspruchung oder Ehrgeiz.</li><li>Beachten der 4 Yogas: passend, verkehrt, zu viel, zu wenig.</li></ul>', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: '1) Ertelt, D., Small, S., Solodkin, A., Dettmers, C., McNamara, A., Binkofski, F., & Buccino, G. (2007). Action observation has a positive impact on rehabilitation of motor deficits after stroke. NeuroImage, 36 Suppl 2, T164-173. ----- 2) Reiser, M., Büsch, D., and Munzert, J. (2011). Strength gains by motor imagery with different ratios of physical to mental practice. Front. Psychol. 2:194. doi: 10.3389/fpsyg.2011.00194 -----3) Malouin, F., Jackson, P. L., and Richards, C. L. (2013). Towards the integration of mental practice in rehabilitation programs. A critical review. Front. Hum. Neurosci. 7:576. doi: 10.3389/fnhum.2013.00576'}  },
 { id: 'Āyurveda_Intro', order: 30, topic: 'Āyurveda', category: 'ayurveda', lesson: 'Intro', icon: 'intro-icon.webp', content: {intro: 'Yoga beschränkt sich nicht allein auf das Üben verschiedener Körperhaltungen. Unter anderem ist Yoga auch ein Auseinandersetzten mit der eigenen Gesundheit.', media: '', headline1: 'Āyurveda das "Wissen vom Leben"', media1: '', text1: 'Ayurveda ist die Gesundheitslehre aus dem alten Indien und entstand ca. 500 v. Chr.', headline2: '', media2: '', text2: 'Trotz oder gerade wegen der langen Tradition sind die Konzepte auch heute noch relevant.', headline3: '', media3: '', text3: 'Da die Lehren des Ayurveda und die Lehren des Yoga sich sehr gut ergänzen, lohnt es sich, im Kontext des Yoga, auch mit Ayurveda zu beschäftigen.', headline4: '', media4: '', text4: 'Begriffe wie marma und ahimsa haben wir schon kennengelernd. In den kommenden Abschnitten werden wir noch ein paar weitere Begriffe und Konzepte kennenlernen, die uns helfen können einen guten und gesunden Umgang mit uns und unserem Körper zu pflegen.', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
-{ id: 'Āyurveda_Nützlich+angenehm', order: 31, topic: 'Āyurveda', category: 'ayurveda', lesson: 'Nützlich & angenehm', icon: '', content: {intro: 'Im Yoga streben wir nach nützlichem und angenehmen. Dabei steht "nützlich" vor "angehem". ', media: '', headline1: 'Nützlich und angenehm im Yoga', media1: '', text1: 'Alle Handlungen oder Dinge müssen zunächst auf ihre Nützlichkeit geprüft werden. Der Nutzen ist wichtiger als das etwas angenehm ist. Ist etwas nützlich und unangenehm, können oft Wege gefunden werden, es doch möglichst angenehm zu gestalten. Etwas kann nützlich sein, sich aber zunächst nicht angenehm anfühlen.', headline2: 'Nützlich und angenehm in Ayurveda', media2: '<table><tr><td><p>hita (हित)</p><p><das was nützlich ist, das was gesund ist/p><p>(Grundwissen, gesundes, nahrhaftes)</p></td><td><p>ahita (अहित)</p><p>das was unnütz ist, das was ungesund ist</p><p>(ungesundes, Schmerzen aushalten)</p></td></tr><tr><td><p>sukha (सुख)</p><p>das was angenehm ist</p><p>(Freude, Glück, Vergnügen, Zufriedenheit)</p></td><td><p>duḥkha (दुःख)</p><p>das was angenehm ist</p><p>Unglück, Kummer, Elend, Schmerz, Angst, Qual, Bedrängnis, Leid, Ärger, Not, Trübsal)</p></td></tr></table>', text2: '', headline3: '', media3: '', text3: '', headline4: '', media4: '', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
+{ id: 'Āyurveda_Nützlich_angenehm', order: 31, topic: 'Āyurveda', category: 'ayurveda', lesson: 'Nützlich & angenehm', icon: '', content: {intro: 'Im Yoga streben wir nach nützlichem und angenehmen. Dabei steht "nützlich" vor "angehem". ', media: '', headline1: 'Nützlich und angenehm im Yoga', media1: '', text1: 'Alle Handlungen oder Dinge müssen zunächst auf ihre Nützlichkeit geprüft werden. Der Nutzen ist wichtiger als das etwas angenehm ist. Ist etwas nützlich und unangenehm, können oft Wege gefunden werden, es doch möglichst angenehm zu gestalten. Etwas kann nützlich sein, sich aber zunächst nicht angenehm anfühlen.', headline2: 'Nützlich und angenehm in Ayurveda', media2: '<table><tr><td><p>hita (हित)</p><p><das was nützlich ist, das was gesund ist/p><p>(Grundwissen, gesundes, nahrhaftes)</p></td><td><p>ahita (अहित)</p><p>das was unnütz ist, das was ungesund ist</p><p>(ungesundes, Schmerzen aushalten)</p></td></tr><tr><td><p>sukha (सुख)</p><p>das was angenehm ist</p><p>(Freude, Glück, Vergnügen, Zufriedenheit)</p></td><td><p>duḥkha (दुःख)</p><p>das was angenehm ist</p><p>Unglück, Kummer, Elend, Schmerz, Angst, Qual, Bedrängnis, Leid, Ärger, Not, Trübsal)</p></td></tr></table>', text2: '', headline3: '', media3: '', text3: '', headline4: '', media4: '', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
 { id: 'Āyurveda_Vegas', order: 32, topic: 'Āyurveda', category: 'ayurveda', lesson: 'Vegas', icon: '', content: {intro: 'Vega (वेग) bezieht sich auf den „natürlichen Drang“ oder natürlich Bedürfnisse.', media: '', headline1: 'Es gibt 13 Vegas (Rufe der Natur)', media1: '<ul> <li>Schlafen</li><li>Essen</li> <li>Trinken</li><li>Erbrechen</li><li>Stuhlgang</li><li>Urinieren</li><li>Sexualität</li><li>Atmen</li><li>Gähnen</li><li>Niesen</li><li>Rülpsen</li><li>Flatulenz</li><li>Weinen</li></ul>', text1: '', headline2: '', media2: '', text2: 'Wir sollen diesen Rufen der Natur, also den Signalen unseres Körper folgen, um unsere Gesundheit zu erhalten. ', headline3: '', media3: '', text3: '', headline4: '', media4: '', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
 { id: 'Gurvādiguṇa_20Gunas', order: 33, topic: 'Gurvādiguṇa', category: 'ayurveda', lesson: '20 Gunas', icon: '', content: {intro: 'Gurvādiguṇa (गुर्वादिगुण) sind im Ayurveda zehn stoffliche Qualitäts Gegensatzpaare.', media: '', headline1: '', media1: '', text1: 'Mit diesen insgesamt 20 gunas, also stofflichen Qualitäten, lassen sich die Qualitäten des Körpers aber auch das gesammte Universum beschreiben.', headline2: '', media2: '<iframe src="20_gunas/20_gunas.html"></iframe>', text2: '', headline3: '', media3: '', text3: '', headline4: '', media4: '', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
 { id: 'Muskel-Marmas_Intro', order: 34, topic: 'Muskel-Marmas', category: 'marmas', lesson: 'Intro', icon: 'intro-icon.webp', content: {intro: 'Die zweite Marmagruppe sind die Muskel-Marmas über die du in diesem Kapitel etwas erfährst.', media: '', headline1: '', media1: '', text1: 'Außerdem gibt es noch etwas über die Funktionsweise von Muskeln und Muskelgewebe zu erfahren.', headline2: '', media2: '', text2: '', headline3: '', media3: '', text3: '', headline4: '', media4: '', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
 { id: 'Muskel-Marmas_Basics', order: 35, topic: 'Muskel-Marmas', category: 'marmas', lesson: 'Basics', icon: 'start-icon.webp', content: {intro: 'Im Yoga helfen uns die Muskel-Marmas gezielt Orte zu enstpannen oder auszudehnen und zu strecken. Muskeln übernehmen die Feinmotorik.', media: '', headline1: 'Was sind Muskeln?', media1: '', text1: 'Muskeln bestehen haptsächlich aus zwei Arten von Musklefasern: tonische Fasern für langanhaltende Haltearbeit und phasische Fasern für schnelle, kraftvolle Bewegungen.', headline2: 'Eigenschaften der Muskeln im Yoga-Kontext', media2: '', text2: 'Attribute der Muskeln sind üblicherweise fest, kompakt, hart oder locker und weich.', headline3: '', media3: '', text3: '', headline4: '', media4: '', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
-{ id: 'Muskel-Marmas_Muskelgewebe', order: 36, topic: 'Muskel-Marmas', category: 'marmas', lesson: 'Muskelgewebe', icon: 'muscles-icon.webp', content: {intro: 'Die Skeletmuskulatur hält das Skelett zusammen bzw. gibt diesem Stabilität.', media: '', headline1: 'Aufbau', media1: '', text1: 'Die Verbindung von Knochen und Muskel bilden die Sehnen. Knochen sowie Muskeln werden von einer Haut umhüllt (Knochen-/ Muskelhaut), hieran sind Bänder (bindegewebige Haut) sowie äußerst stabile Sehnen (-platten) kompakt verwachsen.', headline2: 'Muskelfasern', media2: '<p>Muskelfasern können in zwei (Haupt-)Typen unterschieden werden:</p><p>Typ 1 sind die tonischen Fasern. Sie können langanhaltende Haltearbeit leisten und ermüden dabei nur langsam. Die Fasern haben eine rote Färbung.</p><p>Typ 2 sind die phasischen Fasern. Diese Fasern arbeiten schnell und kraftvoll, ermüden aber schnell. Die Fasern haben eine eher weiße Färbung.</p><p>Im Yoga wollen wir vor allem Muskeln mit einem hohen Anteil an tonischen Fasern nutzen, um mit wenig Kraftaufwand lange in den Übungen verharren zu können.</p>', text2: '', headline3: 'Aufgabe', media3: '', text3: 'Ein Muskel kann jeweils nur seine einzige bestimmungsgemäße Funktion ausführen. So muss es für verschiedene Funktionen verschiedene, entgegengesetzte Muskeln geben (Agonist + Antagonist). Zum Besipiel wird für die Armstreckung der Triezeps angezogen (Strecker) für die Beugung des Arms wird der Bizeps (Beuger) angezogen. Ein Muskel kann sich nicht von sich aus wieder strecken. Es braucht den Gegenspieler, bzw. die Schwerkraft.', headline4: 'Bewegung der Muskelfasern', media4: '<iframe src="muscle_marma/muscle contraction.html"></iframe>', text4: 'Wird ein Muskel angespannt, zieht sich das Muskelgewebe zusammen. Wird der Gegenspieler Muskel angespannt, dehnt sich der Muskel und die Muskelphasern.', headline5: '', media5: '', text5: 'Im Yoga liegt das Interesse vor allem an den Streckmuskeln. ', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
+{ id: 'Muskel-Marmas_Muskelgewebe', order: 36, topic: 'Muskel-Marmas', category: 'marmas', lesson: 'Muskelgewebe', icon: 'muscles-icon.webp', content: {intro: 'Die Skeletmuskulatur hält das Skelett zusammen bzw. gibt diesem Stabilität.', media: '', headline1: 'Aufbau', media1: '', text1: 'Die Verbindung von Knochen und Muskel bilden die Sehnen. Knochen sowie Muskeln werden von einer Haut umhüllt (Knochen-/ Muskelhaut), hieran sind Bänder (bindegewebige Haut) sowie äußerst stabile Sehnen (-platten) kompakt verwachsen.', headline2: 'Muskelfasern', media2: '<p>Muskelfasern können in zwei (Haupt-)Typen unterschieden werden:</p><p>Typ 1 sind die tonischen Fasern. Sie können langanhaltende Haltearbeit leisten und ermüden dabei nur langsam. Die Fasern haben eine rote Färbung.</p><p>Typ 2 sind die phasischen Fasern. Diese Fasern arbeiten schnell und kraftvoll, ermüden aber schnell. Die Fasern haben eine eher weiße Färbung.</p><p>Im Yoga wollen wir vor allem Muskeln mit einem hohen Anteil an tonischen Fasern nutzen, um mit wenig Kraftaufwand lange in den Übungen verharren zu können.</p>', text2: '', headline3: 'Aufgabe', media3: '', text3: 'Ein Muskel kann jeweils nur seine einzige bestimmungsgemäße Funktion ausführen. So muss es für verschiedene Funktionen verschiedene, entgegengesetzte Muskeln geben (Agonist + Antagonist). Zum Besipiel wird für die Armstreckung der Triezeps angezogen (Strecker) für die Beugung des Arms wird der Bizeps (Beuger) angezogen. Ein Muskel kann sich nicht von sich aus wieder strecken. Es braucht den Gegenspieler, bzw. die Schwerkraft.', headline4: 'Bewegung der Muskelfasern*', media4: '<iframe src="muscle_marma/muscle contraction.html"></iframe><span>*symbolisch konzeptionelle Darstellung</span>', text4: 'Wird ein Muskel angespannt, zieht sich das Muskelgewebe zusammen. Wird der Gegenspieler Muskel angespannt, dehnt sich der Muskel und die Muskelphasern.', headline5: '', media5: '', text5: 'Im Yoga liegt das Interesse vor allem an den Streckmuskeln. ', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
 { id: 'Muskel-Marmas_Muskelspannung', order: 37, topic: 'Muskel-Marmas', category: 'marmas', lesson: 'Muskelspannung', icon: 'muscles-icon.webp', content: {intro: 'Musklen haben immer eine Grundspannung, selbst beim Schlafen (Muskeltonus)', media: '', headline1: 'Muskelspindel', media1: '', text1: 'Die Muskelspannung wird von den Muskelspindeln gemessen. Muskelspindeln sind Sinnesorgane in den Muskeln, die den Dehnungszustand bzw. die Muskelspannung der Skelettmuskulatur erfassen. ', headline2: '', media2: '', text2: 'Wird ein Muskel stimuliert, wird die Muskelpannung lokal gemessen und vom Gehirn reguliert. Beispiel ist das Füllen eines Gefäßes unter dem Wasserhahn. Das zusätzliche Gewicht führt zu einer Spannungsänderung im Muskel. Das Gehirn reguliert den zusätzlichen Kraftbedarf und das Gefäß kann weiterhin gehalten werden.', headline3: 'Ruhetonus', media3: '', text3: 'Der Ruhetonus beschreibt die Grundspannung eines Muskles, welcher im Normalfall immer vorhanden ist. Im Yoga versuchen wir einen Tonus zu erreichen, bei dem Gelenke ohne Druck, Muskeln ohne zu starkem Zerren und die Blutgefäße frei sind.', headline4: 'Muskelspannung an Psyche und Soziales gekoppelt', media4: '<p>Stressfaktoren oder Krankheit können sich auf Muskelspannung auswirken*:</p><ul><li>depressive Stimmung: Tonus reduziert – schlaff</li><li>ängstliche Stimmung: Tonus erhöht – angespannt</li><li>ständig leichtes Zittern (Spannung) im Körper, auch bei nicht gezielten Bewegungen</li></ul>', text4: '', headline5: 'Wichtig aus yogischer Sicht', media5: '', text5: 'Nur zart an Muskeln ziehen, Stress vermeiden, ein Zuviel vermeiden. ', headline6: '', media6: '', text6: '', outro: '', quote: '*Beschriebene Sachverhalte sind nicht als medizinischer Rat aufzufassen.'}  },
 { id: 'Muskel-Marmas_funfacts', order: 38, topic: 'Muskel-Marmas', category: 'marmas', lesson: 'fun facts', icon: 'fact-icon.webp', content: {intro: '', media: '', headline1: '', media1: '', text1: 'Ein Mensch hat 656 Muskeln. Der stärkse Muskel im menschlichen Körper ist der Kaumuskel.', headline2: '', media2: '', text2: 'Auch im Schlafen und Sitzen bleibt ein Grund-Tonus der Muskeln erhalten, dieser wird nur bei einer großen Narkose ausgeschaltet (einschließlich Atemmuskulatur → Beatmung erforderlich).', headline3: '', media3: '', text3: 'Der Herzmuskel ist eine modifizierte Form der Skeletmuskulatur. Auch die Zungenmuskulatur gehört zur Skeletmuskulatur. Skeletmuskulatur wird auch als quergestreifte Muskulatur bezeichnet.', headline4: '', media4: '', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
 { id: 'Mahābhūta_Intro', order: 39, topic: 'Mahābhūta', category: 'ayurveda', lesson: 'Intro', icon: 'intro-icon.webp', content: {intro: 'Eine wichtige Grundlage im Āyurveda sind die 5 Mahābhūtas', media: '', headline1: '', media1: '', text1: 'Die 5 Mahabhutas lassen sich nicht einfach übersetzten ohne die eigentliche Bedeutung zu verlieren. In den folgenden Lektionen wird das Konzept dieses ayurvedischen Fachbefriffs erklärt.', headline2: '', media2: '', text2: 'Damit das abstrakte Konzept etwas greifbarer wird gibt es auch ein paar Beispiele.', headline3: '', media3: '', text3: 'Auf dem Konzept der Mahbuhtas bauen dann weitere Konzepte auf, wie z.B. Die etwas bekannteren 3 Doshas.', headline4: '', media4: '', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
@@ -1326,7 +1374,7 @@ const initialAsanaData = [
 { id: 'Yoga-Sûtra_Intro', order: 66, topic: 'Yoga-Sûtra', category: 'yoga', lesson: 'Intro', icon: 'intro-icon.webp', content: {intro: 'Das Yoga-Sutra ist der Yoga-Leitfaden. ', media: '', headline1: '', media1: '', text1: 'Dieser Letfaden beschreibt in insgesamt 195 Versen unterteilt in vier Kapiteln die Essenz des Yoga.', headline2: '', media2: '', text2: 'Im folgenden werden wir ein paar wichtige Sutren kennenlernen.', headline3: '', media3: '', text3: 'Achtung! Da es sich um eine der ältesten Überlieferungen der Yogatradition handelt variieren Übersetzungen teilweise etwas in der Interpretation und Formulierung. In GOM wurde versucht verständlich den Kern der Aussage wiederzugeben.', headline4: '', media4: '', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
 { id: 'Yoga-Sûtra_Sutra1.2', order: 67, topic: 'Yoga-Sûtra', category: 'yoga', lesson: 'Sutra 1. 2', icon: '', content: {intro: 'Das Sutra 1. 2 ist der zweite Vers und damit einer der wichtigsten.', media: '', headline1: '', media1: '', text1: 'yogas-citta-vritti-nirodha', headline2: '', media2: '', text2: 'योगश्चित्तवृत्तिनिरोधः', headline3: '', media3: '', text3: 'Yoga ist die Beruhigung der Gedanken.', headline4: '', media4: '', text4: 'Citta (चित्त) ist ein Sanskrit-Wort, das sich auf „Wahrnehmung, Aufmerksamkeit“ bezieht. Außerdem wird es als Herz, Gedanken, Verstand und Bewusstsein übersetzt.', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: 'James Haughton Woods „The Yoga System of Patanjali“ https://archive.org/details/yogasystemofpata00wooduoft/page/xxx/mode/2up?view=theater'}  },
 { id: 'Yoga-Sûtra_5Vṛtti', order: 68, topic: 'Yoga-Sûtra', category: 'yoga', lesson: '5 Vṛtti', icon: '', content: {intro: 'Im Yoga Sutra 1.5 ist beschrieben, dass es fünf seelisch-geistige Vorgänge gibt.', media: '<iframe src="Sutras/vriti.html"></iframe>', headline1: '', media1: '', text1: 'Diese können entweder leidvoll (Kliṣṭa - क्लिष्ट) oder Akliṣṭa (अक्लिष्ट) angenehm bzw. ungestört sein.', headline2: 'Pramāṇa (प्रमाण) — richtige Wahrnehmung / gültiges Wissen', media2: '', text2: 'Die richtige Wahrnehmung entsteht durch direkte Beobachtung, Schlussfolgerung oder die Worte anderer.¹ Auch im Ayurveda sind die vier Werkzeuge zum Erlangen und Testen von Wissen Wahrnehmung, Schlussfolgerung, Vergleich und Schriften/Recherche.²', headline3: 'Viparyaya (विपर्यय — —) — falsche Wahrnehmung / Fehler', media3: '', text3: 'Eine Fehlwahrnehmung ist falsches Wissen, das nicht auf der tatsächlichen Sachlage beruht.¹ Viparyaya lässt sich in fünf Typen unterteilen, die 5 kleśas: 1. Unwissenheit, Ignoranz oder falsche Identifizierung; 2. Egoissmuss, Selbstsucht; 3. Sucht, Drang zur Leidenschafft; 4. Wut, Drang zum Hass, Abneigung vom Guten; 5. Angst vor dem Tod.³', headline4: 'Vikalpa (विकल्प) — Konzeptualisierung', media4: '', text4: 'Die Konzeptualisierung beruht auf sprachlichem Wissen, nicht auf dem Kontakt mit realen Dingen.¹ Mögliche Übersetzungen des Wortes sind z.B. Zweifel, Unsicherheit, Unentschlossenheit, Zögern⁴ oder Gedankenkarussel.', headline5: 'Nidrā (निद्रा)— Schlaf', media5: '', text5: 'Schlaf ist ein Muster, das auf der Wahrnehmung beruht, dass nichts existiert.¹', headline6: 'Smṛti (स्मृति) — Erinnerung ', media6: '', text6: 'Erinnern ist das Bewahren von Erlebnissen.¹ ', outro: '', quote: '1) Chip Hartranft „The Yoga-Sûtra of Patañjali - Sanskrit-English Translation & Glossary“ https://www.arlingtoncenter.org/Sanskrit-English.pdf 2) https://www.wisdomlib.org/definition/pramana#ayurveda 3) https://www.wisdomlib.org/definition/viparyaya#samkhya 4) https://www.wisdomlib.org/definition/vikalpa#yoga'}  },
-{ id: 'Prakriti_PrakṛtiPuruṣa', order: 69, topic: 'Prakriti', category: 'yoga', lesson: 'Prakṛti & Puruṣa', icon: '', content: {intro: 'Prakṛti und Puruṣa sind zwei grundlegende Faktoren, die für die Entstehung der Prapañca, der sichtbaren Welt, dem Schauplatz aller Aktivitäten.²', media: '', headline1: 'Prakṛti प्रकृति ', media1: '', text1: 'Prakriti wird als Kosmische Natur¹, Urauslöser¹ , (Ur-) Natur, Materie² oder unverursachtes Produkt³ beschrieben. Im Ayuveda wird Prakriti auch mit der inneren Natur oder Konstitution⁴ erklärt. Prakriti ist aber nicht im klassischen Sinn rein stofflich zu sehen. ', headline2: '', media2: '', text2: 'Prakriti setzt sich zusammen aus der Vorsilbe pra = bevor, vorangehend und der Wurzel kri = machen, produzieren. Die unverursachte (Ur-)Natur.', headline3: 'Puruṣa पुरुष ', media3: '', text3: 'Purusha wird als kosmisches Sein¹, Geist bzw. Seele² oder als Bewustsein beschrieben. ', headline4: '', media4: '', text4: 'Purusha ist derjenige, der Wahrnehmungs und Denkprozesse beobachtet, der Zuschauende oder der Seher. Zusammen mit Prakriti bildet Purusha den logisch-praktischen Hintergrund für das Bewustsein von konkreten Erfahrung, von Wahrnehmung und Denken.³ Analogie: Purusha ist der Bewohner der Stadt, Prakriti ist die Stadt, also Herr/Bewohner von Prakriti.', headline5: 'Bereiche von Prakṛti & Puruṣa', media5: '<iframe src="prakriti/pranas.html"></iframe>', text5: 'Prakriti wird durch die 3 Doshas und 3 Gunas,  Puruṣa duch Atnun charakterisiert. Sie lassen sich also durch die 7 Pranas beschreiben:', headline6: '', media6: '<ol><li>Vata</li><li>Pitta</li><li>Kapha</li><li>Sattva</li><li>Rajas</li><li>Tamas</li><li>Atman</li></ol>', text6: '  ', outro: '', quote: '1: THE SIVA PURANA; J.L.Shastri 1950; 1.6 2: Encyclopaedic Dictionary of Puranas, Swami Parmeshwaranand 3:  Yoga Ein Weg für dich, Reinhard Bögele 1996, Seite 58ff 4: Essentials of Ayurveda, Priya Vrat Sharma 1993'}  },
+{ id: 'Prakriti_Prakṛti_Puruṣa', order: 69, topic: 'Prakriti', category: 'yoga', lesson: 'Prakṛti & Puruṣa', icon: '', content: {intro: 'Prakṛti und Puruṣa sind zwei grundlegende Faktoren, die für die Entstehung der Prapañca, der sichtbaren Welt, dem Schauplatz aller Aktivitäten.²', media: '', headline1: 'Prakṛti प्रकृति ', media1: '', text1: 'Prakriti wird als Kosmische Natur¹, Urauslöser¹ , (Ur-) Natur, Materie² oder unverursachtes Produkt³ beschrieben. Im Ayuveda wird Prakriti auch mit der inneren Natur oder Konstitution⁴ erklärt. Prakriti ist aber nicht im klassischen Sinn rein stofflich zu sehen. ', headline2: '', media2: '', text2: 'Prakriti setzt sich zusammen aus der Vorsilbe pra = bevor, vorangehend und der Wurzel kri = machen, produzieren. Die unverursachte (Ur-)Natur.', headline3: 'Puruṣa पुरुष ', media3: '', text3: 'Purusha wird als kosmisches Sein¹, Geist bzw. Seele² oder als Bewustsein beschrieben. ', headline4: '', media4: '', text4: 'Purusha ist derjenige, der Wahrnehmungs und Denkprozesse beobachtet, der Zuschauende oder der Seher. Zusammen mit Prakriti bildet Purusha den logisch-praktischen Hintergrund für das Bewustsein von konkreten Erfahrung, von Wahrnehmung und Denken.³ Analogie: Purusha ist der Bewohner der Stadt, Prakriti ist die Stadt, also Herr/Bewohner von Prakriti.', headline5: 'Bereiche von Prakṛti & Puruṣa', media5: '<iframe src="prakriti/pranas.html"></iframe>', text5: 'Prakriti wird durch die 3 Doshas und 3 Gunas,  Puruṣa duch Atnun charakterisiert. Sie lassen sich also durch die 7 Pranas beschreiben:', headline6: '', media6: '<ol><li>Vata</li><li>Pitta</li><li>Kapha</li><li>Sattva</li><li>Rajas</li><li>Tamas</li><li>Atman</li></ol>', text6: '  ', outro: '', quote: '1: THE SIVA PURANA; J.L.Shastri 1950; 1.6 2: Encyclopaedic Dictionary of Puranas, Swami Parmeshwaranand 3:  Yoga Ein Weg für dich, Reinhard Bögele 1996, Seite 58ff 4: Essentials of Ayurveda, Priya Vrat Sharma 1993'}  },
 { id: 'Ayurvedischer Tag_Intro', order: 70, topic: 'Ayurvedischer Tag', category: 'ayurveda', lesson: 'Intro', icon: 'intro-icon.webp', content: {intro: 'Wir wollen unseren Tagesablauf individuell so gestalten, dass wir am Abend direkt entspannt einschlafen können.', media: '', headline1: '', media1: '', text1: 'Ayurveda hällte ein paar kleine Tips bereit, die uns dabie helfen können.', headline2: '', media2: '', text2: '', headline3: '', media3: '', text3: '', headline4: '', media4: '', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
 { id: 'Ayurvedischer Tag_Morgenroutine', order: 71, topic: 'Ayurvedischer Tag', category: 'ayurveda', lesson: 'Morgenroutine', icon: '', content: {intro: 'Hat sich unser Körper auf eine feste Morgenroutine eingestellt kann es leichterfallen in den Tag zu starten.', media: '', headline1: '', media1: '', text1: 'Im folgenden ein Beispiel für eine Morgenroutine, die helfen kann die Lebensgeister für einen guten Start zu wecken und uns gut auf den bevorstehenden Tag vorbereitet:', headline2: '', media2: '<ul><li>Glas warmes Wasser</li><li>Stuhlgang</li><li>~ 4 Asanas (z.B. Tadasana, halber Hund oder Sonnengruß)</li><li>Frühstück</li><li>Prüfen: Wie viel Energie steht mir heute zur Verfügung.</li><li>Sozialkontakte</li></ul>', text2: '', headline3: 'Energie prüfen', media3: '', text3: 'Jeden Morgen können wir prüfen, wie viel Energie uns für den Tag zur Verfügung steht. Davon sollten wir 50% für uns selbst und 50% für anderes aufwänden. Wenn an einem Tag nur 60% der üblichen Energiemenge zur Verfügung stehen, sollten wir nicht an uns sparen sondern auch diese Menge zumindest gleich aufteilen.', headline4: '', media4: '', text4: '', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
 { id: 'Ayurvedischer Tag_Abendroutine', order: 72, topic: 'Ayurvedischer Tag', category: 'ayurveda', lesson: 'Abendroutine', icon: '', content: {intro: 'Auch am Abend ist es sinvoll eine Routine zu etablieren.', media: '', headline1: '', media1: '', text1: 'Bei einer festen Schlafenzeit kann sich unser Körper darauf einstellen und wird automatisch müde. Wenn wir rechtzeitig vor dem Schlafengehen das Handy weglegen und den spannenden Thriller abschalten, kann auch unser Gehirn zur ruhe kommen.', headline2: 'Abendmeditation', media2: '', text2: 'Helfen kann auch ein kurze Abendmeditation in der du den Tag nocheinmal revue passieren lassen kannst. ', headline3: '', media3: '', text3: 'Was ist mir heute besonders gut gelungen? Warum ist es mir besonders gut gelungen? ', headline4: '', media4: '', text4: 'Fasse für diech die Essenz des tages in 2-5 Minuten nocheinmal zusammen.', headline5: '', media5: '', text5: '', headline6: '', media6: '', text6: '', outro: '', quote: ''}  },
